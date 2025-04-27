@@ -1,6 +1,8 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare } from 'lucide-react'; // Added CheckSquare for Rigorous R&D
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText } from 'lucide-react'; // Added ExternalLink, BookText
+import { Button } from '@/components/ui/button'; // Added Button
 
 export default function AboutUsPage() {
   return (
@@ -97,7 +99,7 @@ export default function AboutUsPage() {
           {/* Joshua Haigler Card */}
           <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col md:flex-row items-start">
             <Image
-              src="https://picsum.photos/seed/joshua/300/300" // Placeholder image
+              src="https://media.licdn.com/dms/image/v2/D4D03AQF0JOckp1538w/profile-displayphoto-shrink_400_400/B4DZSfuvphHYAg-/0/1737846632852?e=1751500800&v=beta&t=Q-ZIrep3uIUXNaGshAdBVdL3JVOZQhylITwh7Y83gUM"
               alt="Joshua Haigler"
               width={200}
               height={200}
@@ -115,7 +117,7 @@ export default function AboutUsPage() {
           {/* Kiara Aguirre Card */}
           <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col md:flex-row items-start">
             <Image
-              src="https://picsum.photos/seed/kiara/300/300" // Placeholder image
+              src="https://media.licdn.com/dms/image/v2/D4E03AQGq8oxYCR80YQ/profile-displayphoto-shrink_400_400/B4EZRmHnWNG0Ag-/0/1736880061392?e=1751500800&v=beta&t=dEt-AuZp6pWxWU1o7bh67JHAFzOJTuWF7s7e2b59XBc"
               alt="Kiara Aguirre"
               width={200}
               height={200}
@@ -132,8 +134,23 @@ export default function AboutUsPage() {
         </div>
       </section>
 
+      {/* Article Section */}
+        <section className="my-20 text-center bg-secondary/50 p-8 rounded-lg shadow-md">
+            <h2 className="text-3xl font-bold tracking-tight mb-4 flex items-center justify-center gap-3">
+                <BookText className="h-8 w-8 text-primary" /> Read Our Latest Article
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
+                Dive deeper into our vision and the science behind Phoenix Lifesciences. Explore our recent publication on Medium for more insights.
+            </p>
+            <Button size="lg" asChild className="shadow-md hover:shadow-lg transition-shadow">
+                <Link href="https://medium.com/p/a5f11e470707" target="_blank" rel="noopener noreferrer">
+                    Read on Medium <ExternalLink className="ml-2 h-5 w-5" />
+                </Link>
+            </Button>
+        </section>
+
         {/* Path Forward Section */}
-      <section className="text-center mt-20">
+      <section className="text-center mt-16">
         <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
         <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
             We are committed to a rigorous development pathway, including advanced in vitro testing, comprehensive animal studies, and carefully designed human clinical trials. Our goal is to bring safe and effective therapies from the laboratory to the living room, transforming the future of aging.
