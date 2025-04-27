@@ -8,10 +8,10 @@ import '@/ai/flows/website-content-assistant';
 
 configureGenkit({
   plugins: [googleAI()],
-  logLevel: 'debug',
-  enableTracingAndMetrics: true,
+  logLevel: 'warn', // Change to 'info' or 'debug' for more logs in prod
+  enableTracingAndMetrics: true, // Consider disabling if not needed for performance
 });
 
 // Note: You must ensure that your API key is secure. Use a secret manager,
-//       environment variable, or similar mechanism. Add the GOOGLE_API_KEY
-//       environment variable with your key.
+//       environment variable, or similar mechanism. Ensure GOOGLE_API_KEY
+//       is properly configured in your production environment.
