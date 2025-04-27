@@ -27,7 +27,7 @@ export function Header() {
             <path d="M2 17l10 5 10-5"/>
             <path d="M2 12l10 5 10-5"/>
           </svg>
-          <span className="font-bold text-lg text-primary">Phoenix Longevity</span>
+          <span className="font-bold text-lg text-primary">Phoenix Lifesciences</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-1">
           {navItems.map((item) => (

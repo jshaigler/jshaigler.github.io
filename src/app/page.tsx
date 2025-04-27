@@ -19,7 +19,7 @@ export default function Home() {
          </div> */}
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-foreground">
-            Phoenix Longevity
+            Phoenix Lifesciences
           </h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl lg:text-2xl text-muted-foreground">
             Pioneering the Next Generation of mRNA Life Extension Therapies.

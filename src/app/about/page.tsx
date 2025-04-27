@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText } from 'lucide-react'; // Added ExternalLink, BookText
-import { Button } from '@/components/ui/button'; // Added Button
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function AboutUsPage() {
   return (
@@ -109,7 +109,7 @@ export default function AboutUsPage() {
               <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
               <p className="text-md text-primary font-medium mb-3">CEO & Co-founder</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Hello, everyone! I am a high school student (graduating spring 2026) from Marshville, North Carolina, although most of my schooling happens via dual enrollment at a local community college. I have been a part of several extracurricular groups for some time now, including student government, The Knowledge Society (TKS), and the Union County Junior EMS program. I have a love of medicine, synthetic biology, biomedical engineering, and computer science, especially at their intersections. I've built various projects in these fields, and I hope to someday make some of them good enough to turn into actual products or services. Beyond academic related activities I love to paint (although I haven't done too much of it lately), build Legos, and read across a variety of genres.
+                A driven student with a deep interest in the intersection of medicine, synthetic biology, biomedical engineering, and computer science. Focused on translating innovative research into practical applications for health and longevity. Actively involved in programs like The Knowledge Society (TKS).
               </p>
             </CardContent>
           </Card>
@@ -127,7 +127,7 @@ export default function AboutUsPage() {
               <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
               <p className="text-md text-primary font-medium mb-3">Head of Board & Co-founder</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                ¡Hi! I’m Kiara Aguirre, a student aiming for a double major in Linguistics and CS. I am deeply passionate about harnessing technology to develop innovative, human-centered solutions, especially to enhance educational environments. My focus is on creating impactful projects that improve linguistics and literacy. Recently, I’ve been honored as a Rise for the World Global Winner, had an essay published by the Ministry of Education, and had a research paper featured in the Harvard International Review Magazine. I’m enthusiastic about connecting with like-minded individuals to collaborate on exciting projects and make a meaningful contribution to the educational tech industry.
+                Passionate about leveraging technology, including linguistics and computer science, for innovative, human-centered solutions. Recognized as a Rise for the World Global Winner, bringing a focus on impactful project development and strategic vision to Phoenix Lifesciences.
               </p>
             </CardContent>
           </Card>
@@ -143,6 +143,7 @@ export default function AboutUsPage() {
                 Dive deeper into our vision and the science behind Phoenix Lifesciences. Explore our recent publication on Medium for more insights.
             </p>
             <Button size="lg" asChild className="shadow-md hover:shadow-lg transition-shadow">
+                {/* Corrected Medium link */}
                 <Link href="https://medium.com/p/a5f11e470707" target="_blank" rel="noopener noreferrer">
                     Read on Medium <ExternalLink className="ml-2 h-5 w-5" />
                 </Link>

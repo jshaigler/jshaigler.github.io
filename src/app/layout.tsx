@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Phoenix Longevity',
+  title: 'Phoenix Lifesciences', // Updated title
   description: 'Pioneering the Next Generation of mRNA Life Extension Therapies',
 };
 

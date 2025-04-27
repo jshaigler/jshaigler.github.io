@@ -105,7 +105,7 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                             <path d="M2 17l10 5 10-5"/>
                             <path d="M2 12l10 5 10-5"/>
                         </svg>
-                        Phoenix Assistant
+                        Phoenix Lifesciences Assistant
                     </DialogTitle>
                     <DialogDescription>
                         Ask questions about Phoenix Lifesciences and our technology.
