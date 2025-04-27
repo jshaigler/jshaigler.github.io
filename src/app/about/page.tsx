@@ -103,7 +103,7 @@ export default function AboutUsPage() {
               alt="Joshua Haigler"
               width={200}
               height={200}
-              className="w-full md:w-1/3 h-auto object-cover"
+              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg" // Added rounded-br-lg
             />
             <CardContent className="p-6 flex-1">
               <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
@@ -121,7 +121,7 @@ export default function AboutUsPage() {
               alt="Kiara Aguirre"
               width={200}
               height={200}
-              className="w-full md:w-1/3 h-auto object-cover"
+              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg" // Added rounded-br-lg
             />
             <CardContent className="p-6 flex-1">
               <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
