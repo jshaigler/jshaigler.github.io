@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText } from 'lucide-react';
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function AboutUsPage() {
@@ -16,28 +16,28 @@ export default function AboutUsPage() {
         </p>
       </div>
 
-      {/* Mission Section */}
-      <section className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-primary/5 to-accent/5 p-8 rounded-lg shadow-inner">
-         <div className="md:w-1/2">
+      {/* Vision/Mission Section - Replaced and Expanded */}
+      <section className="mb-20 flex flex-col md:flex-row-reverse items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner">
+        <div className="md:w-1/2">
             <h2 className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2">
-              <Target className="h-8 w-8 text-primary" /> Our Mission
+              <Eye className="h-8 w-8 text-primary" /> Our Vision for the Future
             </h2>
             <p className="text-lg text-muted-foreground mb-4">
-              At Phoenix Lifesciences, our mission is to develop innovative solutions that combat age-related decline and promote healthier, longer lives. We are committed to pushing the boundaries of science to make meaningful impacts on human healthspan.
+              At Phoenix Lifesciences, we envision a future fundamentally different from the present, one where the twilight years are not defined by frailty and suffering, but by vitality and continued engagement with life. We strive for a world where aging is not synonymous with inevitable decline, but rather a journey that can be navigated with health and grace.
             </p>
-             <p className="text-lg text-muted-foreground">
-               We believe that aging doesn't have to be a period of inevitable decline. By targeting the fundamental biological processes of aging, we aim to empower individuals to live more vibrant lives for longer.
+            <p className="text-lg text-muted-foreground">
+              Our core mission stems from this vision: to extend human healthspan, granting individuals precious additional time—time to pursue passions, deepen relationships, contribute wisdom, and experience the richness of life alongside the people they cherish. We are driven by the goal of alleviating the burdens of age-related diseases, transforming the later stages of life into a period of opportunity and fulfillment, rather than one marked by pain and limitation. We are committed to developing innovative solutions that combat age-related decline and promote healthier, longer lives.
             </p>
-         </div>
-         <div className="md:w-1/2">
-             <Image
-                 src="https://picsum.photos/seed/mission/600/400" // Placeholder image
-                 alt="Team discussing research"
-                 width={600}
-                 height={400}
-                 className="rounded-lg shadow-lg object-cover w-full h-auto"
-             />
-         </div>
+        </div>
+        <div className="md:w-1/2">
+            <Image
+                src="https://picsum.photos/seed/vision/600/400" // Placeholder image for Vision/Mission
+                alt="Vibrant older person enjoying life"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-lg object-cover w-full h-auto"
+            />
+        </div>
       </section>
 
       {/* Our Approach Section */}
@@ -109,7 +109,7 @@ export default function AboutUsPage() {
               <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
               <p className="text-md text-primary font-medium mb-3">CEO & Co-founder</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                A driven student with a deep interest in the intersection of medicine, synthetic biology, biomedical engineering, and computer science. Focused on translating innovative research into practical applications for health and longevity. Actively involved in programs like The Knowledge Society (TKS).
+                 With a deep interest in medicine, synthetic biology, and biomedical engineering, Joshua focuses on translating innovative research into practical applications for health and longevity, driving the scientific vision of Phoenix Lifesciences.
               </p>
             </CardContent>
           </Card>
@@ -127,7 +127,7 @@ export default function AboutUsPage() {
               <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
               <p className="text-md text-primary font-medium mb-3">Head of Board & Co-founder</p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Passionate about leveraging technology, including linguistics and computer science, for innovative, human-centered solutions. Recognized as a Rise for the World Global Winner, bringing a focus on impactful project development and strategic vision to Phoenix Lifesciences.
+                Kiara leverages her background in linguistics and computer science to focus on human-centered solutions and impactful project development, bringing strategic vision and a focus on global impact to Phoenix Lifesciences.
               </p>
             </CardContent>
           </Card>
