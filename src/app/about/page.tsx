@@ -16,7 +16,8 @@ export default function AboutUsPage() {
         </p>
       </div>
 
-      {/* Vision/Mission Section - Replaced and Expanded */}
+      {/* Vision/Mission Section - Removed from this page, now on Homepage */}
+      {/*
       <section className="mb-20 flex flex-col md:flex-row-reverse items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner">
         <div className="md:w-1/2">
             <h2 className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2">
@@ -39,6 +40,7 @@ export default function AboutUsPage() {
             />
         </div>
       </section>
+      */}
 
       {/* Our Approach Section */}
         <section className="mb-20">
@@ -103,7 +105,7 @@ export default function AboutUsPage() {
               alt="Joshua Haigler"
               width={200}
               height={200}
-              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg" // Added rounded-br-lg
+              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg"
             />
             <CardContent className="p-6 flex-1">
               <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
@@ -121,7 +123,7 @@ export default function AboutUsPage() {
               alt="Kiara Aguirre"
               width={200}
               height={200}
-              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg" // Added rounded-br-lg
+              className="w-full md:w-1/3 h-auto object-cover rounded-br-lg"
             />
             <CardContent className="p-6 flex-1">
               <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>

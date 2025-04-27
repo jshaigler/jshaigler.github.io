@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Target, Zap, Microscope } from 'lucide-react';
+import { ArrowRight, Target, Zap, Microscope, Eye } from 'lucide-react'; // Added Eye icon
 
 export default function Home() {
   return (
@@ -39,12 +39,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Introduction Section */}
+      {/* Introduction/Vision Section */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-center mb-12 text-primary">
             Extending Healthspan Through Science
           </h2>
+
+          {/* Vision Section - Moved from About page */}
+          <div className="mb-20 flex flex-col md:flex-row-reverse items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner">
+            <div className="md:w-1/2">
+                <h3 className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2"> {/* Changed h2 to h3 */}
+                  <Eye className="h-8 w-8 text-primary" /> Our Vision for the Future
+                </h3>
+                <p className="text-lg text-muted-foreground mb-4">
+                  At Phoenix Lifesciences, we envision a future fundamentally different from the present, one where the twilight years are not defined by frailty and suffering, but by vitality and continued engagement with life. We strive for a world where aging is not synonymous with inevitable decline, but rather a journey that can be navigated with health and grace.
+                </p>
+                <p className="text-lg text-muted-foreground">
+                  Our core mission stems from this vision: to extend human healthspan, granting individuals precious additional time—time to pursue passions, deepen relationships, contribute wisdom, and experience the richness of life alongside the people they cherish. We are driven by the goal of alleviating the burdens of age-related diseases, transforming the later stages of life into a period of opportunity and fulfillment, rather than one marked by pain and limitation. We are committed to developing innovative solutions that combat age-related decline and promote healthier, longer lives.
+                </p>
+            </div>
+            <div className="md:w-1/2">
+                <Image
+                    src="https://picsum.photos/seed/vision/600/400" // Placeholder image for Vision/Mission
+                    alt="Vibrant older person enjoying life"
+                    width={600}
+                    height={400}
+                    className="rounded-lg shadow-lg object-cover w-full h-auto"
+                />
+            </div>
+          </div>
+
+          {/* Feature Cards Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="text-center shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1">
               <CardHeader>
