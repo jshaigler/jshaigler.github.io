@@ -21,12 +21,14 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
-          {/* Placeholder for a logo if needed */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-          </svg>
+          {/* New Phoenix Logo SVG */}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary">
+            <path d="M12 2C8.2 6.2 6 10.5 6 15c0 3.9 3.1 7 7 7s7-3.1 7-7c0-4.5-2.2-8.8-6-13z" />
+            <path d="M9 18c-1.4 0-2.6-.6-3.5-1.5" />
+            <path d="M15 18c1.4 0 2.6-.6 3.5-1.5" />
+            <path d="M12 15s-1-2-3-2" />
+            <path d="M12 15s1-2 3-2" />
+         </svg>
           <span className="font-bold text-lg text-primary">Phoenix Lifesciences</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-1">

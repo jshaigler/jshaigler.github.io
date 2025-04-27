@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Send, Loader2 } from 'lucide-react';
 import { askQuestion } from '@/ai/flows/website-content-assistant'; // Assuming flow exists
 import { useToast } from "@/hooks/use-toast";
@@ -33,25 +33,77 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
     const { toast } = useToast();
     const scrollAreaRef = React.useRef<HTMLDivElement>(null);
 
-    // Fetch website content on mount (simplified - ideally fetch dynamically or pass)
-    // In a real app, you might scrape the current page or relevant sections.
-    // For this example, we'll use a simplified placeholder or could potentially
-    // scrape the main content areas of the rendered pages if running client-side heavy.
-    // A server-side approach to gather content might be more robust.
+    // Fetch content from all relevant pages when the modal opens
     React.useEffect(() => {
-        // Simplified: Capture basic text content of the body.
-        // This is NOT a robust way to get structured content for Q&A.
-        // A better approach would involve structured data or specific content fetching.
-        try {
-           const content = document.body.innerText || '';
-           // Basic cleanup (remove excessive whitespace)
-           const cleanedContent = content.replace(/\s\s+/g, ' ').trim().substring(0, 10000); // Limit length
-           setWebsiteContent(cleanedContent);
-        } catch (error) {
+        const fetchAllContent = async () => {
+          setIsLoading(true); // Indicate loading while fetching content
+          setWebsiteContent(''); // Clear previous content
+          console.log("Fetching website content...");
+          try {
+            let fullContent = '';
+            // List of routes to fetch content from (adjust if routes change)
+            const routes = ['/', '/about', '/solution', '/prototype'];
+            const fetchPromises = routes.map(route =>
+              fetch(route)
+                .then(res => {
+                  if (!res.ok) {
+                    console.error(`Failed to fetch content from ${route}: ${res.status} ${res.statusText}`);
+                    return ''; // Return empty string on failure
+                  }
+                  return res.text();
+                })
+                .catch(err => {
+                  console.error(`Network error fetching ${route}:`, err);
+                  return ''; // Return empty string on network error
+                })
+            );
+
+            const htmlContents = await Promise.all(fetchPromises);
+
+            htmlContents.forEach((html, index) => {
+              if (html) {
+                try {
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(html, 'text/html');
+                  // Try to get main content area, fallback to body
+                  const mainContent = doc.querySelector('main')?.innerText || doc.body.innerText || '';
+                  if(mainContent) {
+                      fullContent += `\n\n--- Content from ${routes[index]} ---\n\n${mainContent}`;
+                  } else {
+                      console.warn(`No main content found for ${routes[index]}`);
+                  }
+                } catch(parseError) {
+                  console.error(`Error parsing HTML from ${routes[index]}:`, parseError);
+                }
+              }
+            });
+
+
+            if (!fullContent) {
+                throw new Error("Could not extract any content from the site.");
+            }
+
+            // Clean and limit content size
+            const cleanedContent = fullContent.replace(/\s\s+/g, ' ').trim().substring(0, 25000); // Increased limit slightly
+            setWebsiteContent(cleanedContent);
+            console.log("Website content fetched successfully.");
+          } catch (error) {
             console.error("Could not get website content:", error);
-            setWebsiteContent("Error retrieving website content. Please try again later.");
+            setWebsiteContent("Error retrieving website content. The assistant might not have full context.");
+            toast({
+                title: "Content Fetch Error",
+                description: "Could not fetch all website content for the assistant.",
+                variant: "destructive",
+            });
+          } finally {
+            setIsLoading(false); // Stop loading indicator
+          }
+        };
+
+        if (isOpen && !websiteContent) { // Fetch only if open and content isn't already loaded
+          fetchAllContent();
         }
-    }, [isOpen]); // Re-fetch if modal reopens
+      }, [isOpen, websiteContent, toast]); // Add websiteContent and toast to dependency array
 
 
     React.useEffect(() => {
@@ -76,17 +128,23 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
 
         try {
              if (!websiteContent) {
-                throw new Error("Website content not available.");
+                 console.warn("Website content is empty, AI might lack context.");
+                // Optionally inform user or proceed with caution
+                toast({
+                    title: "Limited Context",
+                    description: "Website content might not be fully loaded. Answers may be incomplete.",
+                    variant: "default",
+                });
              }
-            const response = await askQuestion({ question: userMessage.text, websiteContent });
+            const response = await askQuestion({ question: userMessage.text, websiteContent: websiteContent || "No website content available." });
             const aiMessage: Message = { id: (Date.now() + 1).toString(), text: response.answer, sender: 'ai' };
             setMessages((prev) => [...prev, aiMessage]);
         } catch (error) {
             console.error('Error calling AI flow:', error);
-             const errorMessage: Message = { id: (Date.now() + 1).toString(), text: "Sorry, I couldn't process that request. Please try again.", sender: 'ai' };
+             const errorMessage: Message = { id: (Date.now() + 1).toString(), text: "Sorry, I encountered an error trying to process that request. Please check the console or try again later.", sender: 'ai' };
             setMessages((prev) => [...prev, errorMessage]);
             toast({
-                title: "Error",
+                title: "Assistant Error",
                 description: "Failed to get response from the assistant.",
                 variant: "destructive",
             });
@@ -100,22 +158,25 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
             <DialogContent className="sm:max-w-[500px] h-[70vh] flex flex-col p-0">
                 <DialogHeader className="p-6 pb-2">
                     <DialogTitle className="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 text-primary">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                            <path d="M2 17l10 5 10-5"/>
-                            <path d="M2 12l10 5 10-5"/>
+                         {/* Using the new logo SVG */}
+                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary">
+                            <path d="M12 2C8.2 6.2 6 10.5 6 15c0 3.9 3.1 7 7 7s7-3.1 7-7c0-4.5-2.2-8.8-6-13z" />
+                            <path d="M9 18c-1.4 0-2.6-.6-3.5-1.5" />
+                            <path d="M15 18c1.4 0 2.6-.6 3.5-1.5" />
+                            <path d="M12 15s-1-2-3-2" />
+                            <path d="M12 15s1-2 3-2" />
                         </svg>
                         Phoenix Lifesciences Assistant
                     </DialogTitle>
                     <DialogDescription>
-                        Ask questions about Phoenix Lifesciences and our technology.
+                        Ask questions about Phoenix Lifesciences and our technology based on the website content.
                     </DialogDescription>
                 </DialogHeader>
                 <ScrollArea className="flex-1 px-6 pb-4" ref={scrollAreaRef}>
                     <div className="space-y-4 pr-4">
                          {messages.length === 0 && !isLoading && (
                             <p className="text-sm text-muted-foreground text-center py-8">
-                                Ask me anything about the content on this website!
+                                {websiteContent ? "Ask me anything about the content on this website!" : "Loading website content..."}
                             </p>
                         )}
                         {messages.map((message) => (
@@ -128,7 +189,6 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                             >
                                 {message.sender === 'ai' && (
                                     <Avatar className="h-8 w-8">
-                                        {/* Placeholder AI avatar */}
                                         <AvatarFallback className="bg-primary text-primary-foreground text-xs">AI</AvatarFallback>
                                     </Avatar>
                                 )}
@@ -137,10 +197,19 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                                         'max-w-[75%] rounded-lg p-3 text-sm shadow-sm',
                                         message.sender === 'user'
                                             ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary text-secondary-foreground'
+                                            : 'bg-secondary text-secondary-foreground' // Use primary color for AI response background
                                     )}
                                 >
-                                    {message.text}
+                                    {/* Basic markdown rendering (bold, italics) - can be expanded */}
+                                    {message.text.split(/(\*\*.*?\*\*|\*.*?\*)/g).map((part, index) => {
+                                        if (part.startsWith('**') && part.endsWith('**')) {
+                                            return <strong key={index}>{part.slice(2, -2)}</strong>;
+                                        }
+                                        if (part.startsWith('*') && part.endsWith('*')) {
+                                            return <em key={index}>{part.slice(1, -1)}</em>;
+                                        }
+                                        return part;
+                                    })}
                                 </div>
                                 {message.sender === 'user' && (
                                     <Avatar className="h-8 w-8">
@@ -149,7 +218,7 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                                 )}
                             </div>
                         ))}
-                         {isLoading && (
+                         {isLoading && messages.length > 0 && messages[messages.length - 1].sender === 'user' && ( // Show loader only when AI is thinking
                             <div className="flex justify-start items-center gap-3">
                                 <Avatar className="h-8 w-8">
                                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">AI</AvatarFallback>
@@ -165,14 +234,14 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                     <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
                         <Input
                             id="message"
-                            placeholder="Type your question..."
+                            placeholder={isLoading ? "Thinking..." : "Type your question..."}
                             className="flex-1"
                             autoComplete="off"
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            disabled={isLoading}
+                            disabled={isLoading || (!websiteContent && messages.length === 0)} // Disable input while loading initial content or while responding
                         />
-                        <Button type="submit" size="icon" disabled={isLoading || !inputValue.trim()}>
+                        <Button type="submit" size="icon" disabled={isLoading || !inputValue.trim() || (!websiteContent && messages.length === 0)}>
                             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                             <span className="sr-only">Send message</span>
                         </Button>
