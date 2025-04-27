@@ -22,16 +22,16 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Replace SVG with Image component */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-3 group"> {/* Increased gap */}
            <Image
              // Assuming the image is placed in the /public directory
              src="/ChatGPT Image Apr 27, 2025, 05_45_28 PM.png"
              alt="Phoenix Lifesciences Logo"
-             width={32} // Adjust width as needed (similar to h-8 w-8)
-             height={32} // Adjust height as needed
-             className="object-contain" // Ensure the image scales properly
+             width={40} // Increased size
+             height={40} // Increased size
+             className="object-contain rounded-md" // Added rounded-md for consistency
            />
-          <span className="font-bold text-lg text-foreground">Phoenix Lifesciences</span>
+          <span className="font-bold text-lg text-foreground transition-colors duration-300 group-hover:text-primary">Phoenix Lifesciences</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-1">
           {navItems.map((item) => (
