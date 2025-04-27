@@ -85,30 +85,50 @@ export default function AboutUsPage() {
         </section>
 
 
-      {/* Team Section - Placeholder */}
+      {/* Team Section */}
       <section className="mb-16 text-center">
-        <h2 className="text-3xl font-bold tracking-tight mb-8">Meet the Team (Placeholder)</h2>
+        <h2 className="text-3xl font-bold tracking-tight mb-8 flex items-center justify-center gap-3">
+            <Users className="h-8 w-8 text-primary" /> Our Founders
+        </h2>
         <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-          Phoenix Lifesciences is led by a team of experienced scientists, researchers, and biotech professionals dedicated to advancing the field of longevity.
+          Phoenix Lifesciences is led by a passionate team dedicated to advancing the field of longevity.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Placeholder team members */}
-          {[1, 2, 3, 4].map((i) => (
-            <Card key={i} className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out">
-              <Image
-                src={`https://picsum.photos/seed/team${i}/300/300`}
-                alt={`Team Member ${i}`}
-                width={300}
-                height={300}
-                className="w-full h-auto object-cover"
-              />
-              <CardContent className="p-4">
-                <h4 className="text-lg font-semibold text-foreground">Dr. Jane Doe {i}</h4>
-                <p className="text-sm text-primary">Role/Title</p>
-                <p className="text-xs text-muted-foreground mt-1">Brief bio or expertise highlight placeholder.</p>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Joshua Haigler Card */}
+          <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col md:flex-row items-start">
+            <Image
+              src="https://picsum.photos/seed/joshua/300/300" // Placeholder image
+              alt="Joshua Haigler"
+              width={200}
+              height={200}
+              className="w-full md:w-1/3 h-auto object-cover"
+            />
+            <CardContent className="p-6 flex-1">
+              <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
+              <p className="text-md text-primary font-medium mb-3">CEO & Co-founder</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Hello, everyone! I am a high school student (graduating spring 2026) from Marshville, North Carolina, although most of my schooling happens via dual enrollment at a local community college. I have been a part of several extracurricular groups for some time now, including student government, The Knowledge Society (TKS), and the Union County Junior EMS program. I have a love of medicine, synthetic biology, biomedical engineering, and computer science, especially at their intersections. I've built various projects in these fields, and I hope to someday make some of them good enough to turn into actual products or services. Beyond academic related activities I love to paint (although I haven't done too much of it lately), build Legos, and read across a variety of genres.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Kiara Aguirre Card */}
+          <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col md:flex-row items-start">
+            <Image
+              src="https://picsum.photos/seed/kiara/300/300" // Placeholder image
+              alt="Kiara Aguirre"
+              width={200}
+              height={200}
+              className="w-full md:w-1/3 h-auto object-cover"
+            />
+            <CardContent className="p-6 flex-1">
+              <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
+              <p className="text-md text-primary font-medium mb-3">Head of Board & Co-founder</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                ¡Hi! I’m Kiara Aguirre, a student aiming for a double major in Linguistics and CS. I am deeply passionate about harnessing technology to develop innovative, human-centered solutions, especially to enhance educational environments. My focus is on creating impactful projects that improve linguistics and literacy. Recently, I’ve been honored as a Rise for the World Global Winner, had an essay published by the Ministry of Education, and had a research paper featured in the Harvard International Review Magazine. I’m enthusiastic about connecting with like-minded individuals to collaborate on exciting projects and make a meaningful contribution to the educational tech industry.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
