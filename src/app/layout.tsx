@@ -1,26 +1,36 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google'; // Using Inter for a modern feel
+
+'use client'; // Required for Framer Motion client components
+
+import type { Metadata } from 'next'; // Metadata type can still be used
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Toaster } from "@/components/ui/toaster";
 import { ChatAssistantTrigger } from '@/components/chat-assistant-trigger';
+import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation'; // Needed for AnimatePresence key
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter', // Changed variable name if using Geist elsewhere
+  variable: '--font-inter',
 });
 
-export const metadata: Metadata = {
-  title: 'Phoenix Lifesciences', // Updated title
+// Metadata object (remains server-side construct)
+// Note: While the component is 'use client', metadata export is handled by Next.js build process
+export const metadataObj: Metadata = {
+  title: 'Phoenix Lifesciences',
   description: 'Pioneering the Next Generation of mRNA Life Extension Therapies',
 };
+
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -31,7 +41,18 @@ export default function RootLayout({
       >
         <div className="relative flex min-h-screen flex-col">
           <Header />
-          <main className="flex-1">{children}</main>
+          <AnimatePresence mode="wait">
+            <motion.main
+              key={pathname} // Unique key for triggering animations on route change
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="flex-1"
+            >
+              {children}
+            </motion.main>
+          </AnimatePresence>
           {/* Footer could be added here */}
         </div>
         <ChatAssistantTrigger />

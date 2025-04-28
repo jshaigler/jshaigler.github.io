@@ -1,7 +1,12 @@
+
+'use client'; // Required for Framer Motion
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CheckCircle, Dna, Zap, Settings, ShieldCheck, Package } from 'lucide-react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 
 const pillars = [
   {
@@ -25,7 +30,7 @@ const pillars = [
   {
     title: 'Partial Epigenetic Reprogramming',
     description: 'Resetting the Cellular Clock: Incorporates mRNA encoding Oct4, Sox2, and Klf4 (OSK factors) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.',
-    icon: CheckCircle, // Using CheckCircle as a proxy for reset/rejuvenation
+    icon: CheckCircle,
     details: 'Studies in mice demonstrate lifespan extension, improved health, and enhanced tissue regeneration through this partial reprogramming approach.'
   }
 ];
@@ -52,68 +57,89 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={staggerContainer}
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
+      <motion.div variants={fadeInUp} className="text-center mb-16">
+        <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           Our Solution: Phoenix
-        </h1>
-        <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+        </motion.h1>
+        <motion.p variants={fadeInUp} className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
           A Multi-Pronged Therapeutic Strategy Targeting the Root Causes of Aging.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {/* Four Pillars Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold tracking-tight text-center mb-12">The Four Pillars of Phoenix</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <motion.section
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+        className="mb-20"
+      >
+        <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-12">The Four Pillars of Phoenix</motion.h2>
+        <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {pillars.map((pillar, index) => (
-            <Card key={index} className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
-              <CardHeader className="flex flex-row items-start gap-4 pb-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 shrink-0">
-                    <pillar.icon className="h-6 w-6 text-primary" aria-hidden="true" />
-                </div>
-                <div>
-                    <CardTitle className="text-xl mb-1">{pillar.title}</CardTitle>
-                    <CardDescription>{pillar.description}</CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0 flex-grow">
-                  <p className="text-sm text-muted-foreground">{pillar.details}</p>
-              </CardContent>
-            </Card>
+            <motion.div key={index} variants={fadeInUp}>
+              <Card className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out h-full"> {/* Added h-full */}
+                <CardHeader className="flex flex-row items-start gap-4 pb-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                      <pillar.icon className="h-6 w-6 text-primary" aria-hidden="true" />
+                  </div>
+                  <div>
+                      <CardTitle className="text-xl mb-1">{pillar.title}</CardTitle>
+                      <CardDescription>{pillar.description}</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0 flex-grow">
+                    <p className="text-sm text-muted-foreground">{pillar.details}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Synergistic Effects */}
-      <section className="mb-20 p-8 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg shadow-inner">
-         <h2 className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</h2>
-         <p className="text-center text-lg text-muted-foreground mb-8 max-w-4xl mx-auto">
+      <motion.section
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        className="mb-20 p-8 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg shadow-inner"
+      >
+         <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</motion.h2>
+         <motion.p variants={fadeInUp} className="text-center text-lg text-muted-foreground mb-8 max-w-4xl mx-auto">
             The true power of Phoenix lies in the synergistic interaction of its components, creating a comprehensive approach that addresses the multifaceted nature of aging more effectively than isolated treatments.
-         </p>
-         <ul className="space-y-4 list-none p-0 max-w-3xl mx-auto">
-            <li className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 shrink-0" />
-              <span><strong className="font-semibold text-foreground">Enhanced Replicative Capacity:</strong> TERT increases cellular lifespan, supported by the enhanced energy from TFAM-boosted mitochondria.</span>
-            </li>
-            <li className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 shrink-0" />
-              <span><strong className="font-semibold text-foreground">Powered DNA Repair:</strong> Improved mitochondrial function provides the necessary energy for efficient DNA repair processes enhanced by p53-MDM2 modulation.</span>
-            </li>
-            <li className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 shrink-0" />
-              <span><strong className="font-semibold text-foreground">Amplified Rejuvenation:</strong> Epigenetic reprogramming creates a more youthful cellular environment, amplifying the benefits of other interventions.</span>
-            </li>
-             <li className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 shrink-0" />
-              <span><strong className="font-semibold text-foreground">Integrated Safety:</strong> The fine-tuned p53 pathway provides a crucial safety check against potential risks associated with telomerase activation.</span>
-            </li>
-         </ul>
-      </section>
+         </motion.p>
+         <motion.ul variants={staggerContainer} className="space-y-4 list-none p-0 max-w-3xl mx-auto">
+            {[
+              { title: "Enhanced Replicative Capacity:", text: "TERT increases cellular lifespan, supported by the enhanced energy from TFAM-boosted mitochondria." },
+              { title: "Powered DNA Repair:", text: "Improved mitochondrial function provides the necessary energy for efficient DNA repair processes enhanced by p53-MDM2 modulation." },
+              { title: "Amplified Rejuvenation:", text: "Epigenetic reprogramming creates a more youthful cellular environment, amplifying the benefits of other interventions." },
+              { title: "Integrated Safety:", text: "The fine-tuned p53 pathway provides a crucial safety check against potential risks associated with telomerase activation." },
+            ].map((item, index) => (
+              <motion.li key={index} variants={fadeInUp} className="flex items-start">
+                <CheckCircle className="h-5 w-5 text-primary mr-3 mt-1 shrink-0" />
+                <span><strong className="font-semibold text-foreground">{item.title}</strong> {item.text}</span>
+              </motion.li>
+            ))}
+         </motion.ul>
+      </motion.section>
 
        {/* Delivery and Safety */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-center">
-             <div>
+        <motion.section
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-center"
+        >
+             <motion.div variants={slideInLeft}>
                 <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
                    <Package className="h-6 w-6 text-primary" /> Precision Delivery System
                 </h3>
@@ -125,8 +151,8 @@ export default function SolutionPage() {
                     <li>Minimizes potential off-target effects and systemic side effects.</li>
                     <li>Enhances the overall safety profile of the treatment.</li>
                 </ul>
-             </div>
-              <div>
+             </motion.div>
+              <motion.div variants={slideInRight}>
                  <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
                     <ShieldCheck className="h-6 w-6 text-primary" /> Safety-First Genomic Screening
                  </h3>
@@ -138,13 +164,19 @@ export default function SolutionPage() {
                      <li>Allows for exclusion or modification of treatment protocols for these patients.</li>
                      <li>Adds an essential layer of personalized safety to mitigate potential oncogenic risks.</li>
                  </ul>
-              </div>
-        </section>
+              </motion.div>
+        </motion.section>
 
 
       {/* Technical Appendix Section */}
-      <section>
+      <motion.section
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+      >
         <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Technical Appendix: Molecular Mechanisms</h2>
+        {/* Accordion itself doesn't need complex animation, content reveal is handled by Radix */}
         <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto">
            {technicalMechanisms.map((item, index) => (
             <AccordionItem value={`item-${index + 1}`} key={index}>
@@ -157,11 +189,11 @@ export default function SolutionPage() {
             </AccordionItem>
            ))}
         </Accordion>
-      </section>
+      </motion.section>
 
-        <p className="mt-20 text-sm text-center text-muted-foreground italic">
+        <motion.p variants={fadeInUp} className="mt-20 text-sm text-center text-muted-foreground italic">
             Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
-        </p>
-    </div>
+        </motion.p>
+    </motion.div>
   );
 }
