@@ -24,12 +24,13 @@ export function Header() {
         {/* Replace SVG with Image component */}
         <Link href="/" className="flex items-center gap-3 group"> {/* Increased gap */}
            <Image
-             // Assuming the image is placed in the /public directory
-             src="/ChatGPT Image Apr 27, 2025, 05_45_28 PM.png"
+             // Paths in /public should be relative to the root
+             src="/Logo-removebg-preview.png"
              alt="Phoenix Lifesciences Logo"
              width={40} // Increased size
              height={40} // Increased size
              className="object-contain rounded-md" // Added rounded-md for consistency
+             priority // Add priority to potentially improve LCP
            />
           <span className="font-bold text-lg text-foreground transition-colors duration-300 group-hover:text-primary">Phoenix Lifesciences</span>
         </Link>
