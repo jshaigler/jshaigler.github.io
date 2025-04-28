@@ -44,10 +44,10 @@ export default function RootLayout({
           <AnimatePresence mode="wait">
             <motion.main
               key={pathname} // Unique key for triggering animations on route change
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }} // Slightly reduced y offset
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              exit={{ opacity: 0, y: -15 }} // Slightly reduced y offset
+              transition={{ duration: 0.25, ease: 'easeInOut' }} // Faster duration
               className="flex-1"
             >
               {children}

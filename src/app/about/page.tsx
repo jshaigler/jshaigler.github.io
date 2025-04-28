@@ -18,6 +18,7 @@ export default function AboutUsPage() {
       variants={staggerContainer} // Apply stagger to the main container
       className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
     >
+      {/* Initial Section - Animates on load */}
       <motion.div variants={fadeInUp} className="text-center mb-16">
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           About Phoenix Lifesciences
@@ -27,11 +28,11 @@ export default function AboutUsPage() {
         </motion.p>
       </motion.div>
 
-      {/* Our Approach Section */}
+      {/* Our Approach Section - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
           variants={staggerContainer}
           className="mb-20"
         >
@@ -65,11 +66,11 @@ export default function AboutUsPage() {
         </motion.section>
 
 
-      {/* Team Section */}
+      {/* Team Section - Animate when in view */}
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true }}
+        viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
         variants={staggerContainer}
         className="mb-16 text-center"
       >
@@ -125,11 +126,11 @@ export default function AboutUsPage() {
         </motion.div>
       </motion.section>
 
-      {/* Article Section */}
+      {/* Article Section - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.3 }} // Trigger when 30% visible
           variants={fadeIn}
           className="my-20 text-center bg-secondary/50 p-8 rounded-lg shadow-md"
         >
@@ -148,7 +149,7 @@ export default function AboutUsPage() {
             </motion.div>
         </motion.section>
 
-        {/* Path Forward Section */}
+        {/* Path Forward Section - Animate when in view */}
       <motion.section
         initial="initial"
         whileInView="animate"

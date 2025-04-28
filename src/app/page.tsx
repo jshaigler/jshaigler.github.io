@@ -18,7 +18,7 @@ export default function Home() {
         exit="exit" // Add exit if needed for component unmount
         className="flex flex-col min-h-screen"
       >
-        {/* Hero Section */}
+        {/* Hero Section - Animates immediately */}
         <motion.section
           variants={fadeIn} // Simple fade-in for the whole section
           className="relative py-24 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50 overflow-hidden"
@@ -60,18 +60,18 @@ export default function Home() {
                   width={300}
                   height={200}
                   className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto rounded-lg shadow-xl object-contain mx-auto md:mx-0"
-                  priority
+                  priority // LCP Image
                 />
               </motion.div>
             </motion.div>
           </div>
         </motion.section>
 
-        {/* Introduction/Vision Section */}
+        {/* Introduction/Vision Section - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% is visible
           variants={staggerContainer}
           className="py-16 md:py-24 bg-background"
         >
@@ -82,22 +82,23 @@ export default function Home() {
 
             {/* Vision Section */}
             <motion.div
-              variants={fadeIn}
-              initial="initial"
+              initial="initial" // Use initial/whileInView for components within viewport-triggered sections
               whileInView="animate"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.3 }} // Trigger when 30% visible
+              variants={fadeIn} // Use a simple fadeIn for the container div
               className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden"
             >
-              <motion.div variants={fadeIn} className="md:w-1/2">
+              <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
                 <Image
                   src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
                   alt="Vibrant illustration representing future health and longevity"
                   width={600}
                   height={400}
                   className="rounded-lg shadow-lg object-cover w-full h-auto saturate-110 contrast-110"
+                  // Removed priority as it's not the LCP
                 />
               </motion.div>
-              <motion.div variants={staggerContainer} className="md:w-1/2">
+              <motion.div variants={staggerContainer} className="md:w-1/2"> {/* Stagger text animation */}
                   <motion.h3 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2">
                     <Eye className="h-8 w-8 text-primary" /> Our Vision for the Future
                   </motion.h3>
@@ -110,12 +111,12 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* Feature Cards Section */}
+            {/* Feature Cards Section - Animate when in view */}
             <motion.div
               variants={staggerContainer}
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% is visible
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
               {[
@@ -138,10 +139,14 @@ export default function Home() {
                 </motion.div>
               ))}
             </motion.div>
-            <motion.p variants={fadeInUp} className="mt-12 text-center text-lg text-muted-foreground max-w-4xl mx-auto">
+            <motion.p
+             initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}
+             className="mt-12 text-center text-lg text-muted-foreground max-w-4xl mx-auto">
               The longevity industry is booming, projected to reach $63 billion by 2035. Phoenix Lifesciences is at the forefront, developing Phoenix, a novel therapy designed to translate cutting-edge research into tangible solutions for healthier, longer lives.
             </motion.p>
-            <motion.div variants={fadeInUp} className="mt-12 text-center">
+            <motion.div
+              initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}
+              className="mt-12 text-center">
               <Button variant="link" asChild>
                 <Link href="/prototype">
                   See the Prototype <ArrowRight className="ml-1 h-4 w-4" />

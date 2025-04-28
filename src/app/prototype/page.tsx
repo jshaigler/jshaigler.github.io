@@ -30,6 +30,7 @@ export default function PrototypePage() {
       variants={staggerContainer}
       className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
     >
+      {/* Initial Section - Animates on load */}
       <motion.div variants={fadeInUp} className="text-center mb-16">
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           Phoenix Prototype & Research Basis
@@ -39,11 +40,11 @@ export default function PrototypePage() {
         </motion.p>
       </motion.div>
 
-      {/* Current Status Section */}
+      {/* Current Status Section - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
           variants={fadeIn}
           className="mb-20 p-8 bg-secondary/50 rounded-lg shadow-md"
         >
@@ -75,11 +76,11 @@ export default function PrototypePage() {
         </motion.section>
 
 
-      {/* Research Basis Section */}
+      {/* Research Basis Section - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
           variants={staggerContainer}
           className="mb-16"
         >
@@ -127,7 +128,7 @@ export default function PrototypePage() {
             </motion.div>
         </motion.section>
 
-      {/* Disclaimer */}
+      {/* Disclaimer - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
