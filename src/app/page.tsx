@@ -12,14 +12,12 @@ import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations'; // Assumi
 export default function Home() {
   return (
     <>
-      <motion.div
-        initial="initial"
-        animate="animate"
-        exit="exit" // Add exit if needed for component unmount
-        className="flex flex-col min-h-screen"
-      >
+       {/* Remove top-level motion props to let layout handle page transition */}
+      <div className="flex flex-col min-h-screen">
         {/* Hero Section - Animates immediately */}
         <motion.section
+          initial="initial" // Animate this section on load
+          animate="animate"
           variants={fadeIn} // Simple fade-in for the whole section
           className="relative py-24 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50 overflow-hidden"
         >
@@ -27,7 +25,7 @@ export default function Home() {
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="patt" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="hsl(var(--primary))"></circle></pattern></defs><rect width="100%" height="100%" fill="url(#patt)"></rect></svg>
           </div>
           <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <motion.div
+             <motion.div
               variants={staggerContainer}
               className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-12"
             >
@@ -39,18 +37,18 @@ export default function Home() {
                 <motion.p variants={fadeInUp} className="mt-4 text-lg md:text-xl lg:text-2xl text-muted-foreground">
                   Pioneering the Next Generation of mRNA Life Extension Therapies.
                 </motion.p>
-                <motion.div variants={fadeInUp} className="mt-8 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                  <Button size="lg" asChild className="shadow-lg hover:shadow-xl transition-shadow">
-                    <Link href="/solution">
-                      Explore Our Solution <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                  <Button size="lg" variant="outline" asChild className="shadow-lg hover:shadow-xl transition-shadow">
-                    <Link href="/about">
-                      Learn About Us
-                    </Link>
-                  </Button>
-                </motion.div>
+                 <motion.div variants={fadeInUp} className="mt-8 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                   <Button size="lg" asChild className="shadow-lg hover:shadow-xl transition-shadow">
+                     <Link href="/solution">
+                       Explore Our Solution <ArrowRight className="ml-2 h-5 w-5" />
+                     </Link>
+                   </Button>
+                   <Button size="lg" variant="outline" asChild className="shadow-lg hover:shadow-xl transition-shadow">
+                     <Link href="/about">
+                       Learn About Us
+                     </Link>
+                   </Button>
+                 </motion.div>
               </motion.div>
               {/* Image column */}
               <motion.div variants={fadeIn} className="w-full md:w-auto flex-shrink-0">
@@ -71,7 +69,7 @@ export default function Home() {
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% is visible
+          viewport={{ once: true, amount: 0.1 }} // Trigger animation when 10% is visible
           variants={staggerContainer}
           className="py-16 md:py-24 bg-background"
         >
@@ -84,7 +82,7 @@ export default function Home() {
             <motion.div
               initial="initial" // Use initial/whileInView for components within viewport-triggered sections
               whileInView="animate"
-              viewport={{ once: true, amount: 0.3 }} // Trigger when 30% visible
+              viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
               variants={fadeIn} // Use a simple fadeIn for the container div
               className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden"
             >
@@ -116,7 +114,7 @@ export default function Home() {
               variants={staggerContainer}
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, amount: 0.2 }} // Trigger animation when 20% is visible
+              viewport={{ once: true, amount: 0.1 }} // Trigger animation when 10% is visible
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
               {[
@@ -155,7 +153,7 @@ export default function Home() {
             </motion.div>
           </div>
         </motion.section>
-      </motion.div>
+      </div>
     </>
   );
 }

@@ -57,15 +57,15 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={staggerContainer}
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
-      {/* Initial Section - Animates on load */}
-      <motion.div variants={fadeInUp} className="text-center mb-16">
+    // Remove top-level motion props to let layout handle page transition
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      {/* Initial Section - Animates when in view or on load */}
+      <motion.div
+          initial="initial"
+          animate="animate" // Animate this section immediately
+          variants={staggerContainer}
+          className="text-center mb-16"
+      >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           Our Solution: Phoenix
         </motion.h1>
@@ -78,7 +78,7 @@ export default function SolutionPage() {
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
+        viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
         variants={staggerContainer}
         className="mb-20"
       >
@@ -109,7 +109,7 @@ export default function SolutionPage() {
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }} // Trigger when 30% visible
+        viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
         variants={fadeIn}
         className="mb-20 p-8 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg shadow-inner"
       >
@@ -136,9 +136,9 @@ export default function SolutionPage() {
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
+          viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-center"
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-start" // Changed to items-start for better alignment
         >
              <motion.div variants={slideInLeft}>
                 <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
@@ -173,7 +173,7 @@ export default function SolutionPage() {
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
+        viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
         variants={fadeInUp}
       >
         <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Technical Appendix: Molecular Mechanisms</h2>
@@ -197,6 +197,6 @@ export default function SolutionPage() {
          className="mt-20 text-sm text-center text-muted-foreground italic">
             Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
         </motion.p>
-    </motion.div>
+    </div>
   );
 }
