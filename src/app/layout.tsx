@@ -2,7 +2,7 @@
 'use client'; // Required for Framer Motion client components
 
 import type { Metadata } from 'next'; // Metadata type can still be used
-import { Inter } from 'next/font/google';
+// Removed Inter font import
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
@@ -12,11 +12,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'; // Needed for AnimatePresence key
 import { Suspense } from 'react'; // Import Suspense
 import { LoadingSpinner } from '@/components/loading-spinner'; // Import the loading spinner
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
 
 // Metadata object (remains server-side construct)
 // Note: While the component is 'use client', metadata export is handled by Next.js build process
@@ -38,7 +33,7 @@ export default function RootLayout({
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
-          inter.variable
+          // Removed font variable class
         )}
       >
         <div className="relative flex min-h-screen flex-col">
@@ -70,3 +65,4 @@ export default function RootLayout({
     </html>
   );
 }
+
