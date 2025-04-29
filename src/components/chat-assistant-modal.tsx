@@ -2,6 +2,7 @@
 "use client";
 
 import * as React from 'react';
+import Image from 'next/image'; // Import Image component
 import {
   Dialog,
   DialogContent,
@@ -68,6 +69,7 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                   // Try to get main content area, fallback to body
                   const mainContent = doc.querySelector('main')?.innerText || doc.body.innerText || '';
                   if(mainContent) {
+                      // Add a separator and the route path for context
                       fullContent += `\n\n--- Content from ${routes[index]} ---\n\n${mainContent}`;
                   } else {
                       console.warn(`No main content found for ${routes[index]}`);
@@ -83,10 +85,23 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                 throw new Error("Could not extract any content from the site.");
             }
 
-            // Clean and limit content size
-            const cleanedContent = fullContent.replace(/\s\s+/g, ' ').trim().substring(0, 25000); // Increased limit slightly
+            // Clean and limit content size - Increased limit for more context
+            // Using a larger limit as LLMs can handle more context now. Still important for performance/cost.
+            const MAX_CONTENT_LENGTH = 50000; // Increased limit significantly
+            let cleanedContent = fullContent.replace(/\s\s+/g, ' ').trim();
+            if (cleanedContent.length > MAX_CONTENT_LENGTH) {
+                console.warn(`Content length ${cleanedContent.length} exceeds limit ${MAX_CONTENT_LENGTH}. Truncating.`);
+                cleanedContent = cleanedContent.substring(0, MAX_CONTENT_LENGTH);
+                toast({
+                    title: "Context Limit Reached",
+                    description: `Website content has been truncated to ${MAX_CONTENT_LENGTH} characters. Answers may be based on partial information.`,
+                    variant: "default",
+                    duration: 5000,
+                });
+            }
+
             setWebsiteContent(cleanedContent);
-            console.log("Website content fetched successfully.");
+            console.log(`Website content fetched successfully. Length: ${cleanedContent.length}`);
           } catch (error) {
             console.error("Could not get website content:", error);
             setWebsiteContent("Error retrieving website content. The assistant might not have full context.");
@@ -158,14 +173,14 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
             <DialogContent className="sm:max-w-[500px] h-[70vh] flex flex-col p-0">
                 <DialogHeader className="p-6 pb-2">
                     <DialogTitle className="flex items-center gap-2">
-                         {/* Using the new logo SVG */}
-                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary">
-                            <path d="M12 2C8.2 6.2 6 10.5 6 15c0 3.9 3.1 7 7 7s7-3.1 7-7c0-4.5-2.2-8.8-6-13z" />
-                            <path d="M9 18c-1.4 0-2.6-.6-3.5-1.5" />
-                            <path d="M15 18c1.4 0 2.6-.6 3.5-1.5" />
-                            <path d="M12 15s-1-2-3-2" />
-                            <path d="M12 15s1-2 3-2" />
-                        </svg>
+                         {/* Replace SVG with the company logo Image component */}
+                         <Image
+                           src="/Logo-removebg-preview.png" // Path to the logo in /public
+                           alt="Phoenix Lifesciences Logo"
+                           width={24} // Adjust size as needed (similar to original SVG h-6 w-6)
+                           height={24}
+                           className="object-contain rounded-sm" // Adjust styling as needed
+                         />
                         Phoenix Lifesciences Assistant
                     </DialogTitle>
                     <DialogDescription>
@@ -189,6 +204,7 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                             >
                                 {message.sender === 'ai' && (
                                     <Avatar className="h-8 w-8">
+                                        {/* Use a simple AI fallback */}
                                         <AvatarFallback className="bg-primary text-primary-foreground text-xs">AI</AvatarFallback>
                                     </Avatar>
                                 )}
@@ -197,7 +213,7 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                                         'max-w-[75%] rounded-lg p-3 text-sm shadow-sm',
                                         message.sender === 'user'
                                             ? 'bg-primary text-primary-foreground'
-                                            : 'bg-secondary text-secondary-foreground' // Use primary color for AI response background
+                                            : 'bg-secondary text-secondary-foreground' // Keep AI response distinct
                                     )}
                                 >
                                     {/* Basic markdown rendering (bold, italics) - can be expanded */}
@@ -208,7 +224,13 @@ export function ChatAssistantModal({ isOpen, onOpenChange }: { isOpen: boolean; 
                                         if (part.startsWith('*') && part.endsWith('*')) {
                                             return <em key={index}>{part.slice(1, -1)}</em>;
                                         }
-                                        return part;
+                                        // Replace potential newline characters from markdown with <br />
+                                        return part.split('\n').map((line, lineIndex) => (
+                                          <React.Fragment key={`${index}-${lineIndex}`}>
+                                            {line}
+                                            {lineIndex < part.split('\n').length - 1 && <br />}
+                                          </React.Fragment>
+                                        ));
                                     })}
                                 </div>
                                 {message.sender === 'user' && (
