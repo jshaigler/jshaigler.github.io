@@ -4,73 +4,81 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%; /* Neutral Light Gray */
-    --foreground: 0 0% 9%; /* Neutral Dark Gray */
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 10%; /* Very Dark Gray */
     --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 10%; /* Very Dark Gray */
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 10%; /* Very Dark Gray */
     --primary: 180 100% 25%; /* Deep Teal */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 0 0% 94.1%; /* Light Gray */
+    --secondary: 0 0% 94%; /* Light Gray */
     --secondary-foreground: 180 100% 25%; /* Deep Teal on Secondary */
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%; /* Medium Neutral Gray */
-    --accent: 181 100% 75%; /* Electric Blue */
-    --accent-foreground: 0 0% 9%; /* Dark Gray on Accent */
+    --muted: 0 0% 98%; /* Lighter Gray */
+    --muted-foreground: 0 0% 40%; /* Medium Gray */
+    --accent: 185 100% 74%; /* Electric Blue */
+    --accent-foreground: 0 0% 10%; /* Very Dark Gray on Accent */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%; /* Light Neutral Gray Border */
-    --input: 0 0% 89.8%;
-    --ring: 181 100% 75%; /* Electric Blue for rings */
-    --chart-1: 180 70% 40%; /* Adjusted chart colors (Teal variants) */
-    --chart-2: 180 60% 50%;
-    --chart-3: 180 50% 60%;
-    --chart-4: 180 40% 70%;
-    --chart-5: 180 30% 80%;
+    --border: 0 0% 88%; /* Slightly darker gray border */
+    --input: 0 0% 88%; /* Slightly darker gray input */
+    --ring: 185 100% 74%; /* Electric Blue for rings */
+    --chart-1: 180 80% 30%; /* Dark Teal */
+    --chart-2: 180 60% 40%; /* Medium Teal */
+    --chart-3: 180 50% 50%; /* Teal */
+    --chart-4: 185 70% 65%; /* Light Electric Blue */
+    --chart-5: 185 90% 85%; /* Very Light Electric Blue */
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 9%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 180 100% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 181 100% 75%;
-    --sidebar-accent-foreground: 0 0% 9%;
-    --sidebar-border: 0 0% 89.8%;
-    --sidebar-ring: 181 100% 75%;
+    --sidebar-accent: 185 100% 74%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 88%;
+    --sidebar-ring: 185 100% 74%;
+
+    /* Explicit background colors for transitions */
+    --background-light: 0 0% 100%;
+    --background-dark: 210 40% 5%; /* Adjusted Dark Blue */
   }
   .dark {
-    --background: 0 0% 10%; /* Darker Gray */
-    --foreground: 0 0% 95%; /* Lighter Gray */
-    --card: 0 0% 12%; /* Slightly Darker Gray */
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 180 100% 35%; /* Brighter Teal for dark mode */
+    --background: 210 40% 5%; /* Dark Blue */
+    --foreground: 0 0% 95%; /* Light Gray */
+    --card: 210 30% 10%; /* Slightly Lighter Dark Blue Background */
+    --card-foreground: 0 0% 95%; /* Light Gray */
+    --popover: 210 30% 10%; /* Slightly Lighter Dark Blue Background */
+    --popover-foreground: 0 0% 95%; /* Light Gray */
+    --primary: 180 100% 35%; /* Brighter Deep Teal */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 16%; /* Darker Neutral Gray */
-    --secondary-foreground: 180 100% 35%;
-    --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 60%; /* Lighter Neutral Gray */
-    --accent: 181 100% 65%; /* Slightly Adjusted Electric Blue */
-    --accent-foreground: 0 0% 100%; /* White on Accent */
-    --destructive: 0 70% 50%; /* Adjusted Destructive */
+    --secondary: 0 0% 15%; /* Dark Gray */
+    --secondary-foreground: 180 100% 35%; /* Brighter Deep Teal on Secondary */
+    --muted: 0 0% 20%; /* Slightly Lighter Dark Gray */
+    --muted-foreground: 0 0% 60%; /* Medium Light Gray */
+    --accent: 185 100% 60%; /* Brighter Electric Blue */
+    --accent-foreground: 0 0% 10%; /* Very Dark Gray on Accent */
+    --destructive: 0 70% 50%; /* Adjusted Red */
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 26%; /* Darker Neutral Gray Border */
-    --input: 0 0% 16%;
-    --ring: 181 100% 65%; /* Electric Blue for rings */
-    --chart-1: 180 90% 45%;
-    --chart-2: 180 80% 55%;
-    --chart-3: 180 70% 65%;
-    --chart-4: 180 60% 75%;
-    --chart-5: 180 50% 85%;
-    --sidebar-background: 0 0% 10%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 180 100% 35%;
+    --border: 0 0% 25%; /* Medium Dark Gray Border */
+    --input: 0 0% 15%; /* Dark Gray Input */
+    --ring: 185 100% 60%; /* Brighter Electric Blue for rings */
+    --chart-1: 180 90% 40%; /* Dark Teal */
+    --chart-2: 180 70% 50%; /* Medium Dark Teal */
+    --chart-3: 180 60% 60%; /* Medium Teal */
+    --chart-4: 185 80% 70%; /* Light Electric Blue */
+    --chart-5: 185 95% 80%; /* Very Light Electric Blue */
+    --sidebar-background: 210 40% 5%; /* Dark Blue */
+    --sidebar-foreground: 0 0% 95%; /* Light Gray */
+    --sidebar-primary: 180 100% 35%; /* Brighter Deep Teal */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 181 100% 65%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 26%;
-    --sidebar-ring: 181 100% 65%;
+    --sidebar-accent: 185 100% 60%; /* Brighter Electric Blue */
+    --sidebar-accent-foreground: 0 0% 10%; /* Very Dark Gray on Accent */
+    --sidebar-border: 0 0% 25%; /* Medium Dark Gray Border */
+    --sidebar-ring: 185 100% 60%; /* Brighter Electric Blue for rings */
+
+    /* Explicit background colors for transitions */
+    --background-light: 0 0% 100%;
+    --background-dark: 210 40% 5%; /* Consistent Dark Blue */
   }
 }
 
@@ -82,7 +90,7 @@
     /* Apply base transitions */
     @apply bg-background text-foreground font-sans transition-colors duration-500 ease-in-out;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
+    }
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
   }
@@ -93,7 +101,7 @@
   p { @apply leading-7 [&:not(:first-child)]:mt-6; }
   blockquote { @apply mt-6 border-l-2 pl-6 italic; }
   ul { @apply my-6 ml-6 list-disc [&>li]:mt-2; }
-  a { @apply text-primary underline-offset-4 hover:underline; }
+  a { @apply text-primary underline-offset-4 hover:underline;}
 }
 
 /* Add smooth scroll behavior */
@@ -107,42 +115,33 @@ html {
   to { clip-path: circle(var(--r) at var(--x) var(--y)); } /* Use calculated radius */
 }
 
-/* Dark theme appears immediately during transition */
+/* Old view state - No animation, placed behind */
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal; /* Prevent blending issues */
+  z-index: 1;
+}
+
+/* New view state - Apply the animation, placed on top */
+::view-transition-new(root) {
+  animation: circle-reveal 0.5s ease-in forwards;
+  mix-blend-mode: normal; /* Prevent blending issues */
+  z-index: 9999;
+}
+
+/* Ensure correct backgrounds during transition to prevent flicker */
+/* When going TO dark */
 .dark::view-transition-old(root) {
-  z-index: 1; /* Keep light theme snapshot above */
+  background: hsl(var(--background-light)); /* Explicitly set old (light) background */
 }
 .dark::view-transition-new(root) {
-  z-index: 9999; /* Ensure dark theme new state is on top */
+  background: hsl(var(--background-dark)); /* Explicitly set new (dark) background */
 }
 
-/* Light theme appears immediately during transition */
-::view-transition-old(root) {
-  z-index: 9999; /* Ensure light theme old state is on top */
+/* When going TO light */
+html:not(.dark)::view-transition-old(root) {
+   background: hsl(var(--background-dark)); /* Explicitly set old (dark) background */
 }
-::view-transition-new(root) {
-  z-index: 1; /* Keep dark theme snapshot below */
-}
-
-/* Set background color for the transition pseudo-elements to prevent flicker and apply animations/styles */
-::view-transition-old(root) {
-  background: hsl(var(--background)); /* Use the 'old' background color */
-  animation: none; /* Ensure no animation on old */
-  mix-blend-mode: normal;
-  /* z-index applied above */
-}
-
-.dark::view-transition-old(root) {
-   background: hsl(0 0% 98%); /* Explicitly light background for old when going dark */
-}
-
-
-::view-transition-new(root) {
-   background: hsl(var(--background)); /* Use the 'new' background color */
-   animation: circle-reveal 0.5s ease-in forwards; /* Apply animation to new */
-   mix-blend-mode: normal;
-   /* z-index applied above */
-}
-
-.dark::view-transition-new(root) {
-  background: hsl(0 0% 10%); /* Explicitly dark background for new when going dark */
+html:not(.dark)::view-transition-new(root) {
+   background: hsl(var(--background-light)); /* Explicitly set new (light) background */
 }
