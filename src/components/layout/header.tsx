@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { FlaskConical, Home, Presentation, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle'; // Import ThemeToggle
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -25,7 +26,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-3 group"> {/* Increased gap */}
            <Image
              // Paths in /public should be relative to the root
-             src="/Logo-removebg-preview.png"
+             src="/Logo-removebg-preview.png" // Updated path
              alt="Phoenix Lifesciences Logo"
              width={40} // Increased size
              height={40} // Increased size
@@ -34,29 +35,32 @@ export function Header() {
            />
           <span className="font-bold text-lg text-foreground transition-colors duration-300 group-hover:text-primary">Phoenix Lifesciences</span>
         </Link>
-        <nav className="hidden md:flex items-center space-x-1">
-          {navItems.map((item) => (
-            <Button
-              key={item.href}
-              variant="ghost"
-              asChild
-              className={cn(
-                'transition-colors hover:text-primary hover:bg-primary/10', // Keep hover effect on button itself
-                pathname === item.href
-                  ? 'text-primary bg-primary/10 font-semibold' // Active state
-                  : 'text-muted-foreground' // Inactive state
-              )}
-            >
-              <Link href={item.href} className="flex items-center gap-2 px-4 py-2">
-                <item.icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            </Button>
-          ))}
-        </nav>
+        <div className="flex items-center space-x-1"> {/* Wrapper for nav and theme toggle */}
+            <nav className="hidden md:flex items-center space-x-1">
+              {navItems.map((item) => (
+                <Button
+                  key={item.href}
+                  variant="ghost"
+                  asChild
+                  className={cn(
+                    'transition-colors hover:text-primary hover:bg-primary/10', // Keep hover effect on button itself
+                    pathname === item.href
+                      ? 'text-primary bg-primary/10 font-semibold' // Active state
+                      : 'text-muted-foreground' // Inactive state
+                  )}
+                >
+                  <Link href={item.href} className="flex items-center gap-2 px-4 py-2">
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                </Button>
+              ))}
+            </nav>
+            <ThemeToggle /> {/* Add ThemeToggle button here */}
+        </div>
         {/* Add Mobile Menu Trigger if needed later */}
         <div className="md:hidden">
-          {/* Placeholder for mobile menu button */}
+          {/* Placeholder for mobile menu button, could include theme toggle here too */}
         </div>
       </div>
     </header>
