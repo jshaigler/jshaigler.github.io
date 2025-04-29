@@ -57,17 +57,8 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.3 } },
-        exit: { opacity: 0, transition: { duration: 0.2 } },
-      }}
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-      >
+    // Remove top-level motion props to let layout handle page transition
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section - Animates when in view or on load */}
       <motion.div
           initial="initial"
@@ -223,6 +214,6 @@ export default function SolutionPage() {
          className="mt-20 text-sm text-center text-muted-foreground italic">
             Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
         </motion.p>
-    </motion.div>
+    </div>
   );
 }
