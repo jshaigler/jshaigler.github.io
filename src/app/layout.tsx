@@ -30,14 +30,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased transition-colors duration-300', // Added transition-colors
+          'min-h-screen bg-background font-sans antialiased', // Removed transition-colors
         )}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false} // Allow next-themes to manage class changes during transitions
         >
           <div className="relative flex min-h-screen flex-col">
             <Header />

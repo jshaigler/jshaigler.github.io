@@ -10,67 +10,67 @@
     --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
-    --primary: 24 95% 53%; /* Fiery Orange */
+    --primary: 180 100% 25%; /* Deep Teal */
     --primary-foreground: 0 0% 100%; /* White */
-    --secondary: 0 0% 96.1%; /* Lighter Neutral Gray */
-    --secondary-foreground: 24 95% 53%; /* Fiery Orange on Secondary */
+    --secondary: 0 0% 94.1%; /* Light Gray */
+    --secondary-foreground: 180 100% 25%; /* Deep Teal on Secondary */
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%; /* Medium Neutral Gray */
-    --accent: 45 93% 47%; /* Gold */
+    --accent: 181 100% 75%; /* Electric Blue */
     --accent-foreground: 0 0% 9%; /* Dark Gray on Accent */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%; /* Light Neutral Gray Border */
     --input: 0 0% 89.8%;
-    --ring: 45 93% 47%; /* Gold for rings */
-    --chart-1: 24 80% 60%; /* Adjusted chart colors */
-    --chart-2: 35 85% 55%;
-    --chart-3: 45 90% 50%;
-    --chart-4: 15 75% 65%;
-    --chart-5: 50 95% 58%;
+    --ring: 181 100% 75%; /* Electric Blue for rings */
+    --chart-1: 180 70% 40%; /* Adjusted chart colors (Teal variants) */
+    --chart-2: 180 60% 50%;
+    --chart-3: 180 50% 60%;
+    --chart-4: 180 40% 70%;
+    --chart-5: 180 30% 80%;
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 9%;
-    --sidebar-primary: 24 95% 53%;
+    --sidebar-primary: 180 100% 25%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 45 93% 47%;
+    --sidebar-accent: 181 100% 75%;
     --sidebar-accent-foreground: 0 0% 9%;
     --sidebar-border: 0 0% 89.8%;
-    --sidebar-ring: 45 93% 47%;
+    --sidebar-ring: 181 100% 75%;
   }
   .dark {
-    --background: 0 0% 9%; /* Neutral Dark Gray */
-    --foreground: 0 0% 98%; /* Neutral Light Gray */
-    --card: 0 0% 10%; /* Slightly Darker Gray */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 24 90% 60%; /* Slightly brighter Orange for dark mode */
+    --background: 0 0% 10%; /* Darker Gray */
+    --foreground: 0 0% 95%; /* Lighter Gray */
+    --card: 0 0% 12%; /* Slightly Darker Gray */
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 180 100% 35%; /* Brighter Teal for dark mode */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 14.9%; /* Darker Neutral Gray */
-    --secondary-foreground: 24 90% 60%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%; /* Lighter Neutral Gray */
-    --accent: 45 85% 55%; /* Slightly adjusted Gold */
+    --secondary: 0 0% 16%; /* Darker Neutral Gray */
+    --secondary-foreground: 180 100% 35%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 60%; /* Lighter Neutral Gray */
+    --accent: 181 100% 65%; /* Slightly Adjusted Electric Blue */
     --accent-foreground: 0 0% 100%; /* White on Accent */
     --destructive: 0 70% 50%; /* Adjusted Destructive */
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 24.9%; /* Darker Neutral Gray Border */
-    --input: 0 0% 14.9%;
-    --ring: 45 85% 55%; /* Gold for rings */
-    --chart-1: 24 75% 65%;
-    --chart-2: 35 80% 60%;
-    --chart-3: 45 85% 55%;
-    --chart-4: 15 70% 70%;
-    --chart-5: 50 90% 62%;
-    --sidebar-background: 0 0% 9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 24 90% 60%;
+    --border: 0 0% 26%; /* Darker Neutral Gray Border */
+    --input: 0 0% 16%;
+    --ring: 181 100% 65%; /* Electric Blue for rings */
+    --chart-1: 180 90% 45%;
+    --chart-2: 180 80% 55%;
+    --chart-3: 180 70% 65%;
+    --chart-4: 180 60% 75%;
+    --chart-5: 180 50% 85%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 180 100% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 45 85% 55%;
+    --sidebar-accent: 181 100% 65%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 24.9%;
-    --sidebar-ring: 45 85% 55%;
+    --sidebar-border: 0 0% 26%;
+    --sidebar-ring: 181 100% 65%;
   }
 }
 
@@ -79,8 +79,8 @@
     @apply border-border;
   }
   body {
-    /* Removed font-family var(--font-inter) */
-    @apply bg-background text-foreground font-sans;
+    /* Apply base transitions */
+    @apply bg-background text-foreground font-sans transition-colors duration-500 ease-in-out;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -99,4 +99,50 @@
 /* Add smooth scroll behavior */
 html {
   scroll-behavior: smooth;
+}
+
+/* Add CSS for View Transitions */
+@keyframes circle-reveal {
+  from { clip-path: circle(0% at var(--x) var(--y)); }
+  to { clip-path: circle(var(--r) at var(--x) var(--y)); } /* Use calculated radius */
+}
+
+/* Dark theme appears immediately during transition */
+.dark::view-transition-old(root) {
+  z-index: 1; /* Keep light theme snapshot above */
+}
+.dark::view-transition-new(root) {
+  z-index: 9999; /* Ensure dark theme new state is on top */
+}
+
+/* Light theme appears immediately during transition */
+::view-transition-old(root) {
+  z-index: 9999; /* Ensure light theme old state is on top */
+}
+::view-transition-new(root) {
+  z-index: 1; /* Keep dark theme snapshot below */
+}
+
+/* Set background color for the transition pseudo-elements to prevent flicker and apply animations/styles */
+::view-transition-old(root) {
+  background: hsl(var(--background)); /* Use the 'old' background color */
+  animation: none; /* Ensure no animation on old */
+  mix-blend-mode: normal;
+  /* z-index applied above */
+}
+
+.dark::view-transition-old(root) {
+   background: hsl(0 0% 98%); /* Explicitly light background for old when going dark */
+}
+
+
+::view-transition-new(root) {
+   background: hsl(var(--background)); /* Use the 'new' background color */
+   animation: circle-reveal 0.5s ease-in forwards; /* Apply animation to new */
+   mix-blend-mode: normal;
+   /* z-index applied above */
+}
+
+.dark::view-transition-new(root) {
+  background: hsl(0 0% 10%); /* Explicitly dark background for new when going dark */
 }
