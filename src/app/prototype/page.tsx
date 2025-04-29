@@ -23,16 +23,8 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Use motion.div directly for page-level animation controlled by Layout's AnimatePresence
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.5, ease: "easeInOut" } },
-        exit: { opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } },
-      }}
+    // Remove top-level motion.div wrapper; layout handles page transitions
+    <div
       className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
     >
       {/* Initial Section - Animates on load */}
@@ -54,33 +46,36 @@ export default function PrototypePage() {
       <motion.section
         initial="initial"
         animate="animate" // Animate immediately
-        variants={fadeIn}
+        variants={fadeIn} // Use fadeIn for the section
         className="mb-20 p-8 bg-secondary/50 rounded-lg shadow-md"
       >
-          <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8 flex items-center justify-center gap-3">
-              <Lightbulb className="h-8 w-8 text-primary"/> Current Stage: Preclinical Concept
-          </motion.h2>
-          <motion.div variants={staggerContainer} className="text-center text-lg text-muted-foreground max-w-4xl mx-auto space-y-4">
-              <motion.p variants={fadeInUp}>
-                  The Phoenix therapy described on this website represents a <strong className="text-foreground">comprehensive therapeutic concept</strong> based on integrating cutting-edge research in mRNA technology, telomere biology, mitochondrial health, DNA repair, and epigenetic reprogramming.
-              </motion.p>
-              <motion.p variants={fadeInUp}>
-                  Currently, Phoenix is in the <strong className="text-foreground">preclinical and conceptual development phase</strong>. While the individual components are backed by significant scientific evidence (see sources below), the integrated Phoenix platform requires extensive further research, development, and rigorous testing before it could potentially enter clinical trials.
-              </motion.p>
-              <motion.p variants={fadeInUp} className="font-semibold text-foreground">
-                  Key activities in this phase include:
-              </motion.p>
-              <motion.ul variants={fadeInUp} className="list-disc list-inside text-left inline-block">
-                  <li>Optimizing mRNA and miRNA sequences and formulations.</li>
-                  <li>Refining the lipid nanoparticle (LNP) delivery system for targeted delivery.</li>
-                  <li>Conducting advanced <em className="italic">in vitro</em> (cell-based) studies to validate synergistic effects.</li>
-                  <li>Designing and executing comprehensive <em className="italic">in vivo</em> (animal model) studies.</li>
-                  <li>Developing robust safety and efficacy protocols for future clinical trials.</li>
-              </motion.ul>
-               <motion.p variants={fadeInUp} className="mt-6 flex items-center justify-center gap-2 text-base font-medium text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/30">
-                  <Info className="h-5 w-5" />
-                  Phoenix is NOT currently available as a treatment.
-               </motion.p>
+          {/* Stagger content inside */}
+          <motion.div variants={staggerContainer}>
+            <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8 flex items-center justify-center gap-3">
+                <Lightbulb className="h-8 w-8 text-primary"/> Current Stage: Preclinical Concept
+            </motion.h2>
+            <motion.div variants={staggerContainer} className="text-center text-lg text-muted-foreground max-w-4xl mx-auto space-y-4">
+                <motion.p variants={fadeInUp}>
+                    The Phoenix therapy described on this website represents a <strong className="text-foreground">comprehensive therapeutic concept</strong> based on integrating cutting-edge research in mRNA technology, telomere biology, mitochondrial health, DNA repair, and epigenetic reprogramming.
+                </motion.p>
+                <motion.p variants={fadeInUp}>
+                    Currently, Phoenix is in the <strong className="text-foreground">preclinical and conceptual development phase</strong>. While the individual components are backed by significant scientific evidence (see sources below), the integrated Phoenix platform requires extensive further research, development, and rigorous testing before it could potentially enter clinical trials.
+                </motion.p>
+                <motion.p variants={fadeInUp} className="font-semibold text-foreground">
+                    Key activities in this phase include:
+                </motion.p>
+                <motion.ul variants={fadeInUp} className="list-disc list-inside text-left inline-block">
+                    <li>Optimizing mRNA and miRNA sequences and formulations.</li>
+                    <li>Refining the lipid nanoparticle (LNP) delivery system for targeted delivery.</li>
+                    <li>Conducting advanced <em className="italic">in vitro</em> (cell-based) studies to validate synergistic effects.</li>
+                    <li>Designing and executing comprehensive <em className="italic">in vivo</em> (animal model) studies.</li>
+                    <li>Developing robust safety and efficacy protocols for future clinical trials.</li>
+                </motion.ul>
+                 <motion.p variants={fadeInUp} className="mt-6 flex items-center justify-center gap-2 text-base font-medium text-destructive bg-destructive/10 p-3 rounded-md border border-destructive/30">
+                    <Info className="h-5 w-5" />
+                    Phoenix is NOT currently available as a treatment.
+                 </motion.p>
+            </motion.div>
           </motion.div>
       </motion.section>
 
@@ -150,6 +145,6 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under preclinical development. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans.
           </p>
       </motion.section>
-    </motion.div>
+    </div>
   );
 }
