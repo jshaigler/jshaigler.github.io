@@ -40,11 +40,11 @@ export default function PrototypePage() {
         </motion.p>
       </motion.div>
 
-      {/* Current Status Section - Animate when in view */}
+      {/* Current Status Section - Animate on page load */}
         <motion.section
           initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
+          animate="animate" // Change from whileInView to animate
+          // Removed viewport prop as it's not needed for immediate animation
           variants={fadeIn}
           className="mb-20 p-8 bg-secondary/50 rounded-lg shadow-md"
         >
