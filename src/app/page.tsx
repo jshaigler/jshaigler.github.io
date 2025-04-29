@@ -27,6 +27,8 @@ export default function Home() {
           <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
              <motion.div
               variants={staggerContainer}
+              initial="initial"
+              animate="animate"
               className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-12"
             >
               {/* Text content column */}
@@ -118,7 +120,7 @@ export default function Home() {
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
               {[
-                { icon: Target, title: 'Targeted Approach', desc: 'Focusing on key hallmarks of aging like telomere attrition and mitochondrial dysfunction.' },
+                { icon: Target, title: 'Targeted Approach', desc: 'Focusing on four key hallmarks of aging like telomere attrition and mitochondrial dysfunction.' }, // Updated text
                 { icon: Zap, title: 'mRNA Technology', desc: 'Leveraging next-gen mRNA delivery for precise and transient therapeutic action.' },
                 { icon: Microscope, title: 'Synergistic Effect', desc: 'Combining multiple strategies for a comprehensive impact on the aging process.' },
               ].map((feature, index) => (
@@ -140,7 +142,7 @@ export default function Home() {
             <motion.p
              initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}
              className="mt-12 text-center text-lg text-muted-foreground max-w-4xl mx-auto">
-              The longevity industry is booming, projected to reach $63 billion by 2035. Phoenix Lifesciences is at the forefront, developing Phoenix, a novel therapy designed to translate cutting-edge research into tangible solutions for healthier, longer lives.
+              The longevity industry is booming, projected to grow from <strong className="text-foreground">$21.29 billion</strong> in 2024 to <strong className="text-foreground">$63 billion</strong> by 2035, reflecting a compound annual growth rate (CAGR) of <strong className="text-foreground">10.37%</strong>. Phoenix Lifesciences is at the forefront, developing Phoenix, a novel therapy designed to translate cutting-edge research into tangible solutions for healthier, longer lives. {/* Added quantitative data */}
             </motion.p>
             <motion.div
               initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}

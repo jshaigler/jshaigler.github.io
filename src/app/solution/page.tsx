@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { CheckCircle, Dna, Zap, Settings, ShieldCheck, Package } from 'lucide-react';
+import { CheckCircle, Dna, Zap, Settings, ShieldCheck, Package, CalendarClock, Info } from 'lucide-react'; // Added CalendarClock, Info
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
@@ -29,9 +29,9 @@ const pillars = [
   },
   {
     title: 'Partial Epigenetic Reprogramming',
-    description: 'Resetting the Cellular Clock: Incorporates mRNA encoding Oct4, Sox2, and Klf4 (OSK factors) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.',
+    description: 'Resetting the Cellular Clock: Incorporates mRNA encoding three specific Yamanaka factors (Oct4, Sox2, and Klf4 - OSK) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.', // Updated text
     icon: CheckCircle,
-    details: 'Studies in mice demonstrate lifespan extension, improved health, and enhanced tissue regeneration through this partial reprogramming approach.'
+    details: 'Studies in mice demonstrate lifespan extension, improved health, and enhanced tissue regeneration through this partial reprogramming approach using these three factors.' // Updated text
   }
 ];
 
@@ -50,15 +50,24 @@ const technicalMechanisms = [
     },
     {
       title: "OSK-Mediated Epigenetic Reprogramming",
-      content: "Oct4 and Sox2 co-bind enhancers of pluripotency genes, Klf4 facilitates chromatin opening, and together they induce a partial reprogramming state that reverses age-associated epigenetic marks without complete dedifferentiation."
+      content: "Oct4 and Sox2 co-bind enhancers of pluripotency genes, Klf4 facilitates chromatin opening, and together these three factors induce a partial reprogramming state that reverses age-associated epigenetic marks without complete dedifferentiation." // Updated text
     }
 ];
 
 
 export default function SolutionPage() {
   return (
-    // Remove top-level motion props to let layout handle page transition
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.3 } },
+        exit: { opacity: 0, transition: { duration: 0.2 } },
+      }}
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+      >
       {/* Initial Section - Animates when in view or on load */}
       <motion.div
           initial="initial"
@@ -70,7 +79,7 @@ export default function SolutionPage() {
           Our Solution: Phoenix
         </motion.h1>
         <motion.p variants={fadeInUp} className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-          A Multi-Pronged Therapeutic Strategy Targeting the Root Causes of Aging.
+          A Multi-Pronged Therapeutic Strategy Targeting <strong className="text-foreground">Four Key Hallmarks</strong> of Aging. {/* Updated text */}
         </motion.p>
       </motion.div>
 
@@ -115,7 +124,7 @@ export default function SolutionPage() {
       >
          <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</motion.h2>
          <motion.p variants={fadeInUp} className="text-center text-lg text-muted-foreground mb-8 max-w-4xl mx-auto">
-            The true power of Phoenix lies in the synergistic interaction of its components, creating a comprehensive approach that addresses the multifaceted nature of aging more effectively than isolated treatments.
+            The true power of Phoenix lies in the synergistic interaction of its <strong className="text-foreground">four components</strong>, creating a comprehensive approach that addresses the multifaceted nature of aging more effectively than isolated treatments. {/* Updated text */}
          </motion.p>
          <motion.ul variants={staggerContainer} className="space-y-4 list-none p-0 max-w-3xl mx-auto">
             {[
@@ -132,39 +141,56 @@ export default function SolutionPage() {
          </motion.ul>
       </motion.section>
 
-       {/* Delivery and Safety - Animate when in view */}
+       {/* Delivery, Safety, and Treatment Schedule - Animate when in view */}
         <motion.section
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
           variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 items-start" // Changed to items-start for better alignment
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" // Changed to grid-cols-3
         >
              <motion.div variants={slideInLeft}>
                 <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
-                   <Package className="h-6 w-6 text-primary" /> Precision Delivery System
+                   <Package className="h-6 w-6 text-primary" /> Precision Delivery
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                    Phoenix employs a state-of-the-art targeted delivery system using functionalized lipid nanoparticles (LNPs). These LNPs are meticulously designed to selectively deliver the therapeutic payload (mRNAs and miRNAs) to specific tissues and cell types.
+                    Phoenix employs state-of-the-art functionalized lipid nanoparticles (LNPs) designed to selectively deliver the therapeutic payload (mRNAs and miRNAs) to target tissues.
                 </p>
-                <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
-                    <li>Maximizes efficacy by concentrating the therapy where it's needed most.</li>
-                    <li>Minimizes potential off-target effects and systemic side effects.</li>
-                    <li>Enhances the overall safety profile of the treatment.</li>
+                <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                    <li>Concentrates therapy where needed.</li>
+                    <li>Minimizes off-target effects.</li>
+                    <li>Enhances overall safety profile.</li>
                 </ul>
              </motion.div>
-              <motion.div variants={slideInRight}>
+              <motion.div variants={fadeInUp}> {/* Centered item */}
                  <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
-                    <ShieldCheck className="h-6 w-6 text-primary" /> Safety-First Genomic Screening
+                    <ShieldCheck className="h-6 w-6 text-primary" /> Genomic Screening
                  </h3>
                  <p className="text-muted-foreground mb-4">
-                    Patient safety is paramount. Phoenix incorporates a rigorous pre-screening protocol specifically looking for mutations in the <code className="font-mono text-sm bg-muted px-1 py-0.5 rounded">TP53</code> gene, which encodes the critical p53 tumor suppressor protein.
+                    Safety is paramount. A rigorous pre-screening protocol checks for mutations in the <code className="font-mono text-sm bg-muted px-1 py-0.5 rounded">TP53</code> gene (encoding p53 tumor suppressor).
                  </p>
-                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground">
-                     <li>Identifies individuals who might be at higher risk due to compromised p53 function.</li>
-                     <li>Allows for exclusion or modification of treatment protocols for these patients.</li>
-                     <li>Adds an essential layer of personalized safety to mitigate potential oncogenic risks.</li>
+                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                     <li>Identifies individuals with higher risk.</li>
+                     <li>Allows exclusion or protocol modification.</li>
+                     <li>Adds personalized safety layer.</li>
                  </ul>
+              </motion.div>
+              <motion.div variants={slideInRight}> {/* New item */}
+                 <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
+                    <CalendarClock className="h-6 w-6 text-primary" /> Proposed Schedule
+                 </h3>
+                 <p className="text-muted-foreground mb-4">
+                    The theoretical treatment regimen involves a simple administration schedule, aiming for patient convenience and consistent therapeutic levels.
+                 </p>
+                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                     <li><strong className="text-foreground">Once-monthly injection</strong> (every 30 days).</li>
+                     <li>Designed for ease of integration into lifestyle.</li>
+                     <li>Further optimization through clinical trials.</li>
+                 </ul>
+                  <p className="mt-3 text-xs text-muted-foreground italic flex items-center gap-1">
+                     <Info className="h-3 w-3 shrink-0" />
+                     Theoretical schedule, subject to clinical validation.
+                  </p>
               </motion.div>
         </motion.section>
 
@@ -197,6 +223,6 @@ export default function SolutionPage() {
          className="mt-20 text-sm text-center text-muted-foreground italic">
             Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
         </motion.p>
-    </div>
+    </motion.div>
   );
 }
