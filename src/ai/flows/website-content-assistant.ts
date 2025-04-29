@@ -30,7 +30,7 @@ export async function askQuestion(input: AskQuestionInput): Promise<AskQuestionO
     console.error("Missing question or website content for AI assistant.");
     return { answer: "I apologize, but I need both a question and the website content to provide an answer." };
   }
-  console.log(`Asking question: ${input.question.substring(0, 50)}... with content length: ${input.websiteContent.length}`);
+  console.log(`Asking question: ${input.question.substring(0, 50)}... with input content length: ${input.websiteContent.length}`);
   return askQuestionFlow(input);
 }
 
@@ -39,21 +39,22 @@ const prompt = ai.definePrompt({
   input: {
     schema: z.object({
       question: z.string().describe('The user\'s question about the website content.'),
-      websiteContent: z.string().describe('The extracted text content from the Phoenix Lifesciences website pages.'),
+      websiteContent: z.string().describe('The extracted text content from *all* pages of the Phoenix Lifesciences website, concatenated together. Different pages are separated by markers like "--- Content from /about ---".'),
     }),
   },
   output: {
     schema: z.object({
-      answer: z.string().describe('A concise and informative answer to the user\'s question based *only* on the provided website content. Use simple markdown like **bold** and *italics* for emphasis where appropriate. If the answer cannot be found in the content, state that explicitly.'),
+      answer: z.string().describe('A concise and informative answer to the user\'s question based *only* on the provided website content. Search the *entire* provided text thoroughly, as it contains information from multiple pages (Home, About Us, Our Solution, Prototype). Use simple markdown like **bold** and *italics* for emphasis where appropriate. If the answer cannot be found in the content, state that explicitly.'),
     }),
   },
-  // Updated prompt for clarity, emphasizing using ONLY the provided content
-  prompt: `You are a helpful AI assistant for the Phoenix Lifesciences website. Your goal is to answer user questions based *solely* on the provided website content. Do not invent information or use external knowledge.
+  // Updated prompt to emphasize searching the *entire* content across pages.
+  prompt: `You are a helpful AI assistant for the Phoenix Lifesciences website. Your goal is to answer user questions based *solely* on the provided website content below. This content is a concatenation of text from multiple pages (Home, About Us, Our Solution, Prototype), separated by markers (e.g., '--- Content from /about ---').
 
-Here is the content extracted from the website:
---- START WEBSITE CONTENT ---
+Search the *entire* provided text thoroughly to find the answer. Do not invent information or use external knowledge.
+
+--- START WEBSITE CONTENT (All Pages) ---
 {{{websiteContent}}}
---- END WEBSITE CONTENT ---
+--- END WEBSITE CONTENT (All Pages) ---
 
 Now, please answer the following user question based *only* on the information above. If the information is not present in the provided content, clearly state that you cannot find the answer in the website information. Use simple markdown like **bold** and *italics* for emphasis if needed.
 
@@ -73,10 +74,16 @@ const askQuestionFlow = ai.defineFlow<
   },
   async input => {
     try {
-        // Truncate content on the server-side as a fallback, though component should handle it primarily
-        const truncatedContent = input.websiteContent.length > 45000
-            ? input.websiteContent.substring(0, 45000) + "... [Content Truncated]"
-            : input.websiteContent;
+        // Server-side truncation as a fallback (Component handles primary limit)
+        // Increased limit slightly to match schema description
+        const MAX_CONTENT_LENGTH = 50000;
+        let truncatedContent = input.websiteContent;
+        if (input.websiteContent.length > MAX_CONTENT_LENGTH) {
+            console.warn(`Server-side truncation: Original content length ${input.websiteContent.length} exceeded limit ${MAX_CONTENT_LENGTH}.`);
+            truncatedContent = input.websiteContent.substring(0, MAX_CONTENT_LENGTH) + "... [Content Truncated on Server]";
+        }
+
+        console.log(`Content length sent to prompt: ${truncatedContent.length}`); // Log final length
 
         const {output} = await prompt({ question: input.question, websiteContent: truncatedContent });
 
@@ -92,3 +99,4 @@ const askQuestionFlow = ai.defineFlow<
     }
   }
 );
+
