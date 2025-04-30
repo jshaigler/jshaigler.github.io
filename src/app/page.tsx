@@ -55,12 +55,13 @@ export default function Home() {
               {/* Image column */}
               <motion.div variants={fadeIn} className="w-full md:w-auto flex-shrink-0">
                 <Image
-                  src="/ChatGPT_Image_Apr_28__2025__04_19_52_PM-removebg-preview.png"
-                  alt="Phoenix Lifesciences Product Demo"
-                  width={300}
-                  height={200}
+                  src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png" // Updated image source
+                  alt="Phoenix Lifesciences Product Representation" // Updated alt text slightly
+                  width={400} // Adjusted width for potential size differences
+                  height={300} // Adjusted height
                   className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto rounded-lg shadow-xl object-contain mx-auto md:mx-0"
                   priority // LCP Image
+                  data-ai-hint="futuristic medical technology"
                 />
               </motion.div>
             </motion.div>
@@ -90,11 +91,12 @@ export default function Home() {
             >
               <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
                 <Image
-                  src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
+                  src="https://picsum.photos/600/400?grayscale" // Placeholder image
                   alt="Vibrant illustration representing future health and longevity"
                   width={600}
                   height={400}
                   className="rounded-lg shadow-lg object-cover w-full h-auto saturate-110 contrast-110"
+                  data-ai-hint="future health longevity"
                   // Removed priority as it's not the LCP
                 />
               </motion.div>
