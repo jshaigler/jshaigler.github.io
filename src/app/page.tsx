@@ -91,7 +91,7 @@ export default function Home() {
             >
               <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
                 <Image
-                  src="https://picsum.photos/600/400?grayscale" // Placeholder image
+                  src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" // Updated image source
                   alt="Vibrant illustration representing future health and longevity"
                   width={600}
                   height={400}
