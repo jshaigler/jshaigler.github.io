@@ -6,7 +6,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/layout/header';
 import { Toaster } from "@/components/ui/toaster";
-import { ChatAssistantTrigger } from '@/components/chat-assistant-trigger';
+// Removed ChatAssistantTrigger import
 import { ThemeProvider } from "@/components/theme-provider"; // Import ThemeProvider
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -62,7 +62,7 @@ export default function RootLayout({
             </Suspense>
             {/* Footer could be added here */}
           </div>
-          <ChatAssistantTrigger />
+          {/* Removed ChatAssistantTrigger component */}
           <Toaster />
         </ThemeProvider>
       </body>

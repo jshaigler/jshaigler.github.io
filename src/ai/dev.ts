@@ -1,10 +1,11 @@
+
 // This file is machine-generated - do not edit!
 
 import {configureGenkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 
 // Import flows to ensure they are registered.
-import '@/ai/flows/website-content-assistant';
+// Removed import '@/ai/flows/website-content-assistant';
 
 configureGenkit({
   plugins: [googleAI()],
