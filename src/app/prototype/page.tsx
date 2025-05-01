@@ -7,7 +7,7 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
-import { VideoSlider } from '@/components/interactive/video-slider'; // Import the new component
+// Removed VideoSlider import
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -36,7 +36,7 @@ export default function PrototypePage() {
       exit="exit"
       variants={{
         initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        animate: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } }, // Added delayChildren
         exit: { opacity: 0 },
       }}
     >
@@ -55,6 +55,8 @@ export default function PrototypePage() {
 
       {/* Current Status Section */}
       <motion.section
+        initial="initial" // Use initial/animate directly for sections that should appear on load
+        animate="animate"
         variants={fadeIn} // Use fadeIn for the section
         className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" // Subtle gradient
       >
@@ -98,25 +100,7 @@ export default function PrototypePage() {
           </motion.div>
       </motion.section>
 
-       {/* Interactive Video Section */}
-       <motion.section
-           initial="initial"
-           whileInView="animate"
-           viewport={{ once: true, amount: 0.1 }}
-           variants={fadeInUp}
-           className="mb-20"
-       >
-           <h2 className="text-3xl font-bold tracking-tight text-center mb-6">Visualize Cellular Change</h2>
-            <p className="text-center text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-                Use the slider to explore a conceptual visualization of cellular state transformation. (Illustrative Demo)
-            </p>
-            {/* Replace placeholder with VideoSlider, reduced max-width */}
-            <VideoSlider
-               src="/Untitled video - Made with Clipchamp (2).mp4" // Path relative to /public
-               className="max-w-2xl mx-auto" // Reduced max-width
-             />
-            <p className="text-xs text-center text-muted-foreground italic mt-4">Note: This conceptual video illustrates potential effects and does not represent guaranteed results.</p>
-        </motion.section>
+       {/* Removed Interactive Video Section */}
 
 
       {/* Research Basis Section - Enhanced */}
