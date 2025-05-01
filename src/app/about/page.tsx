@@ -50,46 +50,70 @@ const timelinePhases = [
   { name: 'Approval', description: 'Regulatory review and potential market authorization.' },
 ];
 
-const timelineDuration = 5; // Total animation duration in seconds
 
 export default function AboutUsPage() {
-    const controls = useAnimation();
+    const controls = useAnimation(); // Controls for the progress bar animation
     const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 }); // Trigger when 30% visible
-    const [activePhase, setActivePhase] = useState(0); // Index of the active phase
+    const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
 
      useEffect(() => {
-        if (inView) {
-            controls.start({
-                width: '100%', // Animate to full width
-                transition: { duration: timelineDuration, ease: 'linear' }
-            }).then(() => {
-                // Ensure the last phase is marked active after animation finishes
-                setActivePhase(timelinePhases.length - 1);
-            });
-        }
-    }, [controls, inView]);
+        let isMounted = true; // Flag to prevent state updates on unmounted component
 
-    // Effect to update active phase based on animation progress
-    useEffect(() => {
-        let intervalId: NodeJS.Timeout | null = null;
-        if (inView) {
-            const phaseDuration = timelineDuration / timelinePhases.length;
-            intervalId = setInterval(() => {
-                setActivePhase((prev) => {
-                     // Stop incrementing if we reached the last phase description
-                     if (prev >= timelinePhases.length -1 ) {
-                        if(intervalId) clearInterval(intervalId);
-                         return prev;
-                     }
-                    return prev + 1;
-                });
-            }, phaseDuration * 1000); // Convert seconds to milliseconds
-        }
+        const runTimelineAnimation = async () => {
+             // Ensure component is mounted and section is in view
+            if (inView && isMounted) {
+                const numPhases = timelinePhases.length;
+                // Duration for animation between phases (seconds)
+                const segmentAnimationDuration = 0.5;
+                // Pause duration at each phase (milliseconds)
+                const pauseDuration = 2000;
 
-        return () => {
-            if (intervalId) clearInterval(intervalId);
+                // --- Animation Sequence ---
+
+                // 1. Initialize: Set first phase active, bar at 0%
+                setActivePhase(0);
+                await controls.start({ width: '0%', transition: { duration: 0.1 } });
+                // Pause at the very beginning (Preclinical)
+                await new Promise(resolve => setTimeout(resolve, pauseDuration));
+
+                if (!isMounted) return; // Check mount status after pause
+
+                // 2. Loop through subsequent phases
+                for (let i = 1; i < numPhases; i++) {
+                    // Update active phase state
+                    setActivePhase(i);
+
+                    // Calculate target width for the end of this phase's segment
+                    // e.g., Phase I (index 1) reaches 1 / (5-1) = 25% width
+                    const targetWidth = (i / (numPhases - 1)) * 100;
+
+                    // Animate progress bar to the target width
+                    await controls.start({
+                        width: `${targetWidth}%`,
+                        transition: { duration: segmentAnimationDuration, ease: 'linear' }
+                    });
+
+                     if (!isMounted) return; // Check mount status after animation
+
+                    // Pause after reaching the phase's point (unless it's the final phase)
+                    if (i < numPhases - 1) {
+                        await new Promise(resolve => setTimeout(resolve, pauseDuration));
+                         if (!isMounted) return; // Check mount status after pause
+                    }
+                }
+                // Ensure the last phase description stays if needed
+                 if (isMounted) setActivePhase(numPhases - 1);
+            }
         };
-    }, [inView]); // Rerun when inView changes
+
+        runTimelineAnimation();
+
+        // Cleanup function
+        return () => {
+            isMounted = false;
+            controls.stop(); // Stop any ongoing Framer Motion animations
+        };
+    }, [controls, inView]); // Rerun when inView changes or controls instance changes
 
   return (
     // Layout handles page transition
@@ -365,16 +389,18 @@ export default function AboutUsPage() {
                  {/* Phase Description - Shows description of the currently active phase */}
                  <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
                     <AnimatePresence mode="wait">
-                        <motion.p
-                           key={activePhase} // Change key to trigger animation
-                           initial={{ opacity: 0, y: 10 }}
-                           animate={{ opacity: 1, y: 0 }}
-                           exit={{ opacity: 0, y: -10 }}
-                           transition={{ duration: 0.3 }}
-                           className="text-sm text-foreground"
-                         >
-                            <strong>{timelinePhases[activePhase]?.name}:</strong> {timelinePhases[activePhase]?.description}
-                        </motion.p>
+                        {activePhase >= 0 && ( // Only render if a phase is active
+                          <motion.p
+                              key={activePhase} // Change key to trigger animation
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              transition={{ duration: 0.3 }}
+                              className="text-sm text-foreground"
+                          >
+                              <strong>{timelinePhases[activePhase]?.name}:</strong> {timelinePhases[activePhase]?.description}
+                          </motion.p>
+                        )}
                     </AnimatePresence>
                  </div>
             </div>
