@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, BrainCircuit, GraduationCap, Info, Activity } from 'lucide-react'; // Added Award, BrainCircuit, GraduationCap, Info, Activity
 import { Button } from '@/components/ui/button';
-import { motion, useAnimation } from 'framer-motion'; // Import useAnimation
+import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 
