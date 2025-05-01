@@ -1,6 +1,6 @@
 'use client'; // Required for Framer Motion, useState, useEffect
 
-import React, { useState, useEffect } from 'react'; // Import useState, useEffect
+import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,57 +53,71 @@ const timelinePhases = [
 
 export default function AboutUsPage() {
     const controls = useAnimation(); // Controls for the progress bar animation
-    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 }); // Trigger when 30% visible
+    const [ref, inView] = useInView({ threshold: 0.3 }); // Removed triggerOnce
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
+    const isAnimating = useRef(false); // Ref to prevent multiple animation loops starting
 
      useEffect(() => {
         let isMounted = true; // Flag to prevent state updates on unmounted component
 
         const runTimelineAnimation = async () => {
-             // Ensure component is mounted and section is in view
-            if (inView && isMounted) {
-                const numPhases = timelinePhases.length;
-                // Duration for animation between phases (seconds)
-                const segmentAnimationDuration = 0.5;
-                // Pause duration at each phase (milliseconds)
-                const pauseDuration = 2000;
+             if (!inView || isAnimating.current) return; // Exit if not in view or already animating
+             isAnimating.current = true; // Mark as animating
+
+             const numPhases = timelinePhases.length;
+             // Duration for animation between phases (seconds)
+             const segmentAnimationDuration = 0.8; // Slightly increased for smoother feel
+             // Pause duration at each phase (milliseconds)
+             const pauseDuration = 2000; // 2 seconds
+
+             // Loop the animation
+             while (isMounted && inView) { // Keep looping while mounted and in view
+                // --- Reset for loop ---
+                setActivePhase(-1); // Reset active phase visual
+                await controls.start({ width: '0%', transition: { duration: 0.1 } }); // Instantly reset bar
+                if (!isMounted || !inView) break; // Check again before starting sequence
 
                 // --- Animation Sequence ---
 
-                // 1. Initialize: Set first phase active, bar at 0%
+                // 1. Initialize: Set first phase active, bar stays at 0%
                 setActivePhase(0);
-                await controls.start({ width: '0%', transition: { duration: 0.1 } });
                 // Pause at the very beginning (Preclinical)
                 await new Promise(resolve => setTimeout(resolve, pauseDuration));
 
-                if (!isMounted) return; // Check mount status after pause
+                if (!isMounted || !inView) break; // Check mount/view status after pause
 
                 // 2. Loop through subsequent phases
                 for (let i = 1; i < numPhases; i++) {
                     // Update active phase state
                     setActivePhase(i);
 
-                    // Calculate target width for the end of this phase's segment
-                    // e.g., Phase I (index 1) reaches 1 / (5-1) = 25% width
+                    // Calculate target width
                     const targetWidth = (i / (numPhases - 1)) * 100;
 
                     // Animate progress bar to the target width
                     await controls.start({
                         width: `${targetWidth}%`,
-                        transition: { duration: segmentAnimationDuration, ease: 'linear' }
+                        transition: { duration: segmentAnimationDuration, ease: 'easeInOut' } // Smoother easing
                     });
 
-                     if (!isMounted) return; // Check mount status after animation
+                     if (!isMounted || !inView) break; // Check mount/view status after animation
 
                     // Pause after reaching the phase's point (unless it's the final phase)
-                    if (i < numPhases - 1) {
+                    if (i < numPhases ) { // Pause even at the last phase before looping
                         await new Promise(resolve => setTimeout(resolve, pauseDuration));
-                         if (!isMounted) return; // Check mount status after pause
+                         if (!isMounted || !inView) break; // Check mount/view status after pause
                     }
                 }
-                // Ensure the last phase description stays if needed
-                 if (isMounted) setActivePhase(numPhases - 1);
+                // Brief pause at the end before resetting for the loop
+                await new Promise(resolve => setTimeout(resolve, 500));
+                if (!isMounted || !inView) break; // Final check before next loop iteration
             }
+            // Reset when out of view or unmounted
+            if (isMounted) {
+                setActivePhase(-1);
+                await controls.start({ width: '0%', transition: { duration: 0.1 } });
+            }
+            isAnimating.current = false; // Mark as not animating
         };
 
         runTimelineAnimation();
@@ -111,13 +125,24 @@ export default function AboutUsPage() {
         // Cleanup function
         return () => {
             isMounted = false;
+            isAnimating.current = false; // Ensure this is reset on unmount
             controls.stop(); // Stop any ongoing Framer Motion animations
         };
-    }, [controls, inView]); // Rerun when inView changes or controls instance changes
+    }, [controls, inView]); // Rerun when inView changes
 
   return (
     // Layout handles page transition
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div // Wrap entire page content for consistent animation
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={{
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut" } },
+            exit: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" } }
+        }}
+        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
         initial="initial"
@@ -356,8 +381,8 @@ export default function AboutUsPage() {
         <motion.section
             ref={ref} // Attach ref to trigger animation
             initial="initial"
-            animate="animate" // Will be controlled by `inView`
-            variants={fadeInUp} // Single animation for the whole section
+            animate={controls} // Use animation controls here
+            variants={fadeInUp} // Single animation for the whole section container
             className="text-center mt-16"
         >
             <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
@@ -389,13 +414,13 @@ export default function AboutUsPage() {
                  {/* Phase Description - Shows description of the currently active phase */}
                  <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
                     <AnimatePresence mode="wait">
-                        {activePhase >= 0 && ( // Only render if a phase is active
+                        {activePhase >= 0 && activePhase < timelinePhases.length && ( // Check bounds
                           <motion.p
                               key={activePhase} // Change key to trigger animation
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.3 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
                               className="text-sm text-foreground"
                           >
                               <strong>{timelinePhases[activePhase]?.name}:</strong> {timelinePhases[activePhase]?.description}
@@ -405,6 +430,7 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </div>
+    </motion.div>
   );
 }
+
