@@ -29,28 +29,32 @@ const sources = [
 export default function PrototypePage() {
   return (
     // Use layout's motion context
-    <div
+    <motion.div
       className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        exit: { opacity: 0 },
+      }}
     >
       {/* Initial Section */}
       <motion.div
-        initial="initial"
-        animate="animate" // Animate this section immediately
-        variants={staggerContainer}
+        variants={fadeInUp} // Use simple fadeInUp for the whole section title block
         className="text-center mb-16"
       >
-        <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           Phoenix Prototype & Research Basis
-        </motion.h1>
-        <motion.p variants={fadeInUp} className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+        </h1>
+        <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
           Understanding the scientific foundation, current preclinical status, and future potential of the Phoenix therapy concept.
-        </motion.p>
+        </p>
       </motion.div>
 
-      {/* Current Status Section - Ensure it animates on load */}
+      {/* Current Status Section */}
       <motion.section
-        initial="initial" // Start animation from initial state
-        animate="animate" // Animate to this state on load
         variants={fadeIn} // Use fadeIn for the section
         className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" // Subtle gradient
       >
@@ -67,7 +71,7 @@ export default function PrototypePage() {
                 </p>
             </motion.div>
              {/* Key Activities */}
-             <motion.div variants={staggerContainer} initial="initial" animate="animate" className="mt-10 max-w-3xl mx-auto">
+             <motion.div variants={staggerContainer} className="mt-10 max-w-3xl mx-auto">
                  <motion.h4 variants={fadeInUp} className="font-semibold text-center text-foreground mb-4">
                     Key Development Activities:
                  </motion.h4>
@@ -106,10 +110,10 @@ export default function PrototypePage() {
             <p className="text-center text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
                 Use the slider to explore a conceptual visualization of cellular state transformation. (Illustrative Demo)
             </p>
-            {/* Replace placeholder with VideoSlider */}
+            {/* Replace placeholder with VideoSlider, reduced max-width */}
             <VideoSlider
                src="/Untitled video - Made with Clipchamp (2).mp4" // Path relative to /public
-               className="max-w-3xl mx-auto"
+               className="max-w-2xl mx-auto" // Reduced max-width
              />
             <p className="text-xs text-center text-muted-foreground italic mt-4">Note: This conceptual video illustrates potential effects and does not represent guaranteed results.</p>
         </motion.section>
@@ -186,6 +190,6 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under <strong className="text-foreground">preclinical development</strong>. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans. All forward-looking statements are subject to risks and uncertainties.
           </p>
       </motion.section>
-    </div>
+    </motion.div>
   );
 }

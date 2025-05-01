@@ -45,16 +45,15 @@ export function VideoSlider({ src, className }: VideoSliderProps) {
     setProgress(newProgress);
     if (videoRef.current && isVideoReady) {
       const newTime = (newProgress / 100) * duration;
-      // Check if the new time is significantly different to avoid jerky updates
-      if (Math.abs(videoRef.current.currentTime - newTime) > 0.1) {
-         videoRef.current.currentTime = newTime;
-      }
+      // Directly set the current time. Smoothness is browser/hardware dependent.
+      videoRef.current.currentTime = newTime;
     }
   };
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="relative w-full overflow-hidden aspect-video rounded-lg border border-border bg-muted">
+      {/* Adjusted aspect ratio to 16/9, and background color */}
+      <div className="relative w-full overflow-hidden aspect-video rounded-lg border border-border bg-black">
         <video
           ref={videoRef}
           src={src}
@@ -62,8 +61,9 @@ export function VideoSlider({ src, className }: VideoSliderProps) {
           muted // Muted is often required for autoplay-like behavior
           playsInline // Important for mobile
           preload="metadata" // Helps get duration faster
-          className="absolute top-0 left-0 w-[200%] h-full object-cover max-w-none" // Make video twice as wide
-          style={{ transform: 'translateX(-50%)' }} // Shift video left by half its width (shows right half)
+           // Changed object-fit to contain, adjusted width and height
+          className="absolute top-0 left-0 w-[200%] h-full object-contain max-w-none"
+          style={{ transform: 'translateX(-50%)' }} // Keep shift to show right half
           onCanPlay={() => setIsVideoReady(true)} // Another readiness check
         />
          {/* Optional: Loading indicator */}
