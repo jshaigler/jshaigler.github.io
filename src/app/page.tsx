@@ -1,41 +1,27 @@
 
 'use client'; // Required for Framer Motion and useEffect
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Target, Zap, Microscope, Eye, TrendingUp, CheckSquare } from 'lucide-react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations'; // Assuming animations.ts exists
-import CountUp from 'react-countup'; // Import react-countup
-
-// Animated Counter Component
-const AnimatedStat = ({ value, suffix = '', prefix = '', duration = 2, className = '', decimals = 0 }) => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
-  useEffect(() => {
-    if (inView) {
-      controls.start('animate');
-    }
-  }, [controls, inView]);
-
-  return (
-    <motion.span ref={ref} initial="initial" animate={controls} variants={fadeIn} className={className}>
-      {inView ? <CountUp end={value} duration={duration} prefix={prefix} suffix={suffix} decimals={decimals} separator="," /> : 0}
-    </motion.span>
-  );
-};
-
+import { motion } from 'framer-motion';
+import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
+import { AnimatedStat } from '@/components/animated-stat'; // Import the reusable component
 
 export default function Home() {
   return (
     <>
       {/* Layout handles page transition */}
-      <div className="flex flex-col min-h-screen">
+      <motion.div // Add motion wrapper for exit animations if needed, or rely on layout
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={fadeIn} // Basic fade for the whole page container
+          className="flex flex-col min-h-screen"
+      >
         {/* Hero Section - Animates immediately */}
         <motion.section
           initial="initial" // Animate this section on load
@@ -83,10 +69,10 @@ export default function Home() {
                 className="w-full md:w-auto flex-shrink-0"
                >
                 <Image
-                  src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png" // Updated image source
-                  alt="Phoenix Lifesciences Product Representation" // Updated alt text slightly
-                  width={400} // Adjusted width for potential size differences
-                  height={300} // Adjusted height
+                  src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png"
+                  alt="Phoenix Lifesciences Product Representation"
+                  width={400}
+                  height={300}
                   className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto rounded-lg shadow-xl object-contain mx-auto md:mx-0 hover:scale-105 transition-transform duration-300 ease-in-out"
                   priority // LCP Image
                   data-ai-hint="futuristic medical technology"
@@ -134,15 +120,14 @@ export default function Home() {
 
             {/* Vision Section */}
             <motion.div
-              initial="initial" // Use initial/whileInView for components within viewport-triggered sections
-              whileInView="animate"
-              viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
+              initial="initial" // Use initial/animate for components within viewport-triggered sections
+              animate="animate" // Animate immediately
               variants={fadeIn} // Use a simple fadeIn for the container div
-              className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden"
+              className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
             >
               <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
                 <Image
-                  src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" // Updated image source
+                  src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
                   alt="Vibrant illustration representing future health and longevity"
                   width={600}
                   height={400}
@@ -151,7 +136,7 @@ export default function Home() {
                   // Removed priority as it's not the LCP
                 />
               </motion.div>
-              <motion.div variants={staggerContainer} className="md:w-1/2"> {/* Stagger text animation */}
+              <motion.div variants={staggerContainer} initial="initial" animate="animate" className="md:w-1/2"> {/* Stagger text animation */}
                   <motion.h3 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2">
                     <Eye className="h-8 w-8 text-primary" /> Our Vision for the Future
                   </motion.h3>
@@ -256,8 +241,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-      </div>
+      </motion.div>
     </>
   );
 }
-

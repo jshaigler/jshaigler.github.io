@@ -1,3 +1,4 @@
+
 'use client'; // Required for Framer Motion, useState, useEffect
 
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
@@ -73,7 +74,8 @@ export default function AboutUsPage() {
                 while (isMounted && inView) {
                     // --- Reset for loop ---
                     setActivePhase(-1);
-                    await controls.start({ width: '0%', transition: { duration: 0.1 } });
+                    // Immediate reset using controls.set
+                    controls.set({ width: '0%' });
                     if (!isMounted || !inView) break;
 
                     // --- Animation Sequence ---
@@ -101,15 +103,27 @@ export default function AboutUsPage() {
                     }
                      if (!isMounted || !inView) break; // Check before final pause
 
-                    // Brief pause at the end before resetting
+                    // Brief pause at the end before restarting smoothly
                     await new Promise(resolve => setTimeout(resolve, 500));
                      if (!isMounted || !inView) break; // Check before loop restart
+
+                      // Smoothly animate back to 0%
+                    setActivePhase(-1); // Hide description before animating back
+                    await controls.start({
+                        width: '0%',
+                        transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
+                    });
+                    if (!isMounted || !inView) break;
+                     // Add a small delay before the next loop starts
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    if (!isMounted || !inView) break;
+
                 }
             } catch (error) {
                 // Catch potential errors during animation (e.g., component unmount)
                  if (error instanceof Error && error.name === 'AnimationPlaybackError') {
                     // Ignore animation cancellation errors which are expected on unmount/out of view
-                    console.log("Animation stopped cleanly.");
+                    console.log("Timeline animation stopped cleanly.");
                  } else {
                     console.error("Timeline animation error:", error);
                  }
@@ -117,7 +131,7 @@ export default function AboutUsPage() {
                 // Reset state if component is still mounted but animation stopped (e.g., out of view)
                 if (isMounted) {
                     setActivePhase(-1);
-                     // Use controls.set for immediate, non-animated reset
+                     // Use controls.set for immediate, non-animated reset when not in view
                      controls.set({ width: '0%' });
                 }
                 isAnimatingRef.current = false; // Allow animation to restart if it comes back into view
