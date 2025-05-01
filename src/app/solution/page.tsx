@@ -61,7 +61,7 @@ const technicalMechanisms = [
     }
 ];
 
-// Placeholder for interactive 3D model or animation
+// Placeholder for interactive elements
 const InteractiveVisualPlaceholder = ({ title }: { title: string }) => (
     <div className="aspect-video bg-muted/50 rounded-lg flex items-center justify-center text-muted-foreground border border-dashed border-primary/30 my-6 p-4">
         <p className="text-center">Interactive Visualization Placeholder:<br/> <span className="font-semibold text-primary">{title}</span></p>
@@ -72,11 +72,19 @@ const InteractiveVisualPlaceholder = ({ title }: { title: string }) => (
 export default function SolutionPage() {
   return (
     // Use layout's motion context
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{ // Keep page-level transition
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        exit: { opacity: 0 },
+      }}
+    >
       {/* Initial Section */}
       <motion.div
-          initial="initial"
-          animate="animate" // Animate this section immediately
           variants={staggerContainer}
           className="text-center mb-16"
       >
@@ -84,15 +92,12 @@ export default function SolutionPage() {
           Our Solution: Phoenix
         </motion.h1>
         <motion.p variants={fadeInUp} className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
-          A Multi-Pronged Therapeutic Strategy Targeting <strong className="text-foreground">Four Key Hallmarks</strong> of Aging with Synergistic mRNA Technologies.
+           A Multi-Pronged Therapeutic Strategy Targeting <strong className="text-foreground">Four Key Hallmarks</strong> of Aging with Synergistic mRNA Technologies.
         </motion.p>
       </motion.div>
 
       {/* Four Pillars Section - Enhanced Cards */}
       <motion.section
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }}
         variants={staggerContainer}
         className="mb-20"
       >
@@ -129,19 +134,41 @@ export default function SolutionPage() {
             </motion.div>
           ))}
         </motion.div>
-         {/* Placeholder for Interactive 3D Model */}
-         <motion.div initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp} className="mt-12">
-             <InteractiveVisualPlaceholder title="Explore Phoenix Therapy in 3D" />
+         {/* --- Replaced InteractiveVisualPlaceholder --- */}
+         <motion.div
+           variants={fadeInUp} // Animate the container
+           className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
+         >
+             <motion.div variants={fadeIn}> {/* Animate individual image */}
+                 <Image
+                   src="https://picsum.photos/600/400?random=1" // Placeholder 1
+                   alt="Phoenix therapy visualization screenshot 1"
+                   width={600}
+                   height={400}
+                   className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
+                   data-ai-hint="scientific therapy visualization"
+                 />
+                 <p className="text-center text-xs text-muted-foreground mt-2">Visualization of Phoenix Mechanism (Placeholder 1)</p>
+             </motion.div>
+             <motion.div variants={fadeIn} transition={{delay: 0.1}}> {/* Animate individual image with slight delay */}
+                 <Image
+                    src="https://picsum.photos/600/400?random=2" // Placeholder 2
+                    alt="Phoenix therapy visualization screenshot 2"
+                    width={600}
+                    height={400}
+                    className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
+                    data-ai-hint="cellular interaction graphic"
+                  />
+                   <p className="text-center text-xs text-muted-foreground mt-2">Cellular Interaction Detail (Placeholder 2)</p>
+             </motion.div>
          </motion.div>
+          {/* --- End of replacement --- */}
       </motion.section>
 
 
       {/* Synergistic Effects - Enhanced */}
       <motion.section
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={fadeIn}
+        variants={fadeIn} // Use simple fadeIn for this section
         className="mb-20 p-8 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-lg shadow-inner border border-primary/10" // Subtle gradient and border
       >
          <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</motion.h2>
@@ -162,16 +189,13 @@ export default function SolutionPage() {
             ))}
          </motion.ul>
           {/* Placeholder for Synergistic Animation */}
-          <motion.div initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp} className="mt-10">
+          <motion.div variants={fadeInUp} className="mt-10">
               <InteractiveVisualPlaceholder title="How Phoenix Pillars Work Together" />
           </motion.div>
       </motion.section>
 
        {/* Delivery, Safety, and Treatment Schedule Section - Enhanced */}
         <motion.section
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }}
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" // Changed to grid-cols-3
         >
@@ -228,9 +252,6 @@ export default function SolutionPage() {
 
       {/* Technical Appendix Section */}
       <motion.section
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }}
         variants={fadeInUp}
         className="mb-16" // Added margin bottom
       >
@@ -251,9 +272,6 @@ export default function SolutionPage() {
 
       {/* Clinical Evidence Placeholder */}
        <motion.section
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }}
           variants={fadeInUp}
           className="py-16 md:py-20 text-center bg-secondary/40 rounded-lg"
         >
@@ -272,10 +290,10 @@ export default function SolutionPage() {
 
       {/* Disclaimer */}
       <motion.p
-       initial="initial" whileInView="animate" viewport={{ once: true }} variants={fadeInUp}
+       variants={fadeInUp}
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </div>
+    </motion.div>
   );
 }
