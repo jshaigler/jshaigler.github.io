@@ -86,6 +86,8 @@ export default function SolutionPage() {
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
+          initial="initial" // Add initial state
+          animate="animate" // Add animate state
           className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -99,6 +101,9 @@ export default function SolutionPage() {
       {/* Four Pillars Section - Enhanced Cards */}
       <motion.section
         variants={staggerContainer}
+        initial="initial" // Add initial state
+        whileInView="animate" // Keep whileInView for scroll trigger
+        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
         className="mb-20"
       >
         <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-12">The Four Pillars of Phoenix</motion.h2>
@@ -134,41 +139,47 @@ export default function SolutionPage() {
             </motion.div>
           ))}
         </motion.div>
-         {/* --- Replaced InteractiveVisualPlaceholder --- */}
+         {/* --- Screenshots Section --- */}
          <motion.div
-           variants={fadeInUp} // Animate the container
+           variants={staggerContainer} // Use stagger for children
+            initial="initial" // Add initial state
+            whileInView="animate" // Keep whileInView for scroll trigger
+            viewport={{ once: true, amount: 0.1 }} // Trigger earlier
            className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
          >
              <motion.div variants={fadeIn}> {/* Animate individual image */}
                  <Image
                    src="/Screenshot 2025-04-27 190833.png" // Placeholder 1
-                   alt="TERT mRNA"
+                   alt="TERT mRNA Structure Visualization" // Descriptive alt text
                    width={600}
                    height={400}
                    className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                   data-ai-hint="molecular diagram"
+                   data-ai-hint="molecular diagram science" // AI hint
                  />
                  <p className="text-center text-xs text-muted-foreground mt-2">TERT mRNA Structure Visualization</p>
              </motion.div>
              <motion.div variants={fadeIn} transition={{delay: 0.1}}> {/* Animate individual image with slight delay */}
                  <Image
                     src="/Screenshot 2025-04-27 201741.png" // Placeholder 2
-                    alt="TFAM mRNA"
+                    alt="TFAM mRNA Structure Visualization" // Descriptive alt text
                     width={600}
                     height={400}
                     className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                    data-ai-hint="molecular diagram"
+                    data-ai-hint="scientific illustration molecule" // AI hint
                   />
                    <p className="text-center text-xs text-muted-foreground mt-2">TFAM mRNA Structure Visualization</p>
              </motion.div>
          </motion.div>
-          {/* --- End of replacement --- */}
+          {/* --- End of screenshots section --- */}
       </motion.section>
 
 
       {/* Synergistic Effects - Enhanced */}
       <motion.section
-        variants={fadeIn} // Use simple fadeIn for this section
+        variants={staggerContainer} // Use stagger for children
+        initial="initial" // Add initial state
+        whileInView="animate" // Keep whileInView for scroll trigger
+        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
         className="mb-20 p-8 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-lg shadow-inner border border-primary/10" // Subtle gradient and border
       >
          <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</motion.h2>
@@ -188,15 +199,15 @@ export default function SolutionPage() {
               </motion.li>
             ))}
          </motion.ul>
-          {/* Placeholder for Synergistic Animation */}
-          <motion.div variants={fadeInUp} className="mt-10">
-              <InteractiveVisualPlaceholder title="How Phoenix Pillars Work Together" />
-          </motion.div>
+          {/* Removed Synergistic Animation Placeholder */}
       </motion.section>
 
        {/* Delivery, Safety, and Treatment Schedule Section - Enhanced */}
         <motion.section
           variants={staggerContainer}
+          initial="initial" // Add initial state
+          whileInView="animate" // Keep whileInView for scroll trigger
+          viewport={{ once: true, amount: 0.1 }} // Trigger earlier
           className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" // Changed to grid-cols-3
         >
              {/* Precision Delivery */}
@@ -252,7 +263,10 @@ export default function SolutionPage() {
 
       {/* Technical Appendix Section */}
       <motion.section
-        variants={fadeInUp}
+        variants={fadeInUp} // Single animation for the whole section
+        initial="initial" // Add initial state
+        whileInView="animate" // Keep whileInView for scroll trigger
+        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
         className="mb-16" // Added margin bottom
       >
         <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Technical Appendix: Molecular Mechanisms</h2>
@@ -274,10 +288,14 @@ export default function SolutionPage() {
 
       {/* Disclaimer */}
       <motion.p
-       variants={fadeInUp}
+       variants={fadeInUp} // Simple fade in for disclaimer
+       initial="initial" // Add initial state
+       animate="animate" // Make it appear with the page load or when scrolled to
+       viewport={{ once: true }} // Animate once
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
     </motion.div>
   );
 }
+
