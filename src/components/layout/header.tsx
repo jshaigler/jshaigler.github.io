@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image'; // Import next/image
 import { usePathname } from 'next/navigation';
-import { FlaskConical, Home, Presentation, Users } from 'lucide-react';
+import { FlaskConical, Home, Presentation, Users, BookOpen, Microscope } from 'lucide-react'; // Added BookOpen, Microscope
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle'; // Import ThemeToggle
@@ -14,6 +14,9 @@ const navItems = [
   { href: '/solution', label: 'Our Solution', icon: FlaskConical },
   { href: '/about', label: 'About Us', icon: Users },
   { href: '/prototype', label: 'Prototype', icon: Presentation },
+  // Consider adding these if dedicated pages are created:
+  // { href: '/science', label: 'Science', icon: BookOpen },
+  // { href: '/clinical-evidence', label: 'Clinical Evidence', icon: Microscope },
 ];
 
 export function Header() {
@@ -61,6 +64,7 @@ export function Header() {
         {/* Add Mobile Menu Trigger if needed later */}
         <div className="md:hidden">
           {/* Placeholder for mobile menu button, could include theme toggle here too */}
+           <ThemeToggle /> {/* Include toggle in mobile view as well for now */}
         </div>
       </div>
     </header>
