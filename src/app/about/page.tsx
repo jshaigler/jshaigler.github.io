@@ -5,43 +5,13 @@ import React, { useState, useEffect, useRef } from 'react'; // Import useState, 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, BrainCircuit, GraduationCap, Info, Activity } from 'lucide-react'; // Added Award, BrainCircuit, GraduationCap, Info, Activity
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity } from 'lucide-react'; // Removed BrainCircuit
 import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { AnimatedStat } from '@/components/animated-stat'; // Import AnimatedStat
 
-// Placeholder for Advisory Board Member
-const AdvisoryMemberCard = ({ name, title, affiliation, imageUrl }: { name: string, title: string, affiliation: string, imageUrl?: string }) => (
-    <motion.div variants={fadeInUp}>
-        <Card className="text-center shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 h-full">
-            <CardHeader>
-                {imageUrl ? (
-                     <Image
-                        src={imageUrl}
-                        alt={name}
-                        width={80}
-                        height={80}
-                        className="mx-auto rounded-full mb-4 border-2 border-primary/30"
-                        data-ai-hint="scientist headshot"
-                    />
-                ) : (
-                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-muted mb-4 border-2 border-border">
-                        <Users className="h-10 w-10 text-muted-foreground" />
-                    </div>
-                )}
-                <CardTitle className="text-xl">{name}</CardTitle>
-                <p className="text-sm text-primary font-medium">{title}</p>
-            </CardHeader>
-            <CardContent>
-                <p className="text-xs text-muted-foreground">
-                    {affiliation}
-                </p>
-            </CardContent>
-        </Card>
-    </motion.div>
-);
 
 // Timeline Phases Data
 const timelinePhases = [
@@ -55,7 +25,7 @@ const timelinePhases = [
 
 export default function AboutUsPage() {
     const controls = useAnimation(); // Controls for the progress bar animation
-    const [ref, inView] = useInView({ threshold: 0.3 }); // Trigger when 30% visible
+    const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
     const isAnimatingRef = useRef(false); // Ref to track if animation is currently running
 
@@ -76,7 +46,9 @@ export default function AboutUsPage() {
                     setActivePhase(-1);
                     // Immediate reset using controls.set
                     controls.set({ width: '0%' });
+                    await new Promise(resolve => setTimeout(resolve, 300)); // Short delay before starting
                     if (!isMounted || !inView) break;
+
 
                     // --- Animation Sequence ---
                     // 1. Initialize: Show first phase description, pause
@@ -86,16 +58,17 @@ export default function AboutUsPage() {
 
                     // 2. Animate through subsequent phases
                     for (let i = 1; i < numPhases; i++) {
-                        // Set next phase active *before* animation starts
-                        setActivePhase(i);
                         const targetWidth = (i / (numPhases - 1)) * 100;
 
-                        // Animate progress bar
+                        // Animate progress bar first
                         await controls.start({
                             width: `${targetWidth}%`,
                             transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
                         });
                         if (!isMounted || !inView) break;
+
+                        // Then activate the phase description
+                        setActivePhase(i);
 
                         // Pause after reaching the phase's point
                         await new Promise(resolve => setTimeout(resolve, pauseDuration));
@@ -139,7 +112,11 @@ export default function AboutUsPage() {
         };
 
         if (inView) {
-            runTimelineAnimation();
+            // Start animation slightly delayed after coming into view
+            const startTimeout = setTimeout(() => {
+                 if(isMounted) runTimelineAnimation();
+             }, 200);
+            return () => clearTimeout(startTimeout); // Clear timeout on cleanup
         } else {
              // Stop animation and reset when out of view
             controls.stop();
@@ -154,7 +131,7 @@ export default function AboutUsPage() {
         return () => {
             isMounted = false;
             controls.stop(); // Stop any ongoing Framer Motion animations
-             isAnimatingRef.current = false; // Reset animation flag on unmount
+            isAnimatingRef.current = false; // Reset animation flag on unmount
         };
     }, [controls, inView]); // Dependency array
 
@@ -167,16 +144,16 @@ export default function AboutUsPage() {
         exit="exit"
         variants={{
             initial: { opacity: 0 },
-            animate: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut" } },
+            animate: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut", staggerChildren: 0.1 } }, // Added stagger
             exit: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" } }
         }}
         className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
     >
       {/* Initial Section */}
       <motion.div
+        variants={staggerContainer} // Use stagger for title/subtitle
         initial="initial"
-        animate="animate" // Animate this section immediately
-        variants={staggerContainer}
+        animate="animate"
         className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -189,9 +166,9 @@ export default function AboutUsPage() {
 
       {/* Mission & Vision Section */}
         <motion.section
+          variants={fadeIn} // Apply fadeIn to the whole section
           initial="initial"
-          animate="animate" // Changed from whileInView to animate immediately
-          variants={fadeIn} // Keep using fadeIn variant for the section container
+          animate="animate" // Animate immediately
           className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
         >
           {/* Child elements will inherit animation trigger unless overridden */}
@@ -259,27 +236,7 @@ export default function AboutUsPage() {
             </motion.div>
         </motion.section>
 
-       {/* Scientific Advisory Board Placeholder Section */}
-       <motion.section
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={staggerContainer}
-          className="mb-20 bg-muted/40 py-16 rounded-lg"
-       >
-           <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-12 flex items-center justify-center gap-3">
-               <BrainCircuit className="h-8 w-8 text-primary" /> Scientific Advisory Board
-           </motion.h2>
-           <motion.p variants={fadeInUp} className="text-center text-lg text-muted-foreground mb-10 max-w-3xl mx-auto">
-                Guided by leading experts in aging research, genetics, and mRNA technology. (Placeholder Section)
-            </motion.p>
-            <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
-                 {/* Replace with actual advisors */}
-                 <AdvisoryMemberCard name="Dr. Evelyn Reed" title="Gerontology Expert" affiliation="Leading University" />
-                 <AdvisoryMemberCard name="Prof. Kenji Tanaka" title="mRNA Specialist" affiliation="Research Institute" />
-                 <AdvisoryMemberCard name="Dr. Anya Sharma" title="Bioinformatics Lead" affiliation="Biotech Firm" />
-            </motion.div>
-        </motion.section>
+       {/* Scientific Advisory Board Section Removed */}
 
 
       {/* Team Section - Enhanced Layout */}
