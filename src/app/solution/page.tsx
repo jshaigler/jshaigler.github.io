@@ -141,25 +141,25 @@ export default function SolutionPage() {
          >
              <motion.div variants={fadeIn}> {/* Animate individual image */}
                  <Image
-                   src="https://picsum.photos/600/400?random=1" // Placeholder 1
-                   alt="Phoenix therapy visualization screenshot 1"
+                   src="/Screenshot 2025-04-27 190833.png" // Placeholder 1
+                   alt="TERT mRNA"
                    width={600}
                    height={400}
                    className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                   data-ai-hint="scientific therapy visualization"
+                   data-ai-hint="molecular diagram"
                  />
-                 <p className="text-center text-xs text-muted-foreground mt-2">Visualization of Phoenix Mechanism (Placeholder 1)</p>
+                 <p className="text-center text-xs text-muted-foreground mt-2">TERT mRNA Structure Visualization</p>
              </motion.div>
              <motion.div variants={fadeIn} transition={{delay: 0.1}}> {/* Animate individual image with slight delay */}
                  <Image
-                    src="https://picsum.photos/600/400?random=2" // Placeholder 2
-                    alt="Phoenix therapy visualization screenshot 2"
+                    src="/Screenshot 2025-04-27 201741.png" // Placeholder 2
+                    alt="TFAM mRNA"
                     width={600}
                     height={400}
                     className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                    data-ai-hint="cellular interaction graphic"
+                    data-ai-hint="molecular diagram"
                   />
-                   <p className="text-center text-xs text-muted-foreground mt-2">Cellular Interaction Detail (Placeholder 2)</p>
+                   <p className="text-center text-xs text-muted-foreground mt-2">TFAM mRNA Structure Visualization</p>
              </motion.div>
          </motion.div>
           {/* --- End of replacement --- */}
@@ -270,23 +270,7 @@ export default function SolutionPage() {
         </Accordion>
       </motion.section>
 
-      {/* Clinical Evidence Placeholder */}
-       <motion.section
-          variants={fadeInUp}
-          className="py-16 md:py-20 text-center bg-secondary/40 rounded-lg"
-        >
-            <h2 className="text-3xl font-bold tracking-tight mb-4">Clinical Evidence & Data</h2>
-             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-                While Phoenix is currently preclinical, our approach is built on robust scientific findings. Explore our preclinical data and the path towards human trials.
-            </p>
-             {/* Placeholder for data viz */}
-             <div className="aspect-video bg-muted/60 rounded-lg flex items-center justify-center text-muted-foreground border border-dashed border-primary/30 my-6 p-4 max-w-2xl mx-auto">
-                <p>Preclinical Data Visualization Placeholder</p>
-             </div>
-             <Button asChild>
-                <Link href="/prototype#research-basis">View Research Basis</Link>
-             </Button>
-       </motion.section>
+       {/* Removed Clinical Evidence Placeholder section */}
 
       {/* Disclaimer */}
       <motion.p
