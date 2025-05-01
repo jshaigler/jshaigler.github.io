@@ -230,13 +230,13 @@ export default function AboutUsPage() {
         </motion.div>
       </motion.section>
 
-      {/* Article Section */}
+      {/* Article Section - Replaced Button with Article Card */}
         <motion.section
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
           variants={fadeIn}
-          className="my-20 text-center bg-secondary/50 p-8 rounded-lg shadow-md border border-border"
+          className="my-20 text-center"
         >
              <motion.div variants={staggerContainer}>
                 <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center justify-center gap-3">
@@ -245,12 +245,37 @@ export default function AboutUsPage() {
                 <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
                     Dive deeper into our vision and the science behind Phoenix Lifesciences. Explore our recent publication on Medium for more insights into our therapeutic approach.
                 </motion.p>
-                <motion.div variants={fadeInUp}>
-                  <Button size="lg" asChild className="shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-0.5">
-                      <Link href="https://medium.com/p/a5f11e470707" target="_blank" rel="noopener noreferrer">
-                          Read on Medium <ExternalLink className="ml-2 h-5 w-5" />
-                      </Link>
-                  </Button>
+                {/* Article Card */}
+                <motion.div variants={fadeInUp} className="max-w-xl mx-auto">
+                   <Link href="https://medium.com/p/a5f11e470707" target="_blank" rel="noopener noreferrer" className="block group">
+                        <Card className="text-left shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 border border-border hover:border-primary/30 overflow-hidden">
+                             {/* Optional: Add a generic article image */}
+                             {/* <Image src="/placeholder-article-image.png" alt="Article Preview" width={600} height={150} className="w-full h-24 object-cover opacity-80 group-hover:opacity-100 transition-opacity"/> */}
+                             <CardHeader className="flex flex-row items-center gap-4">
+                                <div className="flex-shrink-0">
+                                    <BookText className="h-10 w-10 text-primary" />
+                                </div>
+                                <div className="flex-grow">
+                                    <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                                        Pioneering the Next Generation of mRNA Life Extension Therapies
+                                    </CardTitle>
+                                    <p className="text-sm text-muted-foreground">Published on Medium</p>
+                                </div>
+                             </CardHeader>
+                             <CardContent>
+                                 {/* Simulate text lines */}
+                                 <div className="space-y-1.5">
+                                     <div className="h-2 bg-muted rounded-full w-full"></div>
+                                     <div className="h-2 bg-muted rounded-full w-11/12"></div>
+                                     <div className="h-2 bg-muted rounded-full w-4/5"></div>
+                                     <div className="h-2 bg-muted rounded-full w-10/12"></div>
+                                 </div>
+                                 <div className="mt-4 flex items-center justify-end text-primary text-sm font-medium group-hover:underline">
+                                     Read More <ExternalLink className="ml-1.5 h-4 w-4" />
+                                 </div>
+                             </CardContent>
+                        </Card>
+                   </Link>
                 </motion.div>
              </motion.div>
         </motion.section>
@@ -286,3 +311,5 @@ export default function AboutUsPage() {
     </div>
   );
 }
+
+    
