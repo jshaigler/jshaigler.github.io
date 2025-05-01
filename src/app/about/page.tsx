@@ -1,13 +1,14 @@
+'use client'; // Required for Framer Motion, useState, useEffect
 
-'use client'; // Required for Framer Motion
-
+import React, { useState, useEffect } from 'react'; // Import useState, useEffect
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, BrainCircuit, GraduationCap } from 'lucide-react'; // Added Award, BrainCircuit, GraduationCap
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, BrainCircuit, GraduationCap, Info, Activity } from 'lucide-react'; // Added Award, BrainCircuit, GraduationCap, Info, Activity
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations'; // Import animation variants
+import { motion, useAnimation } from 'framer-motion'; // Import useAnimation
+import { useInView } from 'react-intersection-observer'; // Import useInView
+import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 
 // Placeholder for Advisory Board Member
 const AdvisoryMemberCard = ({ name, title, affiliation, imageUrl }: { name: string, title: string, affiliation: string, imageUrl?: string }) => (
@@ -40,8 +41,56 @@ const AdvisoryMemberCard = ({ name, title, affiliation, imageUrl }: { name: stri
     </motion.div>
 );
 
+// Timeline Phases Data
+const timelinePhases = [
+  { name: 'Preclinical', description: 'In vitro & in vivo studies validating safety and efficacy.' },
+  { name: 'Phase I', description: 'First-in-human trials assessing safety, dosage, and side effects.' },
+  { name: 'Phase II', description: 'Evaluating effectiveness and further assessing safety in a larger group.' },
+  { name: 'Phase III', description: 'Large-scale trials comparing the therapy to standard treatments.' },
+  { name: 'Approval', description: 'Regulatory review and potential market authorization.' },
+];
+
+const timelineDuration = 5; // Total animation duration in seconds
 
 export default function AboutUsPage() {
+    const controls = useAnimation();
+    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 }); // Trigger when 30% visible
+    const [activePhase, setActivePhase] = useState(0); // Index of the active phase
+
+     useEffect(() => {
+        if (inView) {
+            controls.start({
+                width: '100%', // Animate to full width
+                transition: { duration: timelineDuration, ease: 'linear' }
+            }).then(() => {
+                // Ensure the last phase is marked active after animation finishes
+                setActivePhase(timelinePhases.length - 1);
+            });
+        }
+    }, [controls, inView]);
+
+    // Effect to update active phase based on animation progress
+    useEffect(() => {
+        let intervalId: NodeJS.Timeout | null = null;
+        if (inView) {
+            const phaseDuration = timelineDuration / timelinePhases.length;
+            intervalId = setInterval(() => {
+                setActivePhase((prev) => {
+                     // Stop incrementing if we reached the last phase description
+                     if (prev >= timelinePhases.length -1 ) {
+                        if(intervalId) clearInterval(intervalId);
+                         return prev;
+                     }
+                    return prev + 1;
+                });
+            }, phaseDuration * 1000); // Convert seconds to milliseconds
+        }
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [inView]); // Rerun when inView changes
+
   return (
     // Layout handles page transition
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
@@ -64,7 +113,6 @@ export default function AboutUsPage() {
         <motion.section
           initial="initial"
           animate="animate" // Changed from whileInView to animate immediately
-          // Removed viewport prop
           variants={fadeIn} // Keep using fadeIn variant for the section container
           className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
         >
@@ -280,36 +328,57 @@ export default function AboutUsPage() {
              </motion.div>
         </motion.section>
 
-      {/* Path Forward Section */}
-      <motion.section
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
-        variants={fadeInUp} // Single animation for the whole section
-        className="text-center mt-16"
-      >
-        <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
-        <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
-            We are committed to a rigorous development pathway, including advanced <em className="italic">in vitro</em> testing, comprehensive animal studies, and meticulously designed human clinical trials. Our goal is to translate promising science into safe and effective therapies, bringing the future of longevity from the laboratory to the living room.
-        </p>
-         {/* Placeholder for Research Timeline */}
-         <div className="mt-10 p-6 bg-muted/30 rounded-lg max-w-2xl mx-auto border border-dashed border-primary/20">
-             <h4 className="font-semibold text-center text-muted-foreground">Research & Clinical Trial Timeline (Placeholder)</h4>
-             {/* Add a simple visual or steps here */}
-             <div className="mt-4 flex justify-between items-center text-xs text-muted-foreground">
-                 <span>Preclinical</span>
-                 <span>Phase I</span>
-                 <span>Phase II</span>
-                 <span>Phase III</span>
-                 <span>Approval</span>
-             </div>
-             <div className="w-full h-2 bg-muted rounded-full mt-1 overflow-hidden">
-                 <div className="h-full w-1/4 bg-primary rounded-full"></div> {/* Example progress */}
-             </div>
-         </div>
-      </motion.section>
+      {/* Path Forward Section - Enhanced Timeline */}
+        <motion.section
+            ref={ref} // Attach ref to trigger animation
+            initial="initial"
+            animate="animate" // Will be controlled by `inView`
+            variants={fadeInUp} // Single animation for the whole section
+            className="text-center mt-16"
+        >
+            <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto mb-10">
+                We are committed to a rigorous development pathway, including advanced <em className="italic">in vitro</em> testing, comprehensive animal studies, and meticulously designed human clinical trials. Our goal is to translate promising science into safe and effective therapies, bringing the future of longevity from the laboratory to the living room.
+            </p>
+            {/* Animated Research Timeline */}
+            <div className="mt-10 p-6 bg-muted/30 rounded-lg max-w-3xl mx-auto border border-dashed border-primary/20 overflow-hidden">
+                 <h4 className="font-semibold text-center text-foreground mb-6">Research & Clinical Trial Timeline</h4>
+                 {/* Phase Labels */}
+                <div className="relative flex justify-between items-center text-xs text-muted-foreground mb-2 px-2">
+                     {timelinePhases.map((phase, index) => (
+                         <span key={phase.name} className={`relative z-10 transition-colors duration-300 ${index <= activePhase ? 'text-primary font-medium' : ''}`}>
+                             {phase.name}
+                             {/* Small indicator dot */}
+                             <span className={`absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 h-2 w-2 rounded-full border border-primary transition-all duration-300 ${index <= activePhase ? 'bg-primary scale-125' : 'bg-muted'}`}></span>
+                         </span>
+                     ))}
+                 </div>
+                 {/* Progress Bar Track */}
+                 <div className="relative w-full h-2 bg-muted rounded-full mt-1 overflow-hidden">
+                      {/* Animated Progress Bar */}
+                      <motion.div
+                        initial={{ width: '0%' }}
+                        animate={controls} // Controlled by useAnimation and useInView
+                        className="h-full bg-gradient-to-r from-primary/50 to-primary rounded-full"
+                      />
+                 </div>
+                 {/* Phase Description - Shows description of the currently active phase */}
+                 <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
+                    <AnimatePresence mode="wait">
+                        <motion.p
+                           key={activePhase} // Change key to trigger animation
+                           initial={{ opacity: 0, y: 10 }}
+                           animate={{ opacity: 1, y: 0 }}
+                           exit={{ opacity: 0, y: -10 }}
+                           transition={{ duration: 0.3 }}
+                           className="text-sm text-foreground"
+                         >
+                            <strong>{timelinePhases[activePhase]?.name}:</strong> {timelinePhases[activePhase]?.description}
+                        </motion.p>
+                    </AnimatePresence>
+                 </div>
+            </div>
+        </motion.section>
     </div>
   );
 }
-
-    
