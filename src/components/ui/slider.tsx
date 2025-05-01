@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & { 'aria-label'?: string } // Add aria-label prop
 >(({ className, ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
@@ -15,7 +15,7 @@ const Slider = React.forwardRef<
       "relative flex w-full touch-none select-none items-center",
       className
     )}
-    {...props}
+    {...props} // Spread all props including aria-label
   >
     <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
       <SliderPrimitive.Range className="absolute h-full bg-primary" />

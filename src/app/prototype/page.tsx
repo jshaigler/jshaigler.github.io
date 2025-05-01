@@ -1,19 +1,20 @@
 
-'use client'; // Required for Framer Motion
+'use client'; // Required for Framer Motion and VideoSlider
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, Search, SlidersHorizontal } from 'lucide-react'; // Added AlertTriangle, Search, SlidersHorizontal
+import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, Search, SlidersHorizontal, BrainCircuit, Award, GraduationCap } from 'lucide-react'; // Added icons
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations'; // Import animation variants
+import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
+import { VideoSlider } from '@/components/interactive/video-slider'; // Import the new component
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
     { title: "LIN28A enhances regenerative capacity...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC8901931/", number: 2, category: "Epigenetics" },
-    { title: "Lin28a - boost your energy...", url: "https://www.embopress.org/doi/full/10.1002/embj.201387363", number: 3, category: "Mitochondria" }, // Assuming relevance
-    { title: "Lin28a rejuvenates muscle stem cells...", url: "https://www.biorxiv.org/content/10.1101/2021.10.14.462144v1.full.pdf", number: 4, category: "Stem Cells" }, // Assuming relevance
-    { title: "Wound healing, regeneration, and Lin28", url: "https://www.axopub.com/wp01/2013/11/14/wound-healing-regeneration-and-lin28/", number: 5, category: "Regeneration" }, // Assuming relevance
+    { title: "Lin28a - boost your energy...", url: "https://www.embopress.org/doi/full/10.1002/embj.201387363", number: 3, category: "Mitochondria" },
+    { title: "Lin28a rejuvenates muscle stem cells...", url: "https://www.biorxiv.org/content/10.1101/2021.10.14.462144v1.full.pdf", number: 4, category: "Stem Cells" },
+    { title: "Wound healing, regeneration, and Lin28", url: "https://www.axopub.com/wp01/2013/11/14/wound-healing-regeneration-and-lin28/", number: 5, category: "Regeneration" },
     { title: "Lin28A Accelerates Wound Healing...", url: "https://pharmaceuticalintelligence.com/2015/01/14/lin28a-accelerates-wound-healing-hair-regrowth-and-turns-back-the-aging-clock-a-little/", number: 6, category: "Regeneration" },
     { title: "HSCI researchers regrow hair...", url: "https://www.hsci.harvard.edu/news/hsci-researchers-regrow-hair-cartilage-bone-soft-tissues", number: 7, category: "Regeneration" },
     { title: "More on Lin28a and Enhanced Regeneration", url: "https://www.fightaging.org/archives/2013/11/more-on-lin28a-and-enhanced-regeneration/", number: 8, category: "Regeneration" },
@@ -23,13 +24,6 @@ const sources = [
      { title: "TFAM Mitochondrial Function Research", url: "#", number: 11, category: "Mitochondria" },
      { title: "MDM2/p53 Pathway Modulation Paper", url: "#", number: 12, category: "DNA Repair" },
 ];
-
-// Placeholder for interactive demo
-const InteractiveDemoPlaceholder = ({ title }: { title: string }) => (
-    <div className="aspect-[16/7] bg-muted/50 rounded-lg flex items-center justify-center text-muted-foreground border border-dashed border-primary/30 my-6 p-4">
-        <p className="text-center">Interactive Demo Placeholder:<br/> <span className="font-semibold text-primary">{title}</span></p>
-    </div>
-);
 
 
 export default function PrototypePage() {
@@ -53,10 +47,10 @@ export default function PrototypePage() {
         </motion.p>
       </motion.div>
 
-      {/* Current Status Section - Enhanced */}
+      {/* Current Status Section - Ensure it animates on load */}
       <motion.section
-        initial="initial"
-        animate="animate" // Animate immediately
+        initial="initial" // Start animation from initial state
+        animate="animate" // Animate to this state on load
         variants={fadeIn} // Use fadeIn for the section
         className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" // Subtle gradient
       >
@@ -73,7 +67,7 @@ export default function PrototypePage() {
                 </p>
             </motion.div>
              {/* Key Activities */}
-             <motion.div variants={staggerContainer} initial="initial" whileInView="animate" viewport={{ once: true, amount: 0.1 }} className="mt-10 max-w-3xl mx-auto">
+             <motion.div variants={staggerContainer} initial="initial" animate="animate" className="mt-10 max-w-3xl mx-auto">
                  <motion.h4 variants={fadeInUp} className="font-semibold text-center text-foreground mb-4">
                     Key Development Activities:
                  </motion.h4>
@@ -100,21 +94,25 @@ export default function PrototypePage() {
           </motion.div>
       </motion.section>
 
-      {/* Interactive Demo Placeholder */}
-      <motion.section
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={fadeInUp}
-          className="mb-20"
-      >
-          <h2 className="text-3xl font-bold tracking-tight text-center mb-6">Visualize the Potential</h2>
-           <p className="text-center text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-               Explore a simplified simulation of how Phoenix aims to impact cellular health. (Conceptual Demo)
-           </p>
-           <InteractiveDemoPlaceholder title="Cellular State Comparison (Before vs. After Phoenix Concept)" />
-           <p className="text-xs text-center text-muted-foreground italic mt-2">Note: This is a conceptual illustration and does not represent guaranteed results.</p>
-       </motion.section>
+       {/* Interactive Video Section */}
+       <motion.section
+           initial="initial"
+           whileInView="animate"
+           viewport={{ once: true, amount: 0.1 }}
+           variants={fadeInUp}
+           className="mb-20"
+       >
+           <h2 className="text-3xl font-bold tracking-tight text-center mb-6">Visualize Cellular Change</h2>
+            <p className="text-center text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
+                Use the slider to explore a conceptual visualization of cellular state transformation. (Illustrative Demo)
+            </p>
+            {/* Replace placeholder with VideoSlider */}
+            <VideoSlider
+               src="/Untitled video - Made with Clipchamp (2).mp4" // Path relative to /public
+               className="max-w-3xl mx-auto"
+             />
+            <p className="text-xs text-center text-muted-foreground italic mt-4">Note: This conceptual video illustrates potential effects and does not represent guaranteed results.</p>
+        </motion.section>
 
 
       {/* Research Basis Section - Enhanced */}
@@ -163,7 +161,6 @@ export default function PrototypePage() {
                                <p className="text-sm text-muted-foreground">Access the comprehensive document detailing the scientific research supporting the Phoenix project.</p>
                            </div>
                            <Button variant="default" size="sm" asChild className="w-full sm:w-auto flex-shrink-0">
-                              {/* Updated link */}
                               <Link href="https://docs.google.com/document/d/1W_awO-5eAYtuPzmlM-znISb6E5Ija0-wO74_d5ZCgc0/edit?tab=t.0" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
                                   View Document <ExternalLink className="h-4 w-4"/>
                               </Link>
