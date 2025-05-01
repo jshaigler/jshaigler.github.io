@@ -63,15 +63,15 @@ export default function AboutUsPage() {
       {/* Mission & Vision Section */}
         <motion.section
           initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={fadeIn}
+          animate="animate" // Changed from whileInView to animate immediately
+          // Removed viewport prop
+          variants={fadeIn} // Keep using fadeIn variant for the section container
           className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
         >
+          {/* Child elements will inherit animation trigger unless overridden */}
           <motion.div variants={fadeIn} className="md:w-1/2">
-            {/* Re-use the vision image or use a different one */}
             <Image
-              src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" // Using the same vision image
+              src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
               alt="Illustration representing vitality and extended healthspan"
               width={600}
               height={400}
@@ -79,7 +79,8 @@ export default function AboutUsPage() {
               data-ai-hint="health vitality future"
             />
           </motion.div>
-          <motion.div variants={staggerContainer} className="md:w-1/2">
+          {/* Stagger children within this div */}
+          <motion.div variants={staggerContainer} initial="initial" animate="animate" className="md:w-1/2">
               <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-3">
                 <HeartHandshake className="h-8 w-8 text-primary" /> Our Core Mission
               </motion.h2>
@@ -96,8 +97,8 @@ export default function AboutUsPage() {
       {/* Our Approach Section */}
         <motion.section
           initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
+          whileInView="animate" // Keep whileInView for sections further down
+          viewport={{ once: true, amount: 0.1 }}
           variants={staggerContainer}
           className="mb-20"
         >
