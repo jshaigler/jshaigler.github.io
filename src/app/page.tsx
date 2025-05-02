@@ -10,11 +10,38 @@ import { ArrowRight, Target, Zap, Microscope, Eye, TrendingUp, CheckSquare } fro
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { AnimatedStat } from '@/components/animated-stat'; // Import the reusable component
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"; // Import chart components
+import { LineChart, CartesianGrid, XAxis, YAxis, Line, ResponsiveContainer } from 'recharts'; // Import recharts components
+
+
+// Chart data and configuration
+const chartData = [
+  { year: "2024", marketSize: 21.29 },
+  { year: "2030", marketSize: 44.04 }, // Interpolated midpoint for smoother line
+  { year: "2035", marketSize: 63.0 },
+];
+
+const chartConfig = {
+  marketSize: {
+    label: "Market Size (Billion USD)",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig;
+
 
 export default function Home() {
   return (
-    // Removed outer motion.div - page transitions handled by layout.tsx
-    <div className="flex flex-col min-h-screen">
+    <motion.div // Add motion.div wrapper back for page transitions if needed
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.5 } },
+        exit: { opacity: 0, transition: { duration: 0.3 } },
+      }}
+      className="flex flex-col min-h-screen" // Main container class
+    >
       {/* Hero Section - Animates immediately */}
       <motion.section
         initial="initial" // Animate this section on load
@@ -185,17 +212,61 @@ export default function Home() {
             <p className="text-lg text-muted-foreground max-w-4xl mx-auto">
               The longevity industry is experiencing explosive growth, projected to surge from <strong className="text-foreground"><AnimatedStat prefix="$" value={21.29} suffix="B" decimals={2} /></strong> in 2024 to an estimated <strong className="text-foreground"><AnimatedStat prefix="$" value={63.0} suffix="B" decimals={1} /></strong> by 2035. This represents a significant compound annual growth rate (CAGR) of <strong className="text-foreground"><AnimatedStat value={10.37} suffix="%" decimals={2} /></strong>. Phoenix Lifesciences is strategically positioned at the forefront of this revolution, developing Phoenix to translate cutting-edge science into tangible healthspan solutions.
             </p>
-            {/* Optional: Add a simple animated bar graph or chart here */}
-             <div className="mt-8 h-4 w-full max-w-md mx-auto bg-muted rounded-full overflow-hidden">
-                  <motion.div
-                     initial={{ width: '10%' }}
-                     whileInView={{ width: '100%' }}
-                     viewport={{ once: true }}
-                     transition={{ duration: 2.5, ease: 'easeOut' }}
-                     className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
-                   />
+            {/* Animated Line Chart */}
+             <div className="mt-8 h-64 w-full max-w-2xl mx-auto">
+                 <ChartContainer config={chartConfig} className="h-full w-full">
+                    <LineChart
+                      accessibilityLayer
+                      data={chartData}
+                      margin={{
+                        top: 20,
+                        right: 20,
+                        left: 0,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted-foreground/30" />
+                      <XAxis
+                        dataKey="year"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                        tickFormatter={(value) => value}
+                      />
+                      <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                        domain={['dataMin - 5', 'dataMax + 5']}
+                        tickFormatter={(value) => `$${value}B`}
+                      />
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideIndicator />}
+                      />
+                      <Line
+                        dataKey="marketSize"
+                        type="monotone"
+                        stroke="var(--color-marketSize)"
+                        strokeWidth={3}
+                        dot={{
+                          r: 5,
+                          fill: "var(--color-marketSize)",
+                          strokeWidth: 2,
+                          stroke: "hsl(var(--background))"
+                        }}
+                        activeDot={{
+                          r: 7,
+                          fill: "var(--color-marketSize)",
+                          strokeWidth: 2,
+                           stroke: "hsl(var(--background))"
+                        }}
+                        animationDuration={1500} // Add animation duration
+                      />
+                    </LineChart>
+                 </ChartContainer>
               </div>
-               <p className="text-xs text-muted-foreground mt-2">(Illustrative Market Growth Projection)</p>
+               <p className="text-xs text-muted-foreground mt-2">(Projected Market Growth 2024-2035)</p>
           </motion.div>
 
           {/* Updated Call to Action */}
@@ -234,6 +305,6 @@ export default function Home() {
         </div>
       </motion.section>
 
-    </div>
+    </motion.div> // End of motion.div wrapper
   );
 }
