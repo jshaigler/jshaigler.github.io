@@ -1,6 +1,7 @@
 
-'use client'; // Required for Framer Motion and VideoSlider
+'use client'; // Required for Framer Motion and useEffect
 
+import React from 'react'; // Import React
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, Search, SlidersHorizontal, BrainCircuit, Award, GraduationCap } from 'lucide-react'; // Added icons
@@ -129,20 +130,34 @@ export default function PrototypePage() {
                   </motion.div>
               ))}
                {/* Link to a potentially more comprehensive document */}
-               <motion.div variants={fadeInUp} className="col-span-1 md:col-span-2 lg:col-span-3 mt-4">
-                  <Card className="shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out bg-primary/5 border-primary/20">
-                       <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                           <div className="flex-grow">
-                               <p className="text-base font-semibold text-foreground mb-1">Explore Our Full Evidence Base</p>
-                               <p className="text-sm text-muted-foreground">Access the comprehensive document detailing the scientific research supporting the Phoenix project.</p>
-                           </div>
-                           <Button variant="default" size="sm" asChild className="w-full sm:w-auto flex-shrink-0">
-                              <Link href="https://docs.google.com/document/d/1W_awO-5eAYtuPzmlM-znISb6E5Ija0-wO74_d5ZCgc0/edit?tab=t.0" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                                  View Document <ExternalLink className="h-4 w-4"/>
-                              </Link>
-                           </Button>
-                       </CardContent>
-                   </Card>
+               <motion.div variants={fadeInUp} className="col-span-1 md:col-span-2 lg:col-span-3 mt-6 max-w-xl mx-auto">
+                  <Link href="https://docs.google.com/document/d/1W_awO-5eAYtuPzmlM-znISb6E5Ija0-wO74_d5ZCgc0/edit?tab=t.0" target="_blank" rel="noopener noreferrer" className="block group">
+                    <Card className="text-left shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 border border-border hover:border-primary/30 overflow-hidden">
+                        <CardHeader className="flex flex-row items-center gap-4">
+                            <div className="flex-shrink-0">
+                                <BookOpen className="h-10 w-10 text-primary" /> {/* Consistent icon */}
+                            </div>
+                            <div className="flex-grow">
+                                <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                                    Explore Our Full Evidence Base
+                                </CardTitle>
+                                <p className="text-sm text-muted-foreground">Access the comprehensive document</p>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            {/* Simulate text lines */}
+                            <div className="space-y-1.5">
+                                <div className="h-2 bg-muted rounded-full w-full"></div>
+                                <div className="h-2 bg-muted rounded-full w-11/12"></div>
+                                <div className="h-2 bg-muted rounded-full w-4/5"></div>
+                                <div className="h-2 bg-muted rounded-full w-10/12"></div>
+                            </div>
+                            <div className="mt-4 flex items-center justify-end text-primary text-sm font-medium group-hover:underline">
+                                View Document <ExternalLink className="ml-1.5 h-4 w-4" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                  </Link>
                </motion.div>
           </motion.div>
       </motion.section>
