@@ -36,7 +36,8 @@ export default function AboutUsPage() {
         const pauseDuration = 2000; // Pause duration at each phase (milliseconds)
 
         const runTimelineAnimation = async () => {
-            if (!isMounted || !inView || isAnimatingRef.current) return; // Prevent concurrent runs
+            // Ensure component is mounted, in view, and no animation is already running
+            if (!isMounted || !inView || isAnimatingRef.current) return;
             isAnimatingRef.current = true;
 
             try {
@@ -44,27 +45,31 @@ export default function AboutUsPage() {
                 while (isMounted && inView) {
                     // --- Reset for loop ---
                     setActivePhase(-1);
-                    // Immediate reset using controls.set
+                    // Use controls.set for immediate reset (no animation)
+                    if (!isMounted || !inView) break; // Check before setting
                     controls.set({ width: '0%' });
                     await new Promise(resolve => setTimeout(resolve, 300)); // Short delay before starting
-                    if (!isMounted || !inView) break;
+                    if (!isMounted || !inView) break; // Check after delay
 
 
                     // --- Animation Sequence ---
                     // 1. Initialize: Show first phase description, pause
                     setActivePhase(0);
                     await new Promise(resolve => setTimeout(resolve, pauseDuration));
-                    if (!isMounted || !inView) break;
+                    if (!isMounted || !inView) break; // Check after pause
 
                     // 2. Animate through subsequent phases
                     for (let i = 1; i < numPhases; i++) {
                         const targetWidth = (i / (numPhases - 1)) * 100;
 
+                        // Check before starting animation
+                        if (!isMounted || !inView) break;
                         // Animate progress bar first
                         await controls.start({
                             width: `${targetWidth}%`,
                             transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
                         });
+                        // Check after animation might have finished or been interrupted
                         if (!isMounted || !inView) break;
 
                         // Then activate the phase description
@@ -72,7 +77,7 @@ export default function AboutUsPage() {
 
                         // Pause after reaching the phase's point
                         await new Promise(resolve => setTimeout(resolve, pauseDuration));
-                        if (!isMounted || !inView) break;
+                        if (!isMounted || !inView) break; // Check after pause
                     }
                      if (!isMounted || !inView) break; // Check before final pause
 
@@ -82,14 +87,18 @@ export default function AboutUsPage() {
 
                       // Smoothly animate back to 0%
                     setActivePhase(-1); // Hide description before animating back
-                    await controls.start({
+                    // Check before starting reset animation
+                    if (!isMounted || !inView) break;
+                    await controls.start({ // Start the reset animation
                         width: '0%',
                         transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
                     });
-                    if (!isMounted || !inView) break;
+                    // Check after reset animation
+                     if (!isMounted || !inView) break;
+
                      // Add a small delay before the next loop starts
                     await new Promise(resolve => setTimeout(resolve, 300));
-                    if (!isMounted || !inView) break;
+                    if (!isMounted || !inView) break; // Check after delay
 
                 }
             } catch (error) {
@@ -103,9 +112,9 @@ export default function AboutUsPage() {
             } finally {
                 // Reset state if component is still mounted but animation stopped (e.g., out of view)
                 if (isMounted) {
-                    setActivePhase(-1);
-                     // Use controls.set for immediate, non-animated reset when not in view
+                     // Use controls.set for immediate, non-animated reset when not in view or animation stopped
                      controls.set({ width: '0%' });
+                     setActivePhase(-1); // Ensure phase description is hidden
                 }
                 isAnimatingRef.current = false; // Allow animation to restart if it comes back into view
             }
@@ -114,20 +123,17 @@ export default function AboutUsPage() {
         if (inView) {
             // Start animation slightly delayed after coming into view
             const startTimeout = setTimeout(() => {
-                 if(isMounted) runTimelineAnimation();
+                 if(isMounted && !isAnimatingRef.current) runTimelineAnimation(); // Ensure not already running
              }, 200);
             return () => clearTimeout(startTimeout); // Clear timeout on cleanup
         } else {
              // Stop animation and reset when out of view
             controls.stop();
-            if (isMounted) {
-                setActivePhase(-1);
-                controls.set({ width: '0%' }); // Immediate reset
-            }
-            isAnimatingRef.current = false; // Ensure it can restart
+            // No need to reset activePhase/width here, finally block handles it if isMounted
+            isAnimatingRef.current = false; // Ensure it can restart if it comes back into view quickly
         }
 
-        // Cleanup function
+        // Cleanup function for component unmount
         return () => {
             isMounted = false;
             controls.stop(); // Stop any ongoing Framer Motion animations
