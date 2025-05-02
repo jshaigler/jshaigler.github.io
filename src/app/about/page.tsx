@@ -137,13 +137,23 @@ export default function AboutUsPage() {
 
 
   return (
-    // Remove outer motion.div - page transitions handled by layout.tsx
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    // Use motion.div for page-level transitions managed by layout.tsx
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{ // Basic fade-in/out for page transitions
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.5 } },
+        exit: { opacity: 0, transition: { duration: 0.3 } },
+      }}
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
         initial="initial"
-        animate="animate"
+        animate="animate" // Animate immediately on page load
         className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -164,12 +174,12 @@ export default function AboutUsPage() {
           {/* Image */}
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
-              src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
-              alt="Illustration representing vitality and extended healthspan"
+              src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png" // Updated Image Source
+              alt="Scientific illustration representing advanced cellular research" // Updated Alt Text
               width={600}
               height={400}
               className="rounded-lg shadow-lg object-cover w-full h-auto saturate-110 contrast-110 hover:scale-105 transition-transform duration-300 ease-in-out"
-              data-ai-hint="health vitality future"
+              data-ai-hint="science research laboratory" // Updated AI Hint
             />
           </motion.div>
           {/* Text Content - Stagger children */}
@@ -404,6 +414,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </div>
+    </motion.div>
   );
 }
