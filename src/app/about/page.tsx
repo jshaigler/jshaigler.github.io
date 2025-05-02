@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react'; // Import useState, 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity } from 'lucide-react'; // Added icons
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity, CalendarClock } from 'lucide-react'; // Added icons
 import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
@@ -27,7 +27,7 @@ export default function AboutUsPage() {
     const controls = useAnimation(); // Controls for the progress bar animation
     const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
-    const isAnimatingRef = useRef(false); // Ref to track if animation is currently running
+    const isAnimatingRef = useRef(false); // Ref to track if animation is currently running - MOVED OUTSIDE useEffect
 
     useEffect(() => {
         let isMounted = true;
@@ -65,10 +65,13 @@ export default function AboutUsPage() {
                         // Check before starting animation
                         if (!isMounted || !inView) break;
                         // Animate progress bar first
-                        await controls.start({
-                            width: `${targetWidth}%`,
-                            transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
-                        });
+                        // Ensure controls are ready and mounted before starting
+                        if (isMounted && controls) {
+                            await controls.start({
+                                width: `${targetWidth}%`,
+                                transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
+                            });
+                        }
                         // Check after animation might have finished or been interrupted
                         if (!isMounted || !inView) break;
 
@@ -89,10 +92,13 @@ export default function AboutUsPage() {
                     setActivePhase(-1); // Hide description before animating back
                     // Check before starting reset animation
                     if (!isMounted || !inView) break;
-                    await controls.start({ // Start the reset animation
-                        width: '0%',
-                        transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
-                    });
+                     // Ensure controls are ready and mounted before starting
+                    if (isMounted && controls) {
+                        await controls.start({ // Start the reset animation
+                            width: '0%',
+                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
+                        });
+                    }
                     // Check after reset animation
                      if (!isMounted || !inView) break;
 
@@ -120,16 +126,17 @@ export default function AboutUsPage() {
             }
         };
 
-        if (inView) {
+        if (inView && !isAnimatingRef.current) { // Check isAnimatingRef here as well
             // Start animation slightly delayed after coming into view
             const startTimeout = setTimeout(() => {
                  if(isMounted && !isAnimatingRef.current) runTimelineAnimation(); // Ensure not already running
              }, 200);
             return () => clearTimeout(startTimeout); // Clear timeout on cleanup
-        } else {
+        } else if (!inView) {
              // Stop animation and reset when out of view
             controls.stop();
-            // No need to reset activePhase/width here, finally block handles it if isMounted
+            controls.set({ width: '0%' }); // Reset width immediately when out of view
+            setActivePhase(-1); // Hide phase description
             isAnimatingRef.current = false; // Ensure it can restart if it comes back into view quickly
         }
 
@@ -423,3 +430,4 @@ export default function AboutUsPage() {
     </motion.div>
   );
 }
+
