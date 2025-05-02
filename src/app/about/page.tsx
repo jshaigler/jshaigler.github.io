@@ -27,7 +27,7 @@ export default function AboutUsPage() {
     const controls = useAnimation(); // Controls for the progress bar animation
     const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
-    const isAnimatingRef = useRef(false); // Ref to track if animation is currently running - MOVED OUTSIDE useEffect
+    const isAnimatingRef = useRef(false); // Ref to track if animation is currently running
 
     useEffect(() => {
         let isMounted = true;
@@ -36,20 +36,20 @@ export default function AboutUsPage() {
         const pauseDuration = 2000; // Pause duration at each phase (milliseconds)
 
         const runTimelineAnimation = async () => {
-            // Ensure component is mounted, in view, and no animation is already running
+             // Double-check mount status and if already animating
             if (!isMounted || !inView || isAnimatingRef.current) return;
             isAnimatingRef.current = true;
 
             try {
                 // Loop indefinitely while mounted and in view
                 while (isMounted && inView) {
-                    // --- Reset for loop ---
-                    setActivePhase(-1);
-                    // Use controls.set for immediate reset (no animation)
-                    if (!isMounted || !inView) break; // Check before setting
-                    controls.set({ width: '0%' });
-                    await new Promise(resolve => setTimeout(resolve, 300)); // Short delay before starting
-                    if (!isMounted || !inView) break; // Check after delay
+                     // --- Reset for loop ---
+                     setActivePhase(-1);
+                     // Check mount status before setting controls
+                     if (!isMounted || !inView) break;
+                     controls.set({ width: '0%' }); // Use set for immediate reset
+                     await new Promise(resolve => setTimeout(resolve, 300));
+                     if (!isMounted || !inView) break;
 
 
                     // --- Animation Sequence ---
@@ -62,16 +62,21 @@ export default function AboutUsPage() {
                     for (let i = 1; i < numPhases; i++) {
                         const targetWidth = (i / (numPhases - 1)) * 100;
 
-                        // Check before starting animation
-                        if (!isMounted || !inView) break;
+                        // Check before starting animation AND ensure controls are available
+                        if (!isMounted || !inView || !controls) break;
+
                         // Animate progress bar first
-                        // Ensure controls are ready and mounted before starting
-                        if (isMounted && controls) {
+                        // Check again right before starting animation
+                        if (isMounted && inView && controls) {
                             await controls.start({
                                 width: `${targetWidth}%`,
                                 transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
                             });
+                        } else {
+                           // If not mounted/in view, break the loop
+                           break;
                         }
+
                         // Check after animation might have finished or been interrupted
                         if (!isMounted || !inView) break;
 
@@ -90,14 +95,17 @@ export default function AboutUsPage() {
 
                       // Smoothly animate back to 0%
                     setActivePhase(-1); // Hide description before animating back
-                    // Check before starting reset animation
-                    if (!isMounted || !inView) break;
-                     // Ensure controls are ready and mounted before starting
-                    if (isMounted && controls) {
+                    // Check before starting reset animation AND ensure controls are available
+                    if (!isMounted || !inView || !controls) break;
+
+                     // Ensure controls are ready and mounted before starting reset animation
+                    if (isMounted && inView && controls) {
                         await controls.start({ // Start the reset animation
                             width: '0%',
                             transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
                         });
+                    } else {
+                        break; // Break if conditions not met
                     }
                     // Check after reset animation
                      if (!isMounted || !inView) break;
@@ -116,37 +124,44 @@ export default function AboutUsPage() {
                     console.error("Timeline animation error:", error);
                  }
             } finally {
-                // Reset state if component is still mounted but animation stopped (e.g., out of view)
-                if (isMounted) {
-                     // Use controls.set for immediate, non-animated reset when not in view or animation stopped
-                     controls.set({ width: '0%' });
+                 // Reset state if component is still mounted but animation stopped (e.g., out of view)
+                 if (isMounted && controls) {
+                      // Use controls.set for immediate, non-animated reset when not in view or animation stopped
+                      controls.set({ width: '0%' });
+                 }
+                 if (isMounted) {
                      setActivePhase(-1); // Ensure phase description is hidden
-                }
-                isAnimatingRef.current = false; // Allow animation to restart if it comes back into view
+                 }
+                 isAnimatingRef.current = false; // Allow animation to restart if it comes back into view
             }
         };
 
-        if (inView && !isAnimatingRef.current) { // Check isAnimatingRef here as well
-            // Start animation slightly delayed after coming into view
-            const startTimeout = setTimeout(() => {
-                 if(isMounted && !isAnimatingRef.current) runTimelineAnimation(); // Ensure not already running
-             }, 200);
-            return () => clearTimeout(startTimeout); // Clear timeout on cleanup
-        } else if (!inView) {
-             // Stop animation and reset when out of view
-            controls.stop();
-            controls.set({ width: '0%' }); // Reset width immediately when out of view
-            setActivePhase(-1); // Hide phase description
-            isAnimatingRef.current = false; // Ensure it can restart if it comes back into view quickly
-        }
+         let startTimeoutId: NodeJS.Timeout | null = null;
+
+         if (inView && !isAnimatingRef.current) { // Check isAnimatingRef here as well
+             // Start animation slightly delayed after coming into view
+             startTimeoutId = setTimeout(() => {
+                  if(isMounted && inView && !isAnimatingRef.current) { // Final check before running
+                     runTimelineAnimation();
+                  }
+              }, 200);
+         } else if (!inView && controls) {
+              // Stop animation and reset when out of view
+             controls.stop();
+             controls.set({ width: '0%' }); // Reset width immediately when out of view
+             setActivePhase(-1); // Hide phase description
+             isAnimatingRef.current = false; // Ensure it can restart
+             if(startTimeoutId) clearTimeout(startTimeoutId); // Clear pending start timeout
+         }
 
         // Cleanup function for component unmount
         return () => {
             isMounted = false;
-            controls.stop(); // Stop any ongoing Framer Motion animations
+             if (startTimeoutId) clearTimeout(startTimeoutId); // Clear timeout on unmount
+            if (controls) controls.stop(); // Stop any ongoing Framer Motion animations
             isAnimatingRef.current = false; // Reset animation flag on unmount
         };
-    }, [controls, inView]); // Dependency array
+    }, [inView, controls]); // Depend only on inView and controls
 
 
   return (
