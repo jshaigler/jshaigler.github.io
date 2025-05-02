@@ -1,5 +1,5 @@
 
-'use client'; // Required for Framer Motion
+'use client'; // Required for Framer Motion and client components like Accordion
 
 import React from 'react'; // Import React
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -63,13 +63,13 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    // Remove outer motion.div - page transitions handled by layout.tsx
+    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
           initial="initial"
-          animate="animate"
+          animate="animate" // Animate immediately on load
           className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">

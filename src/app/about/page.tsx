@@ -47,7 +47,12 @@ export default function AboutUsPage() {
                      setActivePhase(-1);
                      // Check mount status before setting controls
                      if (!isMounted || !inView) break;
-                     controls.set({ width: '0%' }); // Use set for immediate reset
+                     // Only set controls if the component is mounted and animation is intended
+                     if (isMounted && controls) {
+                         controls.set({ width: '0%' }); // Use set for immediate reset
+                     } else {
+                        break; // Break if controls aren't ready or component unmounted
+                     }
                      await new Promise(resolve => setTimeout(resolve, 300));
                      if (!isMounted || !inView) break;
 
@@ -141,7 +146,7 @@ export default function AboutUsPage() {
          if (inView && !isAnimatingRef.current) { // Check isAnimatingRef here as well
              // Start animation slightly delayed after coming into view
              startTimeoutId = setTimeout(() => {
-                  if(isMounted && inView && !isAnimatingRef.current) { // Final check before running
+                  if(isMounted && inView && !isAnimatingRef.current && controls) { // Final check including controls presence
                      runTimelineAnimation();
                   }
               }, 200);
@@ -165,18 +170,8 @@ export default function AboutUsPage() {
 
 
   return (
-    // Use motion.div for page-level transitions managed by layout.tsx
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{ // Basic fade-in/out for page transitions
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.5 } },
-        exit: { opacity: 0, transition: { duration: 0.3 } },
-      }}
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
@@ -442,7 +437,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </motion.div>
+    </div>
   );
 }
-

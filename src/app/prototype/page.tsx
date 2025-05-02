@@ -1,5 +1,5 @@
 
-'use client'; // Required for Framer Motion and useEffect
+'use client'; // Required for Framer Motion and client components
 
 import React from 'react'; // Import React
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
-
+import { VideoSlider } from '@/components/interactive/video-slider'; // Import VideoSlider
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -29,13 +29,13 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Remove outer motion.div - page transitions handled by layout.tsx
+    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
         initial="initial"
-        animate="animate"
+        animate="animate" // Animate immediately
         className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -45,6 +45,25 @@ export default function PrototypePage() {
           Understanding the scientific foundation, current preclinical status, and future potential of the Phoenix therapy concept.
         </motion.p>
       </motion.div>
+
+       {/* Interactive Demo Section */}
+        <motion.section
+            initial="initial"
+            animate="animate" // Animate immediately
+            variants={fadeIn}
+            className="mb-16 text-center"
+        >
+            <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4">
+                Visualize Cellular Rejuvenation
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
+                Use the slider to observe a conceptual visualization of cellular changes before and after the application of the Phoenix therapeutic concept.
+            </motion.p>
+            {/* Interactive Video Slider */}
+             <motion.div variants={fadeInUp} className="max-w-2xl mx-auto">
+                <VideoSlider src="/Untitled video - Made with Clipchamp (2).mp4" className="w-full" />
+             </motion.div>
+        </motion.section>
 
       {/* Current Status Section */}
       <motion.section
