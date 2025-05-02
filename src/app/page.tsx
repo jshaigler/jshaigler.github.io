@@ -31,16 +31,8 @@ const chartConfig = {
 
 export default function Home() {
   return (
-    <motion.div // Add motion.div wrapper back for page transitions if needed
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.5 } },
-        exit: { opacity: 0, transition: { duration: 0.3 } },
-      }}
-      className="flex flex-col min-h-screen" // Main container class
+    // Removed motion.div wrapper here, rely on layout.tsx for page transitions
+    <div className="flex flex-col min-h-screen" // Main container class
     >
       {/* Hero Section - Animates immediately */}
       <motion.section
@@ -215,55 +207,57 @@ export default function Home() {
             {/* Animated Line Chart */}
              <div className="mt-8 h-64 w-full max-w-2xl mx-auto">
                  <ChartContainer config={chartConfig} className="h-full w-full">
-                    <LineChart
-                      accessibilityLayer
-                      data={chartData}
-                      margin={{
-                        top: 20,
-                        right: 20,
-                        left: 0,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted-foreground/30" />
-                      <XAxis
-                        dataKey="year"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        tickFormatter={(value) => value}
-                      />
-                      <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        domain={['dataMin - 5', 'dataMax + 5']}
-                        tickFormatter={(value) => `$${value}B`}
-                      />
-                      <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent hideIndicator />}
-                      />
-                      <Line
-                        dataKey="marketSize"
-                        type="monotone"
-                        stroke="var(--color-marketSize)"
-                        strokeWidth={3}
-                        dot={{
-                          r: 5,
-                          fill: "var(--color-marketSize)",
-                          strokeWidth: 2,
-                          stroke: "hsl(var(--background))"
-                        }}
-                        activeDot={{
-                          r: 7,
-                          fill: "var(--color-marketSize)",
-                          strokeWidth: 2,
-                           stroke: "hsl(var(--background))"
-                        }}
-                        animationDuration={1500} // Add animation duration
-                      />
-                    </LineChart>
+                    <ResponsiveContainer>
+                        <LineChart
+                          accessibilityLayer
+                          data={chartData}
+                          margin={{
+                            top: 20,
+                            right: 20,
+                            left: 0,
+                            bottom: 5,
+                          }}
+                        >
+                          <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-muted-foreground/30" />
+                          <XAxis
+                            dataKey="year"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            tickFormatter={(value) => value}
+                          />
+                          <YAxis
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            domain={['dataMin - 5', 'dataMax + 5']}
+                            tickFormatter={(value) => `$${value}B`}
+                          />
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideIndicator />}
+                          />
+                          <Line
+                            dataKey="marketSize"
+                            type="monotone"
+                            stroke="var(--color-marketSize)"
+                            strokeWidth={3}
+                            dot={{
+                              r: 5,
+                              fill: "var(--color-marketSize)",
+                              strokeWidth: 2,
+                              stroke: "hsl(var(--background))"
+                            }}
+                            activeDot={{
+                              r: 7,
+                              fill: "var(--color-marketSize)",
+                              strokeWidth: 2,
+                               stroke: "hsl(var(--background))"
+                            }}
+                            animationDuration={1500} // Add animation duration
+                          />
+                        </LineChart>
+                     </ResponsiveContainer>
                  </ChartContainer>
               </div>
                <p className="text-xs text-muted-foreground mt-2">(Projected Market Growth 2024-2035)</p>
@@ -305,6 +299,6 @@ export default function Home() {
         </div>
       </motion.section>
 
-    </motion.div> // End of motion.div wrapper
+    </div> // End of main container div
   );
 }

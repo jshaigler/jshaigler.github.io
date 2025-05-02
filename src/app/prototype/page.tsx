@@ -8,7 +8,7 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
-import { VideoSlider } from '@/components/interactive/video-slider'; // Import VideoSlider
+// Removed import { VideoSlider } from '@/components/interactive/video-slider';
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -46,24 +46,7 @@ export default function PrototypePage() {
         </motion.p>
       </motion.div>
 
-       {/* Interactive Demo Section */}
-        <motion.section
-            initial="initial"
-            animate="animate" // Animate immediately
-            variants={fadeIn}
-            className="mb-16 text-center"
-        >
-            <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4">
-                Visualize Cellular Rejuvenation
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-                Use the slider to observe a conceptual visualization of cellular changes before and after the application of the Phoenix therapeutic concept.
-            </motion.p>
-            {/* Interactive Video Slider */}
-             <motion.div variants={fadeInUp} className="max-w-2xl mx-auto">
-                <VideoSlider src="/Untitled video - Made with Clipchamp (2).mp4" className="w-full" />
-             </motion.div>
-        </motion.section>
+       {/* Removed Interactive Demo Section (VideoSlider) */}
 
       {/* Current Status Section */}
       <motion.section
