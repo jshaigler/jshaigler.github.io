@@ -7,7 +7,7 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
-// Removed VideoSlider import
+
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -28,39 +28,30 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Use layout's motion context
-    <motion.div
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.05 } }, // Added delayChildren
-        exit: { opacity: 0 },
-      }}
-    >
+    // Remove outer motion.div - page transitions handled by layout.tsx
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
-        variants={fadeInUp} // Use simple fadeInUp for the whole section title block
+        variants={staggerContainer} // Use stagger for title/subtitle
+        initial="initial"
+        animate="animate"
         className="text-center mb-16"
       >
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
+        <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
           Phoenix Prototype & Research Basis
-        </h1>
-        <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+        </motion.h1>
+        <motion.p variants={fadeInUp} className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
           Understanding the scientific foundation, current preclinical status, and future potential of the Phoenix therapy concept.
-        </p>
+        </motion.p>
       </motion.div>
 
       {/* Current Status Section */}
       <motion.section
-        initial="initial" // Use initial/animate directly for sections that should appear on load
-        animate="animate"
-        variants={fadeIn} // Use fadeIn for the section
+        initial="initial"
+        animate="animate" // Animate immediately
+        variants={staggerContainer}
         className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" // Subtle gradient
       >
-          <motion.div variants={staggerContainer}>
             <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8 flex items-center justify-center gap-3">
                 <Lightbulb className="h-8 w-8 text-primary"/> Current Stage: Preclinical Concept
             </motion.h2>
@@ -97,10 +88,7 @@ export default function PrototypePage() {
                  <AlertTriangle className="h-6 w-6" />
                  Phoenix is NOT currently available as a treatment.
              </motion.div>
-          </motion.div>
       </motion.section>
-
-       {/* Removed Interactive Video Section */}
 
 
       {/* Research Basis Section - Enhanced */}
@@ -174,6 +162,6 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under <strong className="text-foreground">preclinical development</strong>. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans. All forward-looking statements are subject to risks and uncertainties.
           </p>
       </motion.section>
-    </motion.div>
+    </div>
   );
 }

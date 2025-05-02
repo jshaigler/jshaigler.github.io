@@ -61,33 +61,15 @@ const technicalMechanisms = [
     }
 ];
 
-// Placeholder for interactive elements
-const InteractiveVisualPlaceholder = ({ title }: { title: string }) => (
-    <div className="aspect-video bg-muted/50 rounded-lg flex items-center justify-center text-muted-foreground border border-dashed border-primary/30 my-6 p-4">
-        <p className="text-center">Interactive Visualization Placeholder:<br/> <span className="font-semibold text-primary">{title}</span></p>
-    </div>
-);
-
-
 export default function SolutionPage() {
   return (
-    // Use layout's motion context
-    <motion.div
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{ // Keep page-level transition
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { staggerChildren: 0.1 } },
-        exit: { opacity: 0 },
-      }}
-    >
+    // Remove outer motion.div - page transitions handled by layout.tsx
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
-          initial="initial" // Add initial state
-          animate="animate" // Add animate state
+          initial="initial"
+          animate="animate"
           className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -101,9 +83,9 @@ export default function SolutionPage() {
       {/* Four Pillars Section - Enhanced Cards */}
       <motion.section
         variants={staggerContainer}
-        initial="initial" // Add initial state
-        whileInView="animate" // Keep whileInView for scroll trigger
-        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.1 }}
         className="mb-20"
       >
         <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-12">The Four Pillars of Phoenix</motion.h2>
@@ -141,10 +123,10 @@ export default function SolutionPage() {
         </motion.div>
          {/* --- Screenshots Section --- */}
          <motion.div
-           variants={staggerContainer} // Use stagger for children
-            initial="initial" // Add initial state
-            whileInView="animate" // Keep whileInView for scroll trigger
-            viewport={{ once: true, amount: 0.1 }} // Trigger earlier
+           variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.1 }}
            className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
          >
              <motion.div variants={fadeIn}> {/* Animate individual image */}
@@ -199,15 +181,14 @@ export default function SolutionPage() {
               </motion.li>
             ))}
          </motion.ul>
-          {/* Removed Synergistic Animation Placeholder */}
       </motion.section>
 
        {/* Delivery, Safety, and Treatment Schedule Section - Enhanced */}
         <motion.section
           variants={staggerContainer}
-          initial="initial" // Add initial state
-          whileInView="animate" // Keep whileInView for scroll trigger
-          viewport={{ once: true, amount: 0.1 }} // Trigger earlier
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, amount: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" // Changed to grid-cols-3
         >
              {/* Precision Delivery */}
@@ -264,9 +245,9 @@ export default function SolutionPage() {
       {/* Technical Appendix Section */}
       <motion.section
         variants={fadeInUp} // Single animation for the whole section
-        initial="initial" // Add initial state
-        whileInView="animate" // Keep whileInView for scroll trigger
-        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.1 }}
         className="mb-16" // Added margin bottom
       >
         <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Technical Appendix: Molecular Mechanisms</h2>
@@ -284,18 +265,15 @@ export default function SolutionPage() {
         </Accordion>
       </motion.section>
 
-       {/* Removed Clinical Evidence Placeholder section */}
-
-      {/* Disclaimer */}
+       {/* Disclaimer */}
       <motion.p
        variants={fadeInUp} // Simple fade in for disclaimer
-       initial="initial" // Add initial state
-       animate="animate" // Make it appear with the page load or when scrolled to
+       initial="initial"
+       whileInView="animate" // Make it appear when scrolled to
        viewport={{ once: true }} // Animate once
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </motion.div>
+    </div>
   );
 }
-

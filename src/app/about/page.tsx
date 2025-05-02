@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react'; // Import useState, 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity } from 'lucide-react'; // Removed BrainCircuit
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity } from 'lucide-react'; // Added icons
 import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
@@ -137,18 +137,8 @@ export default function AboutUsPage() {
 
 
   return (
-    // Layout handles page transition
-    <motion.div // Wrap entire page content for consistent animation
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={{
-            initial: { opacity: 0 },
-            animate: { opacity: 1, transition: { duration: 0.3, ease: "easeInOut", staggerChildren: 0.1 } }, // Added stagger
-            exit: { opacity: 0, transition: { duration: 0.2, ease: "easeInOut" } }
-        }}
-        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    // Remove outer motion.div - page transitions handled by layout.tsx
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
@@ -166,12 +156,12 @@ export default function AboutUsPage() {
 
       {/* Mission & Vision Section */}
         <motion.section
-          variants={fadeIn} // Apply fadeIn to the whole section
           initial="initial"
-          animate="animate" // Animate immediately
+          animate="animate" // Animate immediately as it's near the top
+          variants={staggerContainer}
           className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
         >
-          {/* Child elements will inherit animation trigger unless overridden */}
+          {/* Image */}
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
               src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
@@ -182,7 +172,7 @@ export default function AboutUsPage() {
               data-ai-hint="health vitality future"
             />
           </motion.div>
-          {/* Stagger children within this div */}
+          {/* Text Content - Stagger children */}
           <motion.div variants={staggerContainer} initial="initial" animate="animate" className="md:w-1/2">
               <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-3">
                 <HeartHandshake className="h-8 w-8 text-primary" /> Our Core Mission
@@ -416,6 +406,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </motion.div>
+    </div>
   );
 }
