@@ -8,7 +8,6 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
-// Removed import { VideoSlider } from '@/components/interactive/video-slider';
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -29,7 +28,7 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
+    // Container div for page content - Removed top-level motion wrapper
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div

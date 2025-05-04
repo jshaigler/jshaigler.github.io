@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { AnimatedStat } from '@/components/animated-stat'; // Import AnimatedStat
+import { AnimatedStat } from '@/components/ui/animated-stat'; // Import AnimatedStat
 
 
 // Timeline Phases Data
@@ -27,34 +27,38 @@ export default function AboutUsPage() {
     const controls = useAnimation(); // Controls for the progress bar animation
     const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
-    // Use a simple flag/state variable instead of ref to track if animation loop is active
-    const [isAnimating, setIsAnimating] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false); // Flag to prevent multiple animation loops
+
 
     useEffect(() => {
         let isMounted = true;
         const numPhases = timelinePhases.length;
-        const segmentAnimationDuration = 0.8;
-        const pauseDuration = 2000;
+        const segmentAnimationDuration = 0.8; // Duration to animate one segment
+        const pauseDuration = 2000; // Pause duration at each phase (in ms)
 
         let startTimeoutId: NodeJS.Timeout | null = null;
-        let animationLoopId: number | null = null; // To potentially cancel animation frame if needed
-
 
         const runTimelineAnimation = async () => {
-             // Check mount status, view status, controls readiness, and if already animating
             if (!isMounted || !inView || !controls || isAnimating) return;
             setIsAnimating(true); // Mark as running
+
+             // Check if controls object is ready before starting
+            if (!controls) {
+                console.warn("Animation controls not ready.");
+                setIsAnimating(false);
+                return;
+            }
+
 
             try {
                 // Loop indefinitely while mounted and in view
                 while (isMounted && inView) {
-                     // --- Reset for loop ---
-                     setActivePhase(-1);
-                      if (!isMounted || !inView) break; // Double check mount status
-                     controls.set({ width: '0%' }); // Use set for immediate reset
-                     await new Promise(resolve => setTimeout(resolve, 300)); // Small delay before starting
-                      if (!isMounted || !inView) break;
-
+                    // --- Reset for loop ---
+                    setActivePhase(-1);
+                    if (!isMounted || !inView) break; // Check mount status
+                    controls.set({ width: '0%' }); // Immediate reset
+                    await new Promise(resolve => setTimeout(resolve, 300)); // Small delay before starting
+                    if (!isMounted || !inView) break;
 
                     // --- Animation Sequence ---
                     // 1. Initialize: Show first phase description, pause
@@ -67,121 +71,95 @@ export default function AboutUsPage() {
                         const targetWidth = (i / (numPhases - 1)) * 100;
 
                         // Check before starting animation
-                        if (!isMounted || !inView) break;
+                        if (!isMounted || !inView || !controls) break;
 
-                        // Animate progress bar first
-                        // Check again right before starting animation
-                        if (isMounted && inView && controls) {
-                            await controls.start({
-                                width: `${targetWidth}%`,
-                                transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
-                            });
-                        } else {
-                           // If not mounted/in view/controls gone, break the loop
-                           break;
-                        }
+                         // Start the animation, ensuring controls exist
+                         await controls.start({
+                            width: `${targetWidth}%`,
+                            transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
+                         });
+
 
                         // Check after animation might have finished or been interrupted
                         if (!isMounted || !inView) break;
 
-                        // Then activate the phase description
+                        // Activate the phase description
                         setActivePhase(i);
 
                         // Pause after reaching the phase's point
                         await new Promise(resolve => setTimeout(resolve, pauseDuration));
                         if (!isMounted || !inView) break; // Check after pause
                     }
-                     if (!isMounted || !inView) break; // Check before final pause
+                    if (!isMounted || !inView) break; // Check before final pause
 
                     // Brief pause at the end before restarting smoothly
                     await new Promise(resolve => setTimeout(resolve, 500));
-                     if (!isMounted || !inView) break; // Check before loop restart
+                    if (!isMounted || !inView) break; // Check before loop restart
 
                     // Smoothly animate back to 0%
                     setActivePhase(-1); // Hide description before animating back
-                    // Check before starting reset animation
+                    if (!isMounted || !inView || !controls) break; // Check before starting reset animation
+
+                     // Start the reset animation, ensure controls exist
+                     await controls.start({
+                        width: '0%',
+                        transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
+                     });
+
+                    // Check after reset animation
                     if (!isMounted || !inView) break;
 
-                     // Ensure controls are ready and mounted before starting reset animation
-                    if (isMounted && inView && controls) {
-                        await controls.start({ // Start the reset animation
-                            width: '0%',
-                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
-                        });
-                    } else {
-                        break; // Break if conditions not met
-                    }
-                    // Check after reset animation
-                     if (!isMounted || !inView) break;
-
-                     // Add a small delay before the next loop starts
+                    // Add a small delay before the next loop starts
                     await new Promise(resolve => setTimeout(resolve, 300));
                     if (!isMounted || !inView) break; // Check after delay
-
                 }
             } catch (error) {
-                 if (error instanceof Error && error.name === 'AnimationPlaybackError') {
-                    // Ignore animation cancellation errors which are expected on unmount/out of view
+                if (error instanceof Error && error.name === 'AnimationPlaybackError') {
                     console.log("Timeline animation stopped cleanly.");
-                 } else {
+                } else {
                     console.error("Timeline animation error:", error);
-                 }
+                }
             } finally {
-                 setIsAnimating(false); // Mark as not running
-                 // Reset state if component is still mounted but animation stopped (e.g., out of view)
-                 if (isMounted && controls) {
-                      // Use controls.set for immediate, non-animated reset when not in view or animation stopped
-                      controls.set({ width: '0%' });
-                 }
-                 if (isMounted) {
-                     setActivePhase(-1); // Ensure phase description is hidden
-                 }
+                setIsAnimating(false); // Mark as not running
+                if (isMounted && controls) {
+                    // Ensure immediate reset if stopped or out of view
+                     controls.stop(); // Stop any potential lingering animation
+                     controls.set({ width: '0%' }); // Set width immediately
+                }
+                if (isMounted) {
+                    setActivePhase(-1); // Ensure phase description is hidden
+                }
             }
         };
 
+        if (inView && !isAnimating) { // Start animation only if in view and not already running
+            startTimeoutId = setTimeout(() => {
+                if (isMounted && inView && controls && !isAnimating) { // Final check
+                    runTimelineAnimation();
+                }
+            }, 200); // Start slightly delayed
+        } else if (!inView || !isMounted) { // Stop if out of view OR unmounted
+            if (startTimeoutId) clearTimeout(startTimeoutId);
+            if (controls) {
+                controls.stop(); // Stop any ongoing animation
+                controls.set({ width: '0%' }); // Reset width immediately
+            }
+            setActivePhase(-1); // Hide phase description
+            setIsAnimating(false); // Allow restart
+        }
 
-         if (inView && !isAnimating) { // Start animation only if in view and not already running
-             // Start animation slightly delayed after coming into view
-             startTimeoutId = setTimeout(() => {
-                  // Final check including controls presence and mount status
-                  if(isMounted && inView && controls && !isAnimating) {
-                     runTimelineAnimation();
-                  }
-              }, 200);
-         } else if (!inView || !isMounted) { // Stop if out of view OR unmounted
-              if (startTimeoutId) clearTimeout(startTimeoutId); // Clear pending start timeout
-              if (controls) {
-                  controls.stop(); // Stop any ongoing animation
-                  controls.set({ width: '0%' }); // Reset width immediately
-              }
-              setActivePhase(-1); // Hide phase description
-              setIsAnimating(false); // Ensure it can restart
-         }
-
-        // Cleanup function for component unmount
+        // Cleanup function
         return () => {
             isMounted = false;
-             if (startTimeoutId) clearTimeout(startTimeoutId); // Clear timeout on unmount
-             if (animationLoopId) cancelAnimationFrame(animationLoopId); // Cancel any pending animation frame
-            if (controls) controls.stop(); // Stop any ongoing Framer Motion animations
-            setIsAnimating(false); // Reset animation flag on unmount
+            if (startTimeoutId) clearTimeout(startTimeoutId);
+            if (controls) controls.stop(); // Stop animation on unmount
+            setIsAnimating(false);
         };
-    }, [inView, controls, isAnimating]); // Add isAnimating to dependencies
-
+    }, [inView, controls, isAnimating]); // Include controls and isAnimating
 
   return (
-    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
-    <motion.div // Add motion div for page transition
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0 },
-        animate: { opacity: 1, transition: { duration: 0.5 } },
-        exit: { opacity: 0, transition: { duration: 0.3 } },
-      }}
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    // Container div for page content - Removed top-level motion wrapper
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
@@ -447,6 +425,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </motion.div>
+    </div>
   );
 }
