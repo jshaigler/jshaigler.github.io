@@ -64,7 +64,17 @@ const technicalMechanisms = [
 export default function SolutionPage() {
   return (
     // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{
+        initial: { opacity: 0, y: 15 },
+        animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeInOut' } },
+        exit: { opacity: 0, y: -15, transition: { duration: 0.25, ease: 'easeInOut' } },
+      }}
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
@@ -131,7 +141,7 @@ export default function SolutionPage() {
          >
              <motion.div variants={fadeIn}> {/* Animate individual image */}
                  <Image
-                   src="/Screenshot 2025-04-27 190833.png" // Placeholder 1
+                   src="/TERT.png" // Corrected path
                    alt="TERT mRNA Structure Visualization" // Descriptive alt text
                    width={600}
                    height={400}
@@ -142,7 +152,7 @@ export default function SolutionPage() {
              </motion.div>
              <motion.div variants={fadeIn} transition={{delay: 0.1}}> {/* Animate individual image with slight delay */}
                  <Image
-                    src="/Screenshot 2025-04-27 201741.png" // Placeholder 2
+                    src="/TFAM.png" // Corrected path
                     alt="TFAM mRNA Structure Visualization" // Descriptive alt text
                     width={600}
                     height={400}
@@ -274,6 +284,7 @@ export default function SolutionPage() {
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </div>
+    </motion.div>
   );
 }
+

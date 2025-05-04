@@ -185,7 +185,7 @@ export default function AboutUsPage() {
           {/* Image */}
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
-              src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png" // Updated Image Source - Corrected path
+              src="1973.png" // Updated Image Source - Corrected path
               alt="Scientific illustration representing advanced cellular research" // Updated Alt Text
               width={600}
               height={400}
