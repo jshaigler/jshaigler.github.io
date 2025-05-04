@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { AnimatedStat } from '@/components/ui/animated-stat'; // Import AnimatedStat
+import { AnimatedStat } from '@/components/animated-stat'; // Corrected Import AnimatedStat
 
 
 // Timeline Phases Data
@@ -28,134 +28,127 @@ export default function AboutUsPage() {
     const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
     const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
     const [isAnimating, setIsAnimating] = useState(false); // Flag to prevent multiple animation loops
+    const isMountedRef = useRef(false); // Ref to track mount status
+
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
 
 
     useEffect(() => {
-        let isMounted = true;
         const numPhases = timelinePhases.length;
         const segmentAnimationDuration = 0.8; // Duration to animate one segment
         const pauseDuration = 2000; // Pause duration at each phase (in ms)
+        let animationTimeoutId: NodeJS.Timeout | null = null;
 
-        let startTimeoutId: NodeJS.Timeout | null = null;
 
         const runTimelineAnimation = async () => {
-            if (!isMounted || !inView || !controls || isAnimating) return;
-            setIsAnimating(true); // Mark as running
-
-             // Check if controls object is ready before starting
-            if (!controls) {
-                console.warn("Animation controls not ready.");
-                setIsAnimating(false);
-                return;
-            }
-
+            if (!isMountedRef.current || !inView || isAnimating) return;
+            setIsAnimating(true);
 
             try {
                 // Loop indefinitely while mounted and in view
-                while (isMounted && inView) {
+                while (isMountedRef.current && inView) {
                     // --- Reset for loop ---
                     setActivePhase(-1);
-                    if (!isMounted || !inView) break; // Check mount status
+                    if (!isMountedRef.current || !inView) break;
                     controls.set({ width: '0%' }); // Immediate reset
-                    await new Promise(resolve => setTimeout(resolve, 300)); // Small delay before starting
-                    if (!isMounted || !inView) break;
+                    await new Promise(resolve => animationTimeoutId = setTimeout(resolve, 300));
+                    if (!isMountedRef.current || !inView) break;
 
                     // --- Animation Sequence ---
-                    // 1. Initialize: Show first phase description, pause
                     setActivePhase(0);
-                    await new Promise(resolve => setTimeout(resolve, pauseDuration));
-                    if (!isMounted || !inView) break; // Check after pause
+                    await new Promise(resolve => animationTimeoutId = setTimeout(resolve, pauseDuration));
+                    if (!isMountedRef.current || !inView) break; // Check after pause
 
-                    // 2. Animate through subsequent phases
                     for (let i = 1; i < numPhases; i++) {
-                        const targetWidth = (i / (numPhases - 1)) * 100;
+                         const targetWidth = (i / (numPhases - 1)) * 100;
 
-                        // Check before starting animation
-                        if (!isMounted || !inView || !controls) break;
+                         if (!isMountedRef.current || !inView) break;
 
-                         // Start the animation, ensuring controls exist
-                         await controls.start({
-                            width: `${targetWidth}%`,
-                            transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
-                         });
+                         // Start the animation, checking mount status
+                         if (isMountedRef.current) {
+                              await controls.start({
+                                 width: `${targetWidth}%`,
+                                 transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
+                              });
+                         }
 
-
-                        // Check after animation might have finished or been interrupted
-                        if (!isMounted || !inView) break;
-
-                        // Activate the phase description
-                        setActivePhase(i);
-
-                        // Pause after reaching the phase's point
-                        await new Promise(resolve => setTimeout(resolve, pauseDuration));
-                        if (!isMounted || !inView) break; // Check after pause
+                         if (!isMountedRef.current || !inView) break;
+                         setActivePhase(i);
+                         await new Promise(resolve => animationTimeoutId = setTimeout(resolve, pauseDuration));
+                         if (!isMountedRef.current || !inView) break;
                     }
-                    if (!isMounted || !inView) break; // Check before final pause
+                    if (!isMountedRef.current || !inView) break;
 
-                    // Brief pause at the end before restarting smoothly
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    if (!isMounted || !inView) break; // Check before loop restart
+                    await new Promise(resolve => animationTimeoutId = setTimeout(resolve, 500));
+                    if (!isMountedRef.current || !inView) break;
 
                     // Smoothly animate back to 0%
                     setActivePhase(-1); // Hide description before animating back
-                    if (!isMounted || !inView || !controls) break; // Check before starting reset animation
+                    if (!isMountedRef.current || !inView) break;
 
-                     // Start the reset animation, ensure controls exist
-                     await controls.start({
-                        width: '0%',
-                        transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
-                     });
+                    // Start the reset animation, check mount status
+                    if (isMountedRef.current) {
+                         await controls.start({
+                             width: '0%',
+                             transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
+                         });
+                    }
 
-                    // Check after reset animation
-                    if (!isMounted || !inView) break;
+                    if (!isMountedRef.current || !inView) break;
 
-                    // Add a small delay before the next loop starts
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                    if (!isMounted || !inView) break; // Check after delay
+                    await new Promise(resolve => animationTimeoutId = setTimeout(resolve, 300));
+                    if (!isMountedRef.current || !inView) break; // Check after delay
                 }
             } catch (error) {
-                if (error instanceof Error && error.name === 'AnimationPlaybackError') {
-                    console.log("Timeline animation stopped cleanly.");
-                } else {
-                    console.error("Timeline animation error:", error);
-                }
+                 if (error instanceof Error && error.name === 'AnimationPlaybackError') {
+                     console.log("Timeline animation stopped cleanly.");
+                 } else if (error instanceof Error && error.message.includes('Promise was cancelled')) {
+                      // Ignore cancellation errors from unmounting/stopping
+                 } else {
+                     console.error("Timeline animation error:", error);
+                 }
             } finally {
-                setIsAnimating(false); // Mark as not running
-                if (isMounted && controls) {
-                    // Ensure immediate reset if stopped or out of view
+                 setIsAnimating(false); // Mark as not running
+                 if (isMountedRef.current) {
                      controls.stop(); // Stop any potential lingering animation
                      controls.set({ width: '0%' }); // Set width immediately
-                }
-                if (isMounted) {
-                    setActivePhase(-1); // Ensure phase description is hidden
-                }
+                     setActivePhase(-1); // Ensure phase description is hidden
+                 }
             }
         };
 
-        if (inView && !isAnimating) { // Start animation only if in view and not already running
-            startTimeoutId = setTimeout(() => {
-                if (isMounted && inView && controls && !isAnimating) { // Final check
+        if (inView && !isAnimating && isMountedRef.current) {
+            // Small delay before starting animation to ensure component is fully ready
+            animationTimeoutId = setTimeout(() => {
+                if (isMountedRef.current && inView && !isAnimating) {
                     runTimelineAnimation();
                 }
-            }, 200); // Start slightly delayed
-        } else if (!inView || !isMounted) { // Stop if out of view OR unmounted
-            if (startTimeoutId) clearTimeout(startTimeoutId);
-            if (controls) {
-                controls.stop(); // Stop any ongoing animation
-                controls.set({ width: '0%' }); // Reset width immediately
-            }
-            setActivePhase(-1); // Hide phase description
-            setIsAnimating(false); // Allow restart
+            }, 200);
+        } else if (!inView && isMountedRef.current) {
+             // Stop and reset if out of view but still mounted
+             if (animationTimeoutId) clearTimeout(animationTimeoutId);
+             controls.stop();
+             controls.set({ width: '0%' });
+             setActivePhase(-1);
+             setIsAnimating(false); // Allow restart if it comes back into view
         }
+
 
         // Cleanup function
         return () => {
-            isMounted = false;
-            if (startTimeoutId) clearTimeout(startTimeoutId);
-            if (controls) controls.stop(); // Stop animation on unmount
-            setIsAnimating(false);
+            if (animationTimeoutId) clearTimeout(animationTimeoutId);
+            if (controls) {
+                controls.stop(); // Stop animation on unmount or when dependencies change
+            }
+            setIsAnimating(false); // Reset animation flag
         };
-    }, [inView, controls, isAnimating]); // Include controls and isAnimating
+    }, [inView, controls, isAnimating]); // Rerun effect if inView, controls, or isAnimating changes
+
 
   return (
     // Container div for page content - Removed top-level motion wrapper
@@ -185,7 +178,7 @@ export default function AboutUsPage() {
           {/* Image */}
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
-              src="1973.png" // Updated Image Source - Corrected path
+              src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png"
               alt="Scientific illustration representing advanced cellular research" // Updated Alt Text
               width={600}
               height={400}
