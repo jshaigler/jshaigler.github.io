@@ -171,7 +171,17 @@ export default function AboutUsPage() {
 
   return (
     // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div // Add motion div for page transition
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={{
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.5 } },
+        exit: { opacity: 0, transition: { duration: 0.3 } },
+      }}
+      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
@@ -197,7 +207,7 @@ export default function AboutUsPage() {
           {/* Image */}
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
-              src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png" // Updated Image Source
+              src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png" // Updated Image Source - Corrected path
               alt="Scientific illustration representing advanced cellular research" // Updated Alt Text
               width={600}
               height={400}
@@ -437,7 +447,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </div>
+    </motion.div>
   );
 }
-

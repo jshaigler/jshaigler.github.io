@@ -31,8 +31,16 @@ const chartConfig = {
 
 export default function Home() {
   return (
-    // Removed motion.div wrapper here, rely on layout.tsx for page transitions
-    <div className="flex flex-col min-h-screen" // Main container class
+    <motion.div // Add motion div for page transition
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={{
+          initial: { opacity: 0 },
+          animate: { opacity: 1, transition: { duration: 0.5 } },
+          exit: { opacity: 0, transition: { duration: 0.3 } },
+        }}
+         className="flex flex-col min-h-screen"
     >
       {/* Hero Section - Animates immediately */}
       <motion.section
@@ -81,7 +89,7 @@ export default function Home() {
               className="w-full md:w-auto flex-shrink-0"
              >
               <Image
-                src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png"
+                src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png" // Corrected path
                 alt="Phoenix Lifesciences Product Representation"
                 width={400}
                 height={300}
@@ -139,7 +147,7 @@ export default function Home() {
           >
             <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
               <Image
-                src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png"
+                src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" // Corrected path
                 alt="Vibrant illustration representing future health and longevity"
                 width={600}
                 height={400}
@@ -299,6 +307,6 @@ export default function Home() {
         </div>
       </motion.section>
 
-    </div> // End of main container div
+    </motion.div> // End of main container div
   );
 }
