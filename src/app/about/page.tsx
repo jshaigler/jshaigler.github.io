@@ -38,6 +38,8 @@ export default function AboutUsPage() {
     }, []);
 
 
+    // Temporarily commented out complex useEffect causing page loading issues
+    /*
     useEffect(() => {
         const numPhases = timelinePhases.length;
         const segmentAnimationDuration = 0.8; // Duration to animate one segment
@@ -55,7 +57,10 @@ export default function AboutUsPage() {
                     // --- Reset for loop ---
                     setActivePhase(-1);
                     if (!isMountedRef.current || !inView) break;
-                    controls.set({ width: '0%' }); // Immediate reset
+                    // Ensure controls are ready and mounted before setting
+                    if (isMountedRef.current && controls) {
+                        controls.set({ width: '0%' }); // Immediate reset
+                    }
                     await new Promise(resolve => animationTimeoutId = setTimeout(resolve, 300));
                     if (!isMountedRef.current || !inView) break;
 
@@ -69,13 +74,18 @@ export default function AboutUsPage() {
 
                          if (!isMountedRef.current || !inView) break;
 
-                         // Start the animation, checking mount status
+                         // Start the animation, checking mount status and controls readiness
                          if (isMountedRef.current && controls) {
                               await controls.start({
                                  width: `${targetWidth}%`,
                                  transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
                               });
+                         } else {
+                             // If controls aren't ready or unmounted, break the loop
+                             console.warn("Controls not ready or component unmounted during animation step.");
+                             break;
                          }
+
 
                          if (!isMountedRef.current || !inView) break;
                          setActivePhase(i);
@@ -91,13 +101,17 @@ export default function AboutUsPage() {
                     setActivePhase(-1); // Hide description before animating back
                     if (!isMountedRef.current || !inView) break;
 
-                    // Start the reset animation, check mount status
+                    // Start the reset animation, check mount status and controls readiness
                     if (isMountedRef.current && controls) {
                          await controls.start({
                              width: '0%',
                              transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
                          });
-                    }
+                     } else {
+                         console.warn("Controls not ready or component unmounted during reset animation.");
+                         break;
+                     }
+
 
                     if (!isMountedRef.current || !inView) break;
 
@@ -114,9 +128,13 @@ export default function AboutUsPage() {
                  }
             } finally {
                  setIsAnimating(false); // Mark as not running
-                 if (isMountedRef.current) {
-                     controls.stop(); // Stop any potential lingering animation
-                     controls.set({ width: '0%' }); // Set width immediately
+                 if (isMountedRef.current && controls) {
+                     try {
+                         controls.stop(); // Stop any potential lingering animation
+                         controls.set({ width: '0%' }); // Set width immediately
+                     } catch (stopError) {
+                         console.warn("Error stopping/setting controls:", stopError);
+                     }
                      setActivePhase(-1); // Ensure phase description is hidden
                  }
             }
@@ -125,15 +143,21 @@ export default function AboutUsPage() {
         if (inView && !isAnimating && isMountedRef.current) {
             // Small delay before starting animation to ensure component is fully ready
             animationTimeoutId = setTimeout(() => {
-                if (isMountedRef.current && inView && !isAnimating) {
+                if (isMountedRef.current && inView && !isAnimating && controls) { // Check controls readiness
                     runTimelineAnimation();
+                } else if (!controls) {
+                     console.warn("Timeline animation start delayed: Controls not ready.");
                 }
             }, 200);
-        } else if (!inView && isMountedRef.current) {
+        } else if (!inView && isMountedRef.current && controls) {
              // Stop and reset if out of view but still mounted
              if (animationTimeoutId) clearTimeout(animationTimeoutId);
-             controls.stop();
-             controls.set({ width: '0%' });
+              try {
+                 controls.stop();
+                 controls.set({ width: '0%' });
+              } catch (stopError) {
+                  console.warn("Error stopping/setting controls on exit:", stopError);
+              }
              setActivePhase(-1);
              setIsAnimating(false); // Allow restart if it comes back into view
         }
@@ -143,12 +167,16 @@ export default function AboutUsPage() {
         return () => {
             if (animationTimeoutId) clearTimeout(animationTimeoutId);
             if (controls) {
-                controls.stop(); // Stop animation on unmount or when dependencies change
+                try {
+                    controls.stop(); // Stop animation on unmount or when dependencies change
+                } catch (stopError) {
+                     console.warn("Error stopping controls during cleanup:", stopError);
+                }
             }
             setIsAnimating(false); // Reset animation flag
         };
     }, [inView, controls, isAnimating]); // Rerun effect if inView, controls, or isAnimating changes
-
+    */
 
   return (
     // Container div for page content - Removed top-level motion wrapper
@@ -431,3 +459,4 @@ export default function AboutUsPage() {
     </motion.div>
   );
 }
+

@@ -10,6 +10,9 @@ import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { Button } from '@/components/ui/button'; // Import Button
 import Link from 'next/link'; // Import Link
+// Corrected import path for placeholder
+import { InteractiveVisualPlaceholder } from '@/components/interactive-placeholder';
+
 
 const pillars = [
   {
@@ -63,7 +66,7 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    // Container div for page content - No motion wrapper here as layout.tsx handles page transitions
+    // Wrap entire content in motion.div for consistent page transitions
     <motion.div
       initial="initial"
       animate="animate"
@@ -284,7 +287,7 @@ export default function SolutionPage() {
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </motion.div>
+    </motion.div> // End of main container div
   );
 }
 

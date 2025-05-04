@@ -8,6 +8,9 @@ import { Lightbulb, FlaskConical, BookOpen, Info, ExternalLink, AlertTriangle, S
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn } from '@/lib/animations';
+// Corrected import path for placeholder
+import { InteractiveVisualPlaceholder } from '@/components/interactive-placeholder';
+
 
 const sources = [
     { title: "Lin28 enhances tissue repair...", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3917449/", number: 1, category: "Epigenetics" },
@@ -28,7 +31,7 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Container div for page content - Removed top-level motion wrapper
+    // Wrap entire content in motion.div for consistent page transitions
      <motion.div
         initial="initial"
         animate="animate"
@@ -188,6 +191,7 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under <strong className="text-foreground">preclinical development</strong>. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans. All forward-looking statements are subject to risks and uncertainties.
           </p>
       </motion.section>
-    </motion.div>
+    </motion.div> // End of main container div
   );
 }
+
