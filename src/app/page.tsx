@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Target, Zap, Microscope, Eye, TrendingUp, CheckSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { AnimatedStat } from '@/components/animated-stat'; // Import the reusable component
+import { AnimatedStat } from '@/components/animated-stat'; // Corrected Import AnimatedStat
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"; // Import chart components
 import { LineChart, CartesianGrid, XAxis, YAxis, Line, ResponsiveContainer } from 'recharts'; // Import recharts components
 

@@ -29,7 +29,17 @@ const sources = [
 export default function PrototypePage() {
   return (
     // Container div for page content - Removed top-level motion wrapper
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+     <motion.div
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={{
+            initial: { opacity: 0, y: 15 },
+            animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
+            exit: { opacity: 0, y: -15, transition: { duration: 0.3, ease: 'easeInOut' } },
+        }}
+        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer} // Use stagger for title/subtitle
@@ -178,6 +188,6 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under <strong className="text-foreground">preclinical development</strong>. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans. All forward-looking statements are subject to risks and uncertainties.
           </p>
       </motion.section>
-    </div>
+    </motion.div>
   );
 }
