@@ -10,8 +10,6 @@ import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { Button } from '@/components/ui/button'; // Import Button
 import Link from 'next/link'; // Import Link
-// Corrected import path for placeholder
-import { InteractiveVisualPlaceholder } from '@/components/interactive-placeholder';
 
 
 const pillars = [
@@ -66,18 +64,8 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    // Wrap entire content in motion.div for consistent page transitions
-    <motion.div
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      variants={{
-        initial: { opacity: 0, y: 15 },
-        animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeInOut' } },
-        exit: { opacity: 0, y: -15, transition: { duration: 0.25, ease: 'easeInOut' } },
-      }}
-      className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    // Removed AnimatePresence and top-level motion.div for page transitions
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
@@ -150,6 +138,7 @@ export default function SolutionPage() {
                    height={400}
                    className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
                    data-ai-hint="molecular diagram science" // AI hint
+                   priority // Load this image sooner
                  />
                  <p className="text-center text-xs text-muted-foreground mt-2">TERT mRNA Structure Visualization</p>
              </motion.div>
@@ -287,7 +276,7 @@ export default function SolutionPage() {
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </motion.div> // End of main container div
+    </div> // End of main container div
   );
 }
 
