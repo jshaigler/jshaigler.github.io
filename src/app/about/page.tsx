@@ -1,10 +1,11 @@
+
 'use client'; // Required for Framer Motion, useState, useEffect
 
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award, GraduationCap, Info, Activity, CalendarClock } from 'lucide-react'; // Added icons
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award } from 'lucide-react'; // Added icons
 import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
@@ -33,13 +34,19 @@ export default function AboutUsPage() {
         isMountedRef.current = true;
         return () => {
             isMountedRef.current = false;
-            controls.stop(); // Stop any animations on unmount
+            if (controls && typeof controls.stop === 'function') {
+                try {
+                    controls.stop();
+                } catch (e) {
+                    // console.warn("Error stopping controls on unmount:", e);
+                }
+            }
         };
     }, [controls]);
 
     useEffect(() => {
         let animationTimeoutId: NodeJS.Timeout | null = null;
-        let isMountedInEffect = true; // Local flag for this effect's closure
+        let isMountedInEffect = true; 
 
         const numPhases = timelinePhases.length;
         const segmentAnimationDuration = 0.8;
@@ -52,7 +59,7 @@ export default function AboutUsPage() {
             try {
                 while (isMountedInEffect && inView && isMountedRef.current) {
                     setActivePhase(-1);
-                    if (isMountedRef.current) controls.set({ width: '0%' });
+                    if (isMountedRef.current && controls) controls.set({ width: '0%' });
                     await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); });
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
@@ -64,7 +71,6 @@ export default function AboutUsPage() {
                         const targetWidth = (i / (numPhases - 1)) * 100;
                         if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                         
-                        // Ensure controls are ready and mounted before starting
                         if (isMountedRef.current && controls) {
                             await controls.start({
                                 width: `${targetWidth}%`,
@@ -96,7 +102,7 @@ export default function AboutUsPage() {
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                 }
             } catch (error) {
-                 if (error instanceof Error && (error.name === 'AnimationPlaybackError' || error.message.includes('Promise was cancelled'))) {
+                 if (error instanceof Error && (error.name === 'AnimationPlaybackError' || error.message.includes('Promise was cancelled') || error.message.includes("Attempted to call animate()"))) {
                     // Non-critical, expected during unmount or stop
                  } else {
                     console.error("Timeline animation error:", error);
@@ -136,15 +142,23 @@ export default function AboutUsPage() {
         return () => {
             isMountedInEffect = false;
             if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            // controls.stop() is handled by the top-level useEffect cleanup
             setIsAnimating(false);
         };
     }, [inView, controls, isAnimating]);
 
 
   return (
-    // Changed root motion.div to a regular div
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div 
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={{
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
+            exit: { opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
+        }}
+        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer}
@@ -258,7 +272,7 @@ export default function AboutUsPage() {
                 <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                       <Image
-                        src="/joshua_haigler.jpeg"
+                        src="https://media.licdn.com/dms/image/v2/D4D03AQF0JOckp1538w/profile-displayphoto-shrink_400_400/B4DZSfuvphHYAg-/0/1737846632852?e=1751500800&v=beta&t=Q-ZIrep3uIUXNaGshAdBVdL3JVOZQhylITwh7Y83gUM"
                         alt="Joshua Haigler"
                         width={200}
                         height={200}
@@ -285,7 +299,7 @@ export default function AboutUsPage() {
                 <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                        <Image
-                        src="/kiara_aguirre.jpeg"
+                        src="https://media.licdn.com/dms/image/v2/D4E03AQGq8oxYCR80YQ/profile-displayphoto-shrink_400_400/B4EZRmHnWNG0Ag-/0/1736880061392?e=1751500800&v=beta&t=dEt-AuZp6pWxWU1o7bh67JHAFzOJTuWF7s7e2b59XBc"
                         alt="Kiara Aguirre"
                         width={200}
                         height={200}
@@ -412,6 +426,8 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </div>
+    </motion.div>
   );
 }
+
+    
