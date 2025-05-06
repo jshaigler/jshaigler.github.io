@@ -1,4 +1,3 @@
-
 'use client'; // Required for Framer Motion, useState, useEffect
 
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
@@ -10,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
 import { useInView } from 'react-intersection-observer'; // Import useInView
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { AnimatedStat } from '@/components/animated-stat'; // Corrected Import AnimatedStat
+import { AnimatedStat } from '@/components/animated-stat';
 
 
 // Timeline Phases Data
@@ -24,182 +23,133 @@ const timelinePhases = [
 
 
 export default function AboutUsPage() {
-    const controls = useAnimation(); // Controls for the progress bar animation
-    const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false }); // triggerOnce false to allow re-animation
-    const [activePhase, setActivePhase] = useState(-1); // Index of the active phase, start at -1
-    const [isAnimating, setIsAnimating] = useState(false); // Flag to prevent multiple animation loops
-    const isMountedRef = useRef(false); // Ref to track mount status
+    const controls = useAnimation();
+    const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false });
+    const [activePhase, setActivePhase] = useState(-1);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const isMountedRef = useRef(false);
 
     useEffect(() => {
-        isMountedRef.current = true; // Set mounted status
-        // Optional: Initialize controls if needed, but keep animation logic commented out
-        // controls.set({ width: '0%' });
+        isMountedRef.current = true;
         return () => {
-            isMountedRef.current = false; // Clean up mounted status
-             // controls?.stop(); // Stop any animations on unmount
+            isMountedRef.current = false;
+            controls.stop(); // Stop any animations on unmount
         };
-    }, [controls]); // Depend only on controls for initial setup if needed
+    }, [controls]);
 
-
-    // --- ENTIRE TIMELINE ANIMATION LOGIC COMMENTED OUT ---
-    /*
     useEffect(() => {
         let animationTimeoutId: NodeJS.Timeout | null = null;
-        let isMounted = true; // Local flag to track mount status within this effect's closure
+        let isMountedInEffect = true; // Local flag for this effect's closure
 
         const numPhases = timelinePhases.length;
-        const segmentAnimationDuration = 0.8; // Duration to animate one segment
-        const pauseDuration = 2000; // Pause duration at each phase (in ms)
+        const segmentAnimationDuration = 0.8;
+        const pauseDuration = 2000;
 
         const runTimelineAnimation = async () => {
-             if (!isMounted || !inView || isAnimating || !controls) return;
-             console.log("Starting timeline animation loop...");
-             setIsAnimating(true);
+            if (!isMountedInEffect || !inView || isAnimating || !isMountedRef.current) return;
+            setIsAnimating(true);
 
             try {
-                // Loop indefinitely while mounted and in view
-                while (isMounted && inView && controls) {
-                    console.log("Top of loop, resetting...");
-                    // --- Reset for loop ---
+                while (isMountedInEffect && inView && isMountedRef.current) {
                     setActivePhase(-1);
-                    controls.set({ width: '0%' }); // Immediate reset
-                    await new Promise(resolve => { if (isMounted) animationTimeoutId = setTimeout(resolve, 300); });
-                    if (!isMounted || !inView) { console.log("Breaking loop after reset delay"); break; }
+                    if (isMountedRef.current) controls.set({ width: '0%' });
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); });
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
-                    // --- Animation Sequence ---
-                    console.log("Setting active phase 0");
                     setActivePhase(0);
-                    await new Promise(resolve => { if (isMounted) animationTimeoutId = setTimeout(resolve, pauseDuration); });
-                    if (!isMounted || !inView) { console.log("Breaking loop after phase 0 pause"); break; }
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
                     for (let i = 1; i < numPhases; i++) {
                         const targetWidth = (i / (numPhases - 1)) * 100;
-                        console.log(`Animating to phase ${i}, width: ${targetWidth}%`);
+                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
+                        
+                        // Ensure controls are ready and mounted before starting
+                        if (isMountedRef.current && controls) {
+                            await controls.start({
+                                width: `${targetWidth}%`,
+                                transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
+                            });
+                        }
 
-                        if (!isMounted || !inView || !controls) { console.log(`Breaking loop before animating to phase ${i}`); break; }
+                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
-                        // Start the animation, checking mount status and controls readiness
-                        await controls.start({
-                           width: `${targetWidth}%`,
-                           transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
-                        });
-
-                        if (!isMounted || !inView) { console.log(`Breaking loop after animating to phase ${i}`); break; }
-
-                        console.log(`Setting active phase ${i}`);
                         setActivePhase(i);
-                        await new Promise(resolve => { if (isMounted) animationTimeoutId = setTimeout(resolve, pauseDuration); });
-                        if (!isMounted || !inView) { console.log(`Breaking loop after phase ${i} pause`); break; }
-                    } // End for loop
+                        await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
+                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
+                    }
 
-                     if (!isMounted || !inView) { console.log("Breaking loop after main phases"); break; }
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 500); });
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
-                     await new Promise(resolve => { if (isMounted) animationTimeoutId = setTimeout(resolve, 500); });
-                     if (!isMounted || !inView) { console.log("Breaking loop after post-phase delay"); break; }
+                    setActivePhase(-1);
+                    if (isMountedRef.current && controls) {
+                         await controls.start({
+                            width: '0%',
+                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' }
+                        });
+                    }
 
-                    // Smoothly animate back to 0%
-                    console.log("Resetting animation back to 0%");
-                    setActivePhase(-1); // Hide description before animating back
-                    if (!isMounted || !inView || !controls) { console.log("Breaking loop before reset animation"); break; }
-
-                    // Start the reset animation, check mount status and controls readiness
-                    await controls.start({
-                       width: '0%',
-                       transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
-                    });
-
-
-                    if (!isMounted || !inView) { console.log("Breaking loop after reset animation"); break; }
-
-                    await new Promise(resolve => { if (isMounted) animationTimeoutId = setTimeout(resolve, 300); }); // Delay before next loop
-                     if (!isMounted || !inView) { console.log("Breaking loop after final delay"); break; }
-
-                } // End while loop
-            } catch (error) {
-                if (error instanceof Error && error.name === 'AnimationPlaybackError') {
-                    console.log("Timeline animation stopped cleanly (PlaybackError).");
-                } else if (error instanceof Error && error.message.includes('Promise was cancelled')) {
-                     console.log("Timeline animation promise cancelled (likely unmount/stop).");
-                } else {
-                    console.error("Timeline animation error:", error);
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); });
+                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                 }
+            } catch (error) {
+                 if (error instanceof Error && (error.name === 'AnimationPlaybackError' || error.message.includes('Promise was cancelled'))) {
+                    // Non-critical, expected during unmount or stop
+                 } else {
+                    console.error("Timeline animation error:", error);
+                 }
             } finally {
-                console.log("Timeline animation finished or stopped.");
-                setIsAnimating(false); // Mark as not running
-                // Ensure final state is reset if component is still mounted
-                if (isMounted && controls) {
-                     try {
-                         controls.stop(); // Stop any potential lingering animation
-                         controls.set({ width: '0%' }); // Set width immediately
-                     } catch (stopError) {
-                         console.warn("Error stopping/setting controls in finally:", stopError);
-                     }
-                     setActivePhase(-1); // Ensure phase description is hidden
+                setIsAnimating(false);
+                if (isMountedRef.current && controls) {
+                    try {
+                        controls.stop();
+                        controls.set({ width: '0%' });
+                    } catch (stopError) {
+                        // console.warn("Error stopping/setting controls in finally:", stopError);
+                    }
+                    setActivePhase(-1);
                 }
             }
         };
 
-
-        if (inView && !isAnimating && isMounted && controls) {
-             // Small delay before starting animation to ensure component is fully ready
-             console.log("In view, scheduling timeline animation start...");
-             animationTimeoutId = setTimeout(() => {
-                 if (isMounted && inView && !isAnimating && controls) {
-                     runTimelineAnimation();
-                 } else {
-                      console.warn("Timeline animation start aborted: Component unmounted, not in view, already animating, or controls not ready.");
-                 }
-             }, 200);
-        } else if (!inView && isMounted && controls) {
-             // Stop and reset if out of view but still mounted
-              console.log("Out of view, stopping and resetting timeline animation.");
-             if (animationTimeoutId) clearTimeout(animationTimeoutId);
-              try {
-                  controls.stop();
-                  controls.set({ width: '0%' });
-              } catch (stopError) {
-                  console.warn("Error stopping/setting controls on exit:", stopError);
-              }
-             setActivePhase(-1);
-             setIsAnimating(false); // Allow restart if it comes back into view
+        if (inView && !isAnimating && isMountedRef.current && controls) {
+            animationTimeoutId = setTimeout(() => {
+                if (isMountedRef.current && inView && !isAnimating && controls) {
+                    runTimelineAnimation();
+                }
+            }, 200);
+        } else if (!inView && isMountedRef.current && controls) {
+            if (animationTimeoutId) clearTimeout(animationTimeoutId);
+            try {
+                controls.stop();
+                controls.set({ width: '0%' });
+            } catch (stopError) {
+                 // console.warn("Error stopping/setting controls on exit:", stopError);
+            }
+            setActivePhase(-1);
+            setIsAnimating(false);
         }
 
-        // Cleanup function
         return () => {
-             console.log("Cleaning up timeline animation effect.");
-             isMounted = false; // Set local mount flag to false
+            isMountedInEffect = false;
             if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            if (controls) {
-                try {
-                    controls.stop(); // Stop animation on unmount
-                } catch (stopError) {
-                     console.warn("Error stopping controls during cleanup:", stopError);
-                }
-            }
-             setIsAnimating(false); // Reset animation flag
+            // controls.stop() is handled by the top-level useEffect cleanup
+            setIsAnimating(false);
         };
-     }, [inView, controls, isAnimating]); // Dependencies: run effect when these change
-     */
+    }, [inView, controls, isAnimating]);
 
 
   return (
-    // Container div for page content - Removed top-level motion wrapper
-    <motion.div
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={{
-            initial: { opacity: 0, y: 15 },
-            animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
-            exit: { opacity: 0, y: -15, transition: { duration: 0.3, ease: 'easeInOut' } },
-        }}
-        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    // Changed root motion.div to a regular div
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
-        variants={staggerContainer} // Use stagger for title/subtitle
+        variants={staggerContainer}
         initial="initial"
-        animate="animate" // Animate immediately on page load
+        animate="animate" 
         className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -213,7 +163,7 @@ export default function AboutUsPage() {
       {/* Mission & Vision Section */}
         <motion.section
           initial="initial"
-          animate="animate" // Animate immediately as it's near the top
+          animate="animate" 
           variants={staggerContainer}
           className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
         >
@@ -221,12 +171,12 @@ export default function AboutUsPage() {
           <motion.div variants={fadeIn} className="md:w-1/2">
             <Image
               src="/ChatGPT Image May 2, 2025, 02_42_15 PM.png"
-              alt="Scientific illustration representing advanced cellular research" // Updated Alt Text
+              alt="Scientific illustration representing advanced cellular research" 
               width={600}
               height={400}
               className="rounded-lg shadow-lg object-cover w-full h-auto saturate-110 contrast-110 hover:scale-105 transition-transform duration-300 ease-in-out"
-              data-ai-hint="science research laboratory" // Updated AI Hint
-              priority // Load this image sooner
+              data-ai-hint="science research laboratory" 
+              priority 
             />
           </motion.div>
           {/* Text Content - Stagger children */}
@@ -247,7 +197,7 @@ export default function AboutUsPage() {
       {/* Our Approach Section */}
         <motion.section
           initial="initial"
-          whileInView="animate" // Keep whileInView for sections further down
+          whileInView="animate" 
           viewport={{ once: true, amount: 0.1 }}
           variants={staggerContainer}
           className="mb-20"
@@ -255,7 +205,7 @@ export default function AboutUsPage() {
             <motion.div variants={staggerContainer}>
                 <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-12">Our Approach</motion.h2>
                 <motion.div
-                  variants={staggerContainer} // Stagger the cards themselves
+                  variants={staggerContainer} 
                   className="grid grid-cols-1 md:grid-cols-3 gap-8"
                 >
                     {[
@@ -288,7 +238,7 @@ export default function AboutUsPage() {
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
+        viewport={{ once: true, amount: 0.1 }} 
         variants={staggerContainer}
         className="mb-16 text-center"
       >
@@ -300,20 +250,20 @@ export default function AboutUsPage() {
               Phoenix Lifesciences is spearheaded by a dynamic team blending scientific curiosity with strategic execution to revolutionize longevity therapeutics.
             </motion.p>
             <motion.div
-              variants={staggerContainer} // Stagger the founder cards
-              className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch" // Added items-stretch
+              variants={staggerContainer} 
+              className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch" 
             >
               {/* Joshua Haigler Card */}
               <motion.div variants={slideInLeft} className="flex">
-                <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> {/* Added w-full */}
+                <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                       <Image
-                        src="https://media.licdn.com/dms/image/v2/D4D03AQF0JOckp1538w/profile-displayphoto-shrink_400_400/B4DZSfuvphHYAg-/0/1737846632852?e=1751500800&v=beta&t=Q-ZIrep3uIUXNaGshAdBVdL3JVOZQhylITwh7Y83gUM"
+                        src="/joshua_haigler.jpeg"
                         alt="Joshua Haigler"
                         width={200}
                         height={200}
-                        className="w-full sm:w-1/3 h-auto object-cover flex-shrink-0 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none sm:rounded-br-lg" // Adjust rounding for bottom right
-                        unoptimized // If external URL has issues with Next.js optimization
+                        className="w-full sm:w-1/3 h-auto object-cover flex-shrink-0 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none sm:rounded-br-lg" 
+                        unoptimized 
                       />
                       <CardContent className="p-6 flex-1">
                         <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
@@ -321,7 +271,7 @@ export default function AboutUsPage() {
                         <p className="text-sm text-muted-foreground leading-relaxed">
                            Driven by a passion for medicine and synthetic biology, Joshua translates cutting-edge research into practical longevity solutions, guiding the scientific vision of Phoenix Lifesciences.
                         </p>
-                         {/* Placeholder for key skill/focus */}
+                         
                          <div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
                             <FlaskConical size={14} className="text-primary"/> Focus: Scientific Innovation & Product Development
                          </div>
@@ -332,15 +282,15 @@ export default function AboutUsPage() {
 
               {/* Kiara Aguirre Card */}
               <motion.div variants={slideInRight} className="flex">
-                <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> {/* Added w-full */}
+                <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                        <Image
-                        src="https://media.licdn.com/dms/image/v2/D4E03AQGq8oxYCR80YQ/profile-displayphoto-shrink_400_400/B4EZRmHnWNG0Ag-/0/1736880061392?e=1751500800&v=beta&t=dEt-AuZp6pWxWU1o7bh67JHAFzOJTuWF7s7e2b59XBc"
+                        src="/kiara_aguirre.jpeg"
                         alt="Kiara Aguirre"
                         width={200}
                         height={200}
-                         className="w-full sm:w-1/3 h-auto object-cover flex-shrink-0 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none sm:rounded-br-lg" // Adjust rounding for bottom right
-                         unoptimized // If external URL has issues with Next.js optimization
+                         className="w-full sm:w-1/3 h-auto object-cover flex-shrink-0 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none sm:rounded-br-lg" 
+                         unoptimized 
                       />
                       <CardContent className="p-6 flex-1">
                         <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
@@ -348,7 +298,7 @@ export default function AboutUsPage() {
                         <p className="text-sm text-muted-foreground leading-relaxed">
                            Leveraging expertise in linguistics and CS, Kiara ensures our solutions are human-centered, driving strategic vision and global impact for Phoenix Lifesciences.
                         </p>
-                         {/* Placeholder for key skill/focus */}
+                         
                         <div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
                             <Award size={14} className="text-primary"/> Focus: Strategic Growth & Human-Centered Design
                          </div>
@@ -364,7 +314,7 @@ export default function AboutUsPage() {
         <motion.section
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, amount: 0.2 }} // Trigger when 20% visible
+          viewport={{ once: true, amount: 0.2 }} 
           variants={fadeIn}
           className="my-20 text-center"
         >
@@ -379,8 +329,7 @@ export default function AboutUsPage() {
                 <motion.div variants={fadeInUp} className="max-w-xl mx-auto">
                    <Link href="https://medium.com/p/a5f11e470707" target="_blank" rel="noopener noreferrer" className="block group">
                         <Card className="text-left shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out transform hover:-translate-y-1 border border-border hover:border-primary/30 overflow-hidden">
-                             {/* Optional: Add a generic article image */}
-                             {/* <Image src="/placeholder-article-image.png" alt="Article Preview" width={600} height={150} className="w-full h-24 object-cover opacity-80 group-hover:opacity-100 transition-opacity"/> */}
+                             
                              <CardHeader className="flex flex-row items-center gap-4">
                                 <div className="flex-shrink-0">
                                     <BookText className="h-10 w-10 text-primary" />
@@ -393,7 +342,7 @@ export default function AboutUsPage() {
                                 </div>
                              </CardHeader>
                              <CardContent>
-                                 {/* Simulate text lines */}
+                                 
                                  <div className="space-y-1.5">
                                      <div className="h-2 bg-muted rounded-full w-full"></div>
                                      <div className="h-2 bg-muted rounded-full w-11/12"></div>
@@ -412,10 +361,10 @@ export default function AboutUsPage() {
 
       {/* Path Forward Section - Enhanced Timeline */}
         <motion.section
-            ref={ref} // Attach ref to trigger animation when this section is in view
+            ref={ref} 
             initial="initial"
-            animate={inView ? "animate" : "initial"} // Control animation based on inView state
-            variants={fadeInUp} // Single animation for the whole section container
+            animate={inView ? "animate" : "initial"} 
+            variants={fadeInUp} 
             className="text-center mt-16"
         >
             <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
@@ -440,16 +389,16 @@ export default function AboutUsPage() {
                       {/* Animated Progress Bar */}
                       <motion.div
                         initial={{ width: '0%' }}
-                        animate={controls} // Controlled by useAnimation and useInView
+                        animate={controls} 
                         className="h-full bg-gradient-to-r from-primary/50 to-primary rounded-full"
                       />
                  </div>
                  {/* Phase Description - Shows description of the currently active phase */}
                  <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
                     <AnimatePresence mode="wait">
-                        {activePhase >= 0 && activePhase < timelinePhases.length && ( // Check bounds
+                        {activePhase >= 0 && activePhase < timelinePhases.length && ( 
                           <motion.p
-                              key={activePhase} // Change key to trigger animation
+                              key={activePhase} 
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -10 }}
@@ -463,8 +412,6 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </motion.div>
+    </div>
   );
 }
-
-

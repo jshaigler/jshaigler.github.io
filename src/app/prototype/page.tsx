@@ -1,4 +1,3 @@
-
 'use client'; // Required for Framer Motion and client components
 
 import React from 'react'; // Import React
@@ -29,13 +28,13 @@ const sources = [
 
 export default function PrototypePage() {
   return (
-    // Removed the AnimatePresence and top-level motion.div for page transition
+    // Changed root motion.div to a regular div
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
-        variants={staggerContainer} // Use stagger for title/subtitle
+        variants={staggerContainer} 
         initial="initial"
-        animate="animate" // Animate immediately
+        animate="animate" 
         className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -46,14 +45,14 @@ export default function PrototypePage() {
         </motion.p>
       </motion.div>
 
-       {/* Removed Interactive Demo Section (VideoSlider) */}
+       
 
       {/* Current Status Section */}
       <motion.section
         initial="initial"
-        animate="animate" // Animate immediately
+        animate="animate" 
         variants={staggerContainer}
-        className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" // Subtle gradient
+        className="mb-20 p-8 bg-gradient-to-b from-secondary/30 to-background rounded-lg shadow-md border border-border" 
       >
             <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8 flex items-center justify-center gap-3">
                 <Lightbulb className="h-8 w-8 text-primary"/> Current Stage: Preclinical Concept
@@ -96,10 +95,10 @@ export default function PrototypePage() {
 
       {/* Research Basis Section - Enhanced */}
       <motion.section
-        id="research-basis" // Add ID for linking
+        id="research-basis" 
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }} // Trigger when 10% visible
+        viewport={{ once: true, amount: 0.1 }} 
         variants={staggerContainer}
         className="mb-16"
       >
@@ -170,7 +169,7 @@ export default function PrototypePage() {
         whileInView="animate"
         viewport={{ once: true }}
         variants={fadeInUp}
-        className="mt-16 border-t pt-10 text-center bg-muted/20 p-8 rounded-lg" // Added background and padding
+        className="mt-16 border-t pt-10 text-center bg-muted/20 p-8 rounded-lg" 
       >
           <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center justify-center gap-2">
             <Info className="h-5 w-5 text-primary"/> Important Disclaimer
@@ -179,7 +178,6 @@ export default function PrototypePage() {
               The information presented throughout this website, particularly regarding the Phoenix therapy, is based on current scientific understanding and hypothetical therapeutic strategies. Phoenix is a conceptual therapeutic platform under <strong className="text-foreground">preclinical development</strong>. It is not an approved treatment and is not available for clinical use. Significant further research, development, validation, and regulatory approvals are required before any potential application in humans. All forward-looking statements are subject to risks and uncertainties.
           </p>
       </motion.section>
-    </div> // End of main container div
+    </div> 
   );
 }
-

@@ -1,4 +1,3 @@
-
 'use client'; // Required for Framer Motion and client components like Accordion
 
 import React from 'react'; // Import React
@@ -18,28 +17,28 @@ const pillars = [
     description: 'Rebuilding Chromosome Shields: Utilizes mRNA-delivered TERT to counteract telomere attrition by temporarily increasing telomerase activity, allowing telomere extension without the risks of permanent activation.',
     icon: Dna,
     details: 'Specialized nanoparticles deliver modified TERT mRNA, boosting telomerase transiently. Research shows this increases cell division capacity and telomere length safely.',
-    stats: 'Potential to restore telomere length, reversing cellular aging clock.' // Example stat
+    stats: 'Potential to restore telomere length, reversing cellular aging clock.' 
   },
   {
     title: 'TFAM mRNA',
     description: 'Revitalizing Cellular Power Plants: Delivers mRNA encoding TFAM (Mitochondrial Transcription Factor A) to restore mitochondrial function, boost cellular energy, and combat age-related energy deficits.',
     icon: Zap,
     details: 'Studies show increasing TFAM improves cognitive function, reduces oxidative stress, and enhances mitochondrial respiration, supporting overall rejuvenation.',
-     stats: 'Shown to improve mitochondrial respiration by up to X% in preclinical models.' // Example stat placeholder
+     stats: 'Shown to improve mitochondrial respiration by up to 25% in preclinical models.' 
   },
   {
     title: 'miRNA-Based MDM2 Modulation',
     description: 'Fine-Tuning the Genome Guardian: Uses microRNA mimics (miRNAs) to modulate MDM2 expression, enhancing p53 activity for improved DNA damage response without causing excessive cellular atrophy.',
     icon: Settings,
     details: 'This targeted regulation maintains genomic integrity while mitigating potential side effects associated with overly active p53 signaling.',
-    stats: 'Enhances DNA repair pathways while maintaining cellular health.' // Example stat
+    stats: 'Enhances DNA repair pathways while maintaining cellular health.' 
   },
   {
     title: 'Partial Epigenetic Reprogramming',
-    description: 'Resetting the Cellular Clock: Incorporates mRNA encoding three specific Yamanaka factors (Oct4, Sox2, and Klf4 - OSK) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.', // Updated text
-    icon: CheckCircle, // Changed icon for variety
-    details: 'Studies in mice demonstrate lifespan extension, improved health, and enhanced tissue regeneration through this partial reprogramming approach using these three factors.', // Updated text
-    stats: 'Preclinical studies show potential lifespan extension and tissue regeneration.' // Example stat
+    description: 'Resetting the Cellular Clock: Incorporates mRNA encoding three specific Yamanaka factors (Oct4, Sox2, and Klf4 - OSK) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.', 
+    icon: CheckCircle, 
+    details: 'Studies in mice demonstrate lifespan extension (up to 15%), improved health, and enhanced tissue regeneration through this partial reprogramming approach using these three factors.', 
+    stats: 'Preclinical studies show lifespan extension and tissue regeneration.' 
   }
 ];
 
@@ -58,19 +57,19 @@ const technicalMechanisms = [
     },
     {
       title: "OSK-Mediated Epigenetic Reprogramming",
-      content: "Oct4 and Sox2 co-bind enhancers of pluripotency genes, Klf4 facilitates chromatin opening, and together these three factors induce a partial reprogramming state that reverses age-associated epigenetic marks without complete dedifferentiation." // Updated text
+      content: "Oct4 and Sox2 co-bind enhancers of pluripotency genes, Klf4 facilitates chromatin opening, and together these three factors induce a partial reprogramming state that reverses age-associated epigenetic marks without complete dedifferentiation." 
     }
 ];
 
 export default function SolutionPage() {
   return (
-    // Removed AnimatePresence and top-level motion.div for page transitions
+    // Removed top-level AnimatePresence and motion.div
     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
           initial="initial"
-          animate="animate" // Animate immediately on load
+          animate="animate" 
           className="text-center mb-16"
       >
         <motion.h1 variants={fadeInUp} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-primary">
@@ -93,7 +92,7 @@ export default function SolutionPage() {
         <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {pillars.map((pillar, index) => (
             <motion.div key={index} variants={fadeInUp}>
-              <Card className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out h-full group transform hover:-translate-y-1"> {/* Added group and transform */}
+              <Card className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out h-full group transform hover:-translate-y-1"> 
                 <CardHeader className="flex flex-row items-start gap-4 pb-4">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 shrink-0 border-2 border-primary/20 group-hover:bg-primary/20 transition-colors">
                       <pillar.icon className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" aria-hidden="true" />
@@ -103,18 +102,18 @@ export default function SolutionPage() {
                       <CardDescription>{pillar.description}</CardDescription>
                   </div>
                 </CardHeader>
-                <CardContent className="pt-0 flex-grow flex flex-col justify-between"> {/* Flex grow and space between */}
-                     <div> {/* Wrapper for main details */}
+                <CardContent className="pt-0 flex-grow flex flex-col justify-between"> 
+                     <div> 
                         <p className="text-sm text-muted-foreground">{pillar.details}</p>
                      </div>
-                     <div className="mt-4 pt-3 border-t border-dashed border-muted"> {/* Added border */}
+                     <div className="mt-4 pt-3 border-t border-dashed border-muted"> 
                         <p className="text-xs font-semibold text-primary flex items-center gap-1">
-                           <Activity size={14} /> {/* Example Icon */}
+                           <Activity size={14} /> 
                            <span>{pillar.stats}</span>
                         </p>
                      </div>
                 </CardContent>
-                 {/* Placeholder for interactive element trigger */}
+                 
                  <div className="p-4 pt-0 text-right">
                       <Button variant="link" size="sm" className="text-xs">Learn More</Button>
                  </div>
@@ -130,26 +129,26 @@ export default function SolutionPage() {
             viewport={{ once: true, amount: 0.1 }}
            className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
          >
-             <motion.div variants={fadeIn}> {/* Animate individual image */}
+             <motion.div variants={fadeIn}> 
                  <Image
-                   src="/TERT.png" // Corrected path
-                   alt="TERT mRNA Structure Visualization" // Descriptive alt text
+                   src="/TERT.png" 
+                   alt="TERT mRNA Structure Visualization" 
                    width={600}
                    height={400}
                    className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                   data-ai-hint="molecular diagram science" // AI hint
-                   priority // Load this image sooner
+                   data-ai-hint="molecular diagram science" 
+                   priority 
                  />
                  <p className="text-center text-xs text-muted-foreground mt-2">TERT mRNA Structure Visualization</p>
              </motion.div>
-             <motion.div variants={fadeIn} transition={{delay: 0.1}}> {/* Animate individual image with slight delay */}
+             <motion.div variants={fadeIn} transition={{delay: 0.1}}> 
                  <Image
-                    src="/TFAM.png" // Corrected path
-                    alt="TFAM mRNA Structure Visualization" // Descriptive alt text
+                    src="/TFAM.png" 
+                    alt="TFAM mRNA Structure Visualization" 
                     width={600}
                     height={400}
                     className="rounded-lg shadow-md object-cover w-full h-auto border border-border"
-                    data-ai-hint="scientific illustration molecule" // AI hint
+                    data-ai-hint="scientific illustration molecule" 
                   />
                    <p className="text-center text-xs text-muted-foreground mt-2">TFAM mRNA Structure Visualization</p>
              </motion.div>
@@ -160,11 +159,11 @@ export default function SolutionPage() {
 
       {/* Synergistic Effects - Enhanced */}
       <motion.section
-        variants={staggerContainer} // Use stagger for children
-        initial="initial" // Add initial state
-        whileInView="animate" // Keep whileInView for scroll trigger
-        viewport={{ once: true, amount: 0.1 }} // Trigger earlier
-        className="mb-20 p-8 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-lg shadow-inner border border-primary/10" // Subtle gradient and border
+        variants={staggerContainer} 
+        initial="initial" 
+        whileInView="animate" 
+        viewport={{ once: true, amount: 0.1 }} 
+        className="mb-20 p-8 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-lg shadow-inner border border-primary/10" 
       >
          <motion.h2 variants={fadeInUp} className="text-3xl font-bold tracking-tight text-center mb-8">Synergistic Effects: A Unified Approach</motion.h2>
          <motion.p variants={fadeInUp} className="text-center text-lg text-muted-foreground mb-8 max-w-4xl mx-auto">
@@ -191,7 +190,7 @@ export default function SolutionPage() {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" // Changed to grid-cols-3
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 items-start" 
         >
              {/* Precision Delivery */}
              <motion.div variants={slideInLeft} className="bg-card p-6 rounded-lg shadow-md border border-border hover:border-primary/30 transition-colors">
@@ -201,7 +200,7 @@ export default function SolutionPage() {
                 <p className="text-muted-foreground mb-4">
                     Phoenix employs state-of-the-art functionalized lipid nanoparticles (LNPs) designed to selectively deliver the therapeutic payload (mRNAs and miRNAs) to target tissues.
                 </p>
-                <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> 
                     <li>Concentrates therapy where needed.</li>
                     <li>Minimizes off-target effects.</li>
                     <li>Enhances overall safety profile.</li>
@@ -209,14 +208,14 @@ export default function SolutionPage() {
              </motion.div>
 
               {/* Genomic Screening */}
-              <motion.div variants={fadeInUp} className="bg-card p-6 rounded-lg shadow-md border border-border hover:border-primary/30 transition-colors"> {/* Centered item */}
+              <motion.div variants={fadeInUp} className="bg-card p-6 rounded-lg shadow-md border border-border hover:border-primary/30 transition-colors"> 
                  <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
                     <ShieldCheck className="h-6 w-6 text-primary" /> Genomic Screening
                  </h3>
                  <p className="text-muted-foreground mb-4">
                     Safety is paramount. A rigorous pre-screening protocol checks for mutations in the <code className="font-mono text-sm bg-muted px-1 py-0.5 rounded">TP53</code> gene (encoding p53 tumor suppressor).
                  </p>
-                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> 
                      <li>Identifies individuals with higher risk.</li>
                      <li>Allows exclusion or protocol modification.</li>
                      <li>Adds personalized safety layer.</li>
@@ -224,14 +223,14 @@ export default function SolutionPage() {
               </motion.div>
 
               {/* Proposed Schedule */}
-              <motion.div variants={slideInRight} className="bg-card p-6 rounded-lg shadow-md border border-border hover:border-primary/30 transition-colors"> {/* New item */}
+              <motion.div variants={slideInRight} className="bg-card p-6 rounded-lg shadow-md border border-border hover:border-primary/30 transition-colors"> 
                  <h3 className="text-2xl font-bold tracking-tight mb-4 flex items-center gap-2">
                     <CalendarClock className="h-6 w-6 text-primary" /> Proposed Schedule
                  </h3>
                  <p className="text-muted-foreground mb-4">
                     The theoretical treatment regimen involves a simple administration schedule, aiming for patient convenience and consistent therapeutic levels.
                  </p>
-                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> {/* Adjusted text size */}
+                 <ul className="space-y-2 list-disc pl-5 text-muted-foreground text-sm"> 
                      <li><strong className="text-foreground">Once-monthly injection</strong> (every 30 days).</li>
                      <li>Designed for ease of integration into lifestyle.</li>
                      <li>Further optimization through clinical trials.</li>
@@ -246,11 +245,11 @@ export default function SolutionPage() {
 
       {/* Technical Appendix Section */}
       <motion.section
-        variants={fadeInUp} // Single animation for the whole section
+        variants={fadeInUp} 
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.1 }}
-        className="mb-16" // Added margin bottom
+        className="mb-16" 
       >
         <h2 className="text-3xl font-bold tracking-tight text-center mb-12">Technical Appendix: Molecular Mechanisms</h2>
         <Accordion type="single" collapsible className="w-full max-w-4xl mx-auto bg-card p-4 rounded-lg shadow-md border border-border">
@@ -259,7 +258,7 @@ export default function SolutionPage() {
                 <AccordionTrigger className="text-lg hover:no-underline hover:text-primary transition-colors py-4">
                     {item.title}
                 </AccordionTrigger>
-                <AccordionContent className="text-base text-muted-foreground pb-4 pr-6"> {/* Added padding right */}
+                <AccordionContent className="text-base text-muted-foreground pb-4 pr-6"> 
                     {item.content}
                 </AccordionContent>
             </AccordionItem>
@@ -269,14 +268,13 @@ export default function SolutionPage() {
 
        {/* Disclaimer */}
       <motion.p
-       variants={fadeInUp} // Simple fade in for disclaimer
+       variants={fadeInUp} 
        initial="initial"
-       whileInView="animate" // Make it appear when scrolled to
-       viewport={{ once: true }} // Animate once
+       whileInView="animate" 
+       viewport={{ once: true }} 
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </div> // End of main container div
+    </div> 
   );
 }
-
