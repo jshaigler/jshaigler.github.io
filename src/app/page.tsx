@@ -1,4 +1,3 @@
-
 'use client'; // Required for Framer Motion and useEffect
 
 import React from 'react';
@@ -9,15 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Target, Zap, Microscope, Eye, TrendingUp, CheckSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { AnimatedStat } from '@/components/animated-stat'; // Corrected Import AnimatedStat
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"; // Import chart components
-import { LineChart, CartesianGrid, XAxis, YAxis, Line, ResponsiveContainer } from 'recharts'; // Import recharts components
+import { AnimatedStat } from '@/components/animated-stat'; 
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"; 
+import { LineChart, CartesianGrid, XAxis, YAxis, Line, ResponsiveContainer } from 'recharts'; 
 
 
 // Chart data and configuration
 const chartData = [
   { year: "2024", marketSize: 21.29 },
-  { year: "2030", marketSize: 44.04 }, // Interpolated midpoint for smoother line
+  { year: "2030", marketSize: 44.04 }, 
   { year: "2035", marketSize: 63.0 },
 ];
 
@@ -31,22 +30,12 @@ const chartConfig = {
 
 export default function Home() {
   return (
-    <motion.div // Add motion div for page transition
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={{
-          initial: { opacity: 0 },
-          animate: { opacity: 1, transition: { duration: 0.5 } },
-          exit: { opacity: 0, transition: { duration: 0.3 } },
-        }}
-         className="flex flex-col min-h-screen"
-    >
+    <div className="flex flex-col min-h-screen">
       {/* Hero Section - Animates immediately */}
       <motion.section
-        initial="initial" // Animate this section on load
+        initial="initial" 
         animate="animate"
-        variants={fadeIn} // Simple fade-in for the whole section
+        variants={fadeIn} 
         className="relative py-24 md:py-32 lg:py-40 bg-gradient-to-b from-background to-secondary/50 overflow-hidden"
       >
         {/* Enhanced background pattern */}
@@ -89,12 +78,12 @@ export default function Home() {
               className="w-full md:w-auto flex-shrink-0"
              >
               <Image
-                src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png" // Corrected path
+                src="/ChatGPT Image Apr 30, 2025, 05_41_11 PM.png" 
                 alt="Phoenix Lifesciences Product Representation"
                 width={400}
                 height={300}
                 className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto rounded-lg shadow-xl object-contain mx-auto md:mx-0 hover:scale-105 transition-transform duration-300 ease-in-out"
-                priority // LCP Image
+                priority 
                 data-ai-hint="futuristic medical technology"
               />
             </motion.div>
@@ -129,7 +118,7 @@ export default function Home() {
       <motion.section
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.1 }} // Trigger animation when 10% is visible
+        viewport={{ once: true, amount: 0.1 }} 
         variants={staggerContainer}
         className="py-16 md:py-24 bg-background"
       >
@@ -140,23 +129,22 @@ export default function Home() {
 
           {/* Vision Section */}
           <motion.div
-            initial="initial" // Use initial/animate for components within viewport-triggered sections
-            animate="animate" // Animate immediately
-            variants={fadeIn} // Use a simple fadeIn for the container div
+            initial="initial" 
+            animate="animate" 
+            variants={fadeIn} 
             className="mb-20 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-accent/5 to-primary/5 p-8 rounded-lg shadow-inner overflow-hidden border border-border"
           >
-            <motion.div variants={fadeIn} className="md:w-1/2"> {/* Animate image */}
+            <motion.div variants={fadeIn} className="md:w-1/2"> 
               <Image
-                src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" // Corrected path
+                src="/ChatGPT Image Apr 28, 2025, 04_06_08 PM.png" 
                 alt="Vibrant illustration representing future health and longevity"
                 width={600}
                 height={400}
                 className="rounded-lg shadow-lg object-cover w-full h-auto saturate-110 contrast-110 hover:scale-105 transition-transform duration-300 ease-in-out"
                 data-ai-hint="future health longevity"
-                // Removed priority as it's not the LCP
               />
             </motion.div>
-            <motion.div variants={staggerContainer} initial="initial" animate="animate" className="md:w-1/2"> {/* Stagger text animation */}
+            <motion.div variants={staggerContainer} initial="initial" animate="animate" className="md:w-1/2"> 
                 <motion.h3 variants={fadeInUp} className="text-3xl font-bold tracking-tight mb-4 flex items-center gap-2">
                   <Eye className="h-8 w-8 text-primary" /> Our Vision for the Future
                 </motion.h3>
@@ -183,14 +171,14 @@ export default function Home() {
               { icon: Microscope, title: 'Synergistic Effect', desc: 'Combining multiple strategies for a comprehensive impact on the aging process.', details: 'Amplifies benefits by addressing interconnected aging factors simultaneously.' },
             ].map((feature, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="text-center shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 group h-full flex flex-col"> {/* Added group, h-full, flex */}
+                <Card className="text-center shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 group h-full flex flex-col"> 
                   <CardHeader>
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4 border-2 border-primary/20 group-hover:bg-primary/20 transition-colors">
                       <feature.icon className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
                     </div>
                     <CardTitle className="text-xl">{feature.title}</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex-grow"> {/* Allow content to grow */}
+                  <CardContent className="flex-grow"> 
                     <p className="text-muted-foreground">{feature.desc}</p>
                      <p className="text-sm text-primary mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           {feature.details}
@@ -262,7 +250,7 @@ export default function Home() {
                               strokeWidth: 2,
                                stroke: "hsl(var(--background))"
                             }}
-                            animationDuration={1500} // Add animation duration
+                            animationDuration={1500} 
                           />
                         </LineChart>
                      </ResponsiveContainer>
@@ -307,6 +295,7 @@ export default function Home() {
         </div>
       </motion.section>
 
-    </motion.div> // End of main container div
+    </div> 
   );
 }
+

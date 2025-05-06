@@ -1,14 +1,13 @@
+'use client'; 
 
-'use client'; // Required for Framer Motion, useState, useEffect
-
-import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
+import React, { useState, useEffect, useRef } from 'react'; 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award } from 'lucide-react'; // Added icons
+import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award } from 'lucide-react'; 
 import { Button } from '@/components/ui/button';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion'; // Import useAnimation and AnimatePresence
-import { useInView } from 'react-intersection-observer'; // Import useInView
+import { motion, useAnimation, AnimatePresence } from 'framer-motion'; 
+import { useInView } from 'react-intersection-observer'; 
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { AnimatedStat } from '@/components/animated-stat';
 
@@ -148,17 +147,7 @@ export default function AboutUsPage() {
 
 
   return (
-    <motion.div 
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={{
-            initial: { opacity: 0 },
-            animate: { opacity: 1, transition: { duration: 0.5, ease: 'easeInOut' } },
-            exit: { opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
-        }}
-        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
-    >
+    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Initial Section */}
       <motion.div
         variants={staggerContainer}
@@ -228,7 +217,7 @@ export default function AboutUsPage() {
                         { icon: CheckSquare, title: 'Rigorous R&D', desc: 'Committed to comprehensive testing, from in vitro studies to clinical trials.' },
                     ].map((approach, index) => (
                         <motion.div key={index} variants={fadeInUp}>
-                            <Card className="text-center shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 h-full group"> {/* Added group, h-full */}
+                            <Card className="text-center shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 h-full group"> 
                                 <CardHeader>
                                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4 border-2 border-primary/20 group-hover:bg-primary/20 transition-colors">
                                         <approach.icon className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" />
@@ -408,7 +397,7 @@ export default function AboutUsPage() {
                       />
                  </div>
                  {/* Phase Description - Shows description of the currently active phase */}
-                 <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
+                 <div className="mt-6 text-center h-10"> 
                     <AnimatePresence mode="wait">
                         {activePhase >= 0 && activePhase < timelinePhases.length && ( 
                           <motion.p
@@ -426,7 +415,7 @@ export default function AboutUsPage() {
                  </div>
             </div>
         </motion.section>
-    </motion.div>
+    </div>
   );
 }
 
