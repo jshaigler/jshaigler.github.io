@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 // Removed Accordion imports
-import { CheckCircle, Dna, Zap, Settings, Package, Activity, CalendarClock, Info, RefreshCw } from 'lucide-react';
+import { CheckCircle, Dna, Zap, Settings, Package, Activity, CalendarClock, Info, RefreshCw, ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
@@ -302,3 +302,4 @@ export default function SolutionPage() {
     </motion.div>
   );
 }
+
