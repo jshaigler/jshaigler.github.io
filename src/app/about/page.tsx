@@ -1,157 +1,25 @@
 'use client'; 
 
-import React, { useState, useEffect, useRef } from 'react'; 
+import React, { useEffect, useRef } from 'react'; 
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Target, Users, FlaskConical, TrendingUp, CheckSquare, ExternalLink, BookText, HeartHandshake, Eye, Award } from 'lucide-react'; 
 import { Button } from '@/components/ui/button';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion'; 
-import { useInView } from 'react-intersection-observer'; 
+import { motion, AnimatePresence } from 'framer-motion'; 
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
 import { AnimatedStat } from '@/components/animated-stat';
 
 
-// Timeline Phases Data
-const timelinePhases = [
-  { name: 'Preclinical', description: 'In vitro & in vivo studies validating safety and efficacy.' },
-  { name: 'Phase I', description: 'First-in-human trials assessing safety, dosage, and side effects.' },
-  { name: 'Phase II', description: 'Evaluating effectiveness and further assessing safety in a larger group.' },
-  { name: 'Phase III', description: 'Large-scale trials comparing the therapy to standard treatments.' },
-  { name: 'Approval', description: 'Regulatory review and potential market authorization.' },
-];
-
-
 export default function AboutUsPage() {
-    const controls = useAnimation();
-    const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: false });
-    const [activePhase, setActivePhase] = useState(-1);
-    const [isAnimating, setIsAnimating] = useState(false);
     const isMountedRef = useRef(false);
 
     useEffect(() => {
         isMountedRef.current = true;
         return () => {
             isMountedRef.current = false;
-            if (controls && typeof controls.stop === 'function') {
-                try {
-                    controls.stop();
-                } catch (e) {
-                    // console.warn("Error stopping controls on unmount:", e);
-                }
-            }
         };
-    }, [controls]);
-
-    useEffect(() => {
-        let animationTimeoutId: NodeJS.Timeout | null = null;
-        let isMountedInEffect = true; 
-
-        const numPhases = timelinePhases.length;
-        const segmentAnimationDuration = 0.8;
-        const pauseDuration = 2000;
-
-        const runTimelineAnimation = async () => {
-            if (!isMountedInEffect || !inView || isAnimating || !isMountedRef.current) return;
-            setIsAnimating(true);
-
-            try {
-                while (isMountedInEffect && inView && isMountedRef.current) {
-                    // Reset before starting the loop
-                    if (isMountedRef.current && controls) {
-                        setActivePhase(-1); // Clear description while resetting
-                        controls.set({ width: '0%' }); // Instantly set to 0%
-                    }
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); }); // Short pause before start
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-
-                    // Animate through phases
-                    for (let i = 0; i < numPhases; i++) {
-                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                        
-                        // Set active phase first to show description
-                        setActivePhase(i);
-
-                        // Animate progress bar
-                        const targetWidth = ((i + 1) / numPhases) * 100; // Progress for current phase completion
-                        if (isMountedRef.current && controls) {
-                            await controls.start({
-                                width: `${targetWidth}%`,
-                                transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
-                            });
-                        }
-                        
-                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                        await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
-                        if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                    }
-
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                    
-                    // Pause at the end before resetting
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-
-                    // Smoothly animate back to 0%
-                    setActivePhase(-1); // Hide description before animating back
-                    if (isMountedRef.current && controls) {
-                         await controls.start({
-                            width: '0%',
-                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
-                        });
-                    }
-
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                    // Pause before restarting the loop for a smoother cycle
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration / 2); }); 
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                }
-            } catch (error) {
-                 if (error instanceof Error && (error.name === 'AnimationPlaybackError' || error.message.includes('Promise was cancelled') || error.message.includes("Attempted to call animate()"))) {
-                    // Non-critical, expected during unmount or stop
-                 } else {
-                    // console.error("Timeline animation error:", error);
-                 }
-            } finally {
-                setIsAnimating(false); // Allow animation to restart if still in view
-                if (isMountedRef.current && controls && !inView) { // Ensure reset if out of view
-                    try {
-                        controls.stop();
-                        controls.set({ width: '0%' });
-                    } catch (stopError) {
-                        // console.warn("Error stopping/setting controls in finally:", stopError);
-                    }
-                    setActivePhase(-1);
-                }
-            }
-        };
-
-        if (inView && !isAnimating && isMountedRef.current && controls) {
-            // Clear any pending timeout before starting a new one
-            if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            animationTimeoutId = setTimeout(() => {
-                if (isMountedRef.current && inView && !isAnimating && controls) {
-                    runTimelineAnimation();
-                }
-            }, 200); // Initial delay before starting animation
-        } else if (!inView && isMountedRef.current && controls) {
-            if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            try {
-                controls.stop();
-                controls.set({ width: '0%' });
-            } catch (stopError) {
-                 // console.warn("Error stopping/setting controls on exit:", stopError);
-            }
-            setActivePhase(-1);
-            setIsAnimating(false); // Ensure isAnimating is false if view is exited
-        }
-
-        return () => {
-            isMountedInEffect = false;
-            if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            setIsAnimating(false); // Reset on unmount or effect re-run
-        };
-    }, [inView, controls, isAnimating]);
+    }, []);
 
 
   return (
@@ -222,7 +90,7 @@ export default function AboutUsPage() {
                     {[
                         { icon: FlaskConical, title: 'Science-Driven', desc: 'Grounded in robust scientific understanding of the hallmarks of aging.' },
                         { icon: TrendingUp, title: 'Innovative Technology', desc: 'Leveraging next-generation mRNA technology for targeted and synergistic therapies.' },
-                        { icon: CheckSquare, title: 'Rigorous R&D', desc: 'Committed to comprehensive testing, from in vitro studies to clinical trials.' },
+                        { icon: CheckSquare, title: 'Rigorous R&amp;D', desc: 'Committed to comprehensive testing, from in vitro studies to clinical trials.' },
                     ].map((approach, index) => (
                         <motion.div key={index} variants={fadeInUp}>
                             <Card className="text-center shadow-md hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 h-full group"> 
@@ -269,7 +137,7 @@ export default function AboutUsPage() {
                 <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                       <Image
-                        src="https://media.licdn.com/dms/image/v2/D4D03AQF0JOckp1538w/profile-displayphoto-shrink_400_400/B4DZSfuvphHYAg-/0/1737846632852?e=1751500800&v=beta&t=Q-ZIrep3uIUXNaGshAdBVdL3JVOZQhylITwh7Y83gUM"
+                        src="https://media.licdn.com/dms/image/v2/D4D03AQF0JOckp1538w/profile-displayphoto-shrink_400_400/B4DZSfuvphHYAg-/0/1737846632852?e=1751500800&amp;v=beta&amp;t=Q-ZIrep3uIUXNaGshAdBVdL3JVOZQhylITwh7Y83gUM"
                         alt="Joshua Haigler"
                         width={200}
                         height={200}
@@ -278,13 +146,13 @@ export default function AboutUsPage() {
                       />
                       <CardContent className="p-6 flex-1">
                         <h4 className="text-xl font-semibold text-foreground">Joshua Haigler</h4>
-                        <p className="text-md text-primary font-medium mb-3">CEO & Co-founder</p>
+                        <p className="text-md text-primary font-medium mb-3">CEO &amp; Co-founder</p>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                            Driven by a passion for medicine and synthetic biology, Joshua translates cutting-edge research into practical longevity solutions, guiding the scientific vision of Phoenix Lifesciences.
                         </p>
                          
                          <div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
-                            <FlaskConical size={14} className="text-primary"/> Focus: Scientific Innovation & Product Development
+                            <FlaskConical size={14} className="text-primary"/> Focus: Scientific Innovation &amp; Product Development
                          </div>
                       </CardContent>
                   </div>
@@ -296,7 +164,7 @@ export default function AboutUsPage() {
                 <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out text-left flex flex-col w-full"> 
                   <div className="flex flex-col sm:flex-row items-center sm:items-start">
                        <Image
-                        src="https://media.licdn.com/dms/image/v2/D4E03AQGq8oxYCR80YQ/profile-displayphoto-shrink_400_400/B4EZRmHnWNG0Ag-/0/1736880061392?e=1751500800&v=beta&t=dEt-AuZp6pWxWU1o7bh67JHAFzOJTuWF7s7e2b59XBc"
+                        src="https://media.licdn.com/dms/image/v2/D4E03AQGq8oxYCR80YQ/profile-displayphoto-shrink_400_400/B4EZRmHnWNG0Ag-/0/1736880061392?e=1751500800&amp;v=beta&amp;t=dEt-AuZp6pWxWU1o7bh67JHAFzOJTuWF7s7e2b59XBc"
                         alt="Kiara Aguirre"
                         width={200}
                         height={200}
@@ -305,13 +173,13 @@ export default function AboutUsPage() {
                       />
                       <CardContent className="p-6 flex-1">
                         <h4 className="text-xl font-semibold text-foreground">Kiara Aguirre</h4>
-                        <p className="text-md text-primary font-medium mb-3">Head of Board & Co-founder</p>
+                        <p className="text-md text-primary font-medium mb-3">Head of Board &amp; Co-founder</p>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                            Leveraging expertise in linguistics and CS, Kiara ensures our solutions are human-centered, driving strategic vision and global impact for Phoenix Lifesciences.
                         </p>
                          
                         <div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
-                            <Award size={14} className="text-primary"/> Focus: Strategic Growth & Human-Centered Design
+                            <Award size={14} className="text-primary"/> Focus: Strategic Growth &amp; Human-Centered Design
                          </div>
                       </CardContent>
                   </div>
@@ -370,63 +238,33 @@ export default function AboutUsPage() {
              </motion.div>
         </motion.section>
 
-      {/* Path Forward Section - Enhanced Timeline */}
+        {/* General Call to Action/Next Steps */}
         <motion.section
-            ref={ref} 
             initial="initial"
-            animate={inView ? "animate" : "initial"} 
-            variants={fadeInUp} 
-            className="text-center mt-16"
+            whileInView="animate"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+            className="text-center mt-16 py-12 bg-muted/30 rounded-lg"
         >
-            <h2 className="text-3xl font-bold tracking-tight mb-4">The Path Forward</h2>
-            <p className="text-lg text-muted-foreground max-w-4xl mx-auto mb-10">
-                 We are committed to a rigorous development pathway, including advanced <em className="italic">in vitro</em> testing, comprehensive animal studies (<AnimatedStat value={0} suffix="+ Studies Completed" duration={2.5} />), and meticulously designed human clinical trials (<AnimatedStat value={0} suffix="+ Trials Planned" duration={3} />). Our goal is to translate promising science into safe and effective therapies, bringing the future of longevity from the laboratory to the living room.
+            <h2 className="text-3xl font-bold tracking-tight mb-4 text-primary">
+                Join Us on the Forefront of Longevity
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
+                Phoenix Lifesciences is committed to pushing the boundaries of what's possible in healthspan extension. We invite you to explore our research, understand our approach, and envision a future where longer, healthier lives are achievable for all.
             </p>
-            {/* Animated Research Timeline */}
-            <div className="mt-10 p-6 bg-muted/30 rounded-lg max-w-3xl mx-auto border border-dashed border-primary/20 overflow-hidden">
-                 <h4 className="font-semibold text-center text-foreground mb-6">Research & Clinical Trial Timeline</h4>
-                 {/* Phase Labels */}
-                <div className="relative flex justify-between items-center text-xs text-muted-foreground mb-2 px-2">
-                     {timelinePhases.map((phase, index) => (
-                         <span key={phase.name} className={`relative z-10 transition-colors duration-300 ${index <= activePhase ? 'text-primary font-medium' : ''}`}>
-                             {phase.name}
-                             {/* Small indicator dot */}
-                             <span className={`absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 h-2 w-2 rounded-full border border-primary transition-all duration-300 ${index <= activePhase ? 'bg-primary scale-125' : 'bg-muted'}`}></span>
-                         </span>
-                     ))}
-                 </div>
-                 {/* Progress Bar Track */}
-                 <div className="relative w-full h-2 bg-muted rounded-full mt-1 overflow-hidden">
-                      {/* Animated Progress Bar */}
-                      <motion.div
-                        initial={{ width: '0%' }}
-                        animate={controls} 
-                        className="h-full bg-gradient-to-r from-primary/50 to-primary rounded-full"
-                      />
-                 </div>
-                 {/* Phase Description - Shows description of the currently active phase */}
-                 <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
-                    <AnimatePresence mode="wait">
-                        {activePhase >= 0 && activePhase < timelinePhases.length && ( 
-                          <motion.p
-                              key={activePhase} // Change key to trigger animation
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              transition={{ duration: 0.3, ease: "easeInOut" }}
-                              className="text-sm text-foreground"
-                          >
-                              <strong>{timelinePhases[activePhase]?.name}:</strong> {timelinePhases[activePhase]?.description}
-                          </motion.p>
-                        )}
-                    </AnimatePresence>
-                 </div>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button size="lg" asChild className="shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1">
+                    <Link href="/solution">
+                        Discover Our Therapeutic Solution
+                    </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1">
+                    <Link href="/prototype">
+                        Learn About Our Prototype
+                    </Link>
+                </Button>
             </div>
         </motion.section>
     </div>
   );
 }
-
-    
-
-    
