@@ -57,58 +57,64 @@ export default function AboutUsPage() {
 
             try {
                 while (isMountedInEffect && inView && isMountedRef.current) {
-                    setActivePhase(-1);
-                    if (isMountedRef.current && controls) controls.set({ width: '0%' });
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); });
+                    // Reset before starting the loop
+                    if (isMountedRef.current && controls) {
+                        setActivePhase(-1); // Clear description while resetting
+                        controls.set({ width: '0%' }); // Instantly set to 0%
+                    }
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); }); // Short pause before start
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
-                    setActivePhase(0);
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
-                    if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-
-                    for (let i = 1; i < numPhases; i++) {
-                        const targetWidth = (i / (numPhases - 1)) * 100;
+                    // Animate through phases
+                    for (let i = 0; i < numPhases; i++) {
                         if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                         
+                        // Set active phase first to show description
+                        setActivePhase(i);
+
+                        // Animate progress bar
+                        const targetWidth = ((i + 1) / numPhases) * 100; // Progress for current phase completion
                         if (isMountedRef.current && controls) {
                             await controls.start({
                                 width: `${targetWidth}%`,
                                 transition: { duration: segmentAnimationDuration, ease: 'easeInOut' }
                             });
                         }
-
+                        
                         if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-
-                        setActivePhase(i);
                         await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
                         if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                     }
 
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 500); });
+                    
+                    // Pause at the end before resetting
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration); });
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
 
-                    setActivePhase(-1);
+                    // Smoothly animate back to 0%
+                    setActivePhase(-1); // Hide description before animating back
                     if (isMountedRef.current && controls) {
                          await controls.start({
                             width: '0%',
-                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' }
+                            transition: { duration: segmentAnimationDuration * 0.75, ease: 'easeInOut' } // Slightly faster reset
                         });
                     }
 
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
-                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, 300); });
+                    // Pause before restarting the loop for a smoother cycle
+                    await new Promise(resolve => { if (isMountedInEffect) animationTimeoutId = setTimeout(resolve, pauseDuration / 2); }); 
                     if (!isMountedInEffect || !inView || !isMountedRef.current) break;
                 }
             } catch (error) {
                  if (error instanceof Error && (error.name === 'AnimationPlaybackError' || error.message.includes('Promise was cancelled') || error.message.includes("Attempted to call animate()"))) {
                     // Non-critical, expected during unmount or stop
                  } else {
-                    console.error("Timeline animation error:", error);
+                    // console.error("Timeline animation error:", error);
                  }
             } finally {
-                setIsAnimating(false);
-                if (isMountedRef.current && controls) {
+                setIsAnimating(false); // Allow animation to restart if still in view
+                if (isMountedRef.current && controls && !inView) { // Ensure reset if out of view
                     try {
                         controls.stop();
                         controls.set({ width: '0%' });
@@ -121,11 +127,13 @@ export default function AboutUsPage() {
         };
 
         if (inView && !isAnimating && isMountedRef.current && controls) {
+            // Clear any pending timeout before starting a new one
+            if (animationTimeoutId) clearTimeout(animationTimeoutId);
             animationTimeoutId = setTimeout(() => {
                 if (isMountedRef.current && inView && !isAnimating && controls) {
                     runTimelineAnimation();
                 }
-            }, 200);
+            }, 200); // Initial delay before starting animation
         } else if (!inView && isMountedRef.current && controls) {
             if (animationTimeoutId) clearTimeout(animationTimeoutId);
             try {
@@ -135,13 +143,13 @@ export default function AboutUsPage() {
                  // console.warn("Error stopping/setting controls on exit:", stopError);
             }
             setActivePhase(-1);
-            setIsAnimating(false);
+            setIsAnimating(false); // Ensure isAnimating is false if view is exited
         }
 
         return () => {
             isMountedInEffect = false;
             if (animationTimeoutId) clearTimeout(animationTimeoutId);
-            setIsAnimating(false);
+            setIsAnimating(false); // Reset on unmount or effect re-run
         };
     }, [inView, controls, isAnimating]);
 
@@ -397,11 +405,11 @@ export default function AboutUsPage() {
                       />
                  </div>
                  {/* Phase Description - Shows description of the currently active phase */}
-                 <div className="mt-6 text-center h-10"> 
+                 <div className="mt-6 text-center h-10"> {/* Fixed height to prevent layout shift */}
                     <AnimatePresence mode="wait">
                         {activePhase >= 0 && activePhase < timelinePhases.length && ( 
                           <motion.p
-                              key={activePhase} 
+                              key={activePhase} // Change key to trigger animation
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -10 }}
@@ -418,5 +426,7 @@ export default function AboutUsPage() {
     </div>
   );
 }
+
+    
 
     
