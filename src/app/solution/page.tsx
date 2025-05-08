@@ -1,44 +1,45 @@
-'use client'; // Required for Framer Motion and client components like Accordion
 
-import React from 'react'; // Import React
+'use client'; 
+
+import React from 'react'; 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { CheckCircle, Dna, Zap, Settings, ShieldCheck, Package, Activity, CalendarClock, Info } from 'lucide-react'; // Added Activity, CalendarClock, Info
+import { CheckCircle, Dna, Zap, Settings, ShieldCheck, Package, Activity, CalendarClock, Info } from 'lucide-react'; 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, fadeIn, slideInLeft, slideInRight } from '@/lib/animations';
-import { Button } from '@/components/ui/button'; // Import Button
-import Link from 'next/link'; // Import Link
+import { Button } from '@/components/ui/button'; 
+import Link from 'next/link'; 
 
 
 const pillars = [
   {
     title: 'mRNA-Delivered TERT',
-    description: 'Rebuilding Chromosome Shields: Utilizes mRNA-delivered TERT to counteract telomere attrition by temporarily increasing telomerase activity, allowing telomere extension without the risks of permanent activation.',
+    description: 'Targeting telomere health to support cellular longevity and stability.',
     icon: Dna,
-    details: 'Specialized nanoparticles deliver modified TERT mRNA, boosting telomerase transiently. Research shows this increases cell division capacity and telomere length safely.',
-    stats: 'Potential to restore telomere length, reversing cellular aging clock.' 
+    details: 'Utilizes advanced mRNA technology to temporarily support telomere maintenance mechanisms, promoting cellular vitality without permanent genetic alterations.',
+    stats: 'Aims to enhance cellular replicative capacity.' 
   },
   {
     title: 'TFAM mRNA',
-    description: 'Revitalizing Cellular Power Plants: Delivers mRNA encoding TFAM (Mitochondrial Transcription Factor A) to restore mitochondrial function, boost cellular energy, and combat age-related energy deficits.',
+    description: 'Boosting mitochondrial function to enhance cellular energy and resilience.',
     icon: Zap,
-    details: 'Studies show increasing TFAM improves cognitive function, reduces oxidative stress, and enhances mitochondrial respiration, supporting overall rejuvenation.',
-     stats: 'Shown to improve mitochondrial respiration by up to 25% in preclinical models.' 
+    details: 'Delivers mRNA to support mitochondrial health, potentially improving energy production and reducing oxidative stress associated with aging.',
+     stats: 'Focuses on improving mitochondrial respiration and energy output.' 
   },
   {
     title: 'miRNA-Based MDM2 Modulation',
-    description: 'Fine-Tuning the Genome Guardian: Uses microRNA mimics (miRNAs) to modulate MDM2 expression, enhancing p53 activity for improved DNA damage response without causing excessive cellular atrophy.',
+    description: 'Optimizing cellular repair pathways for enhanced genomic integrity.',
     icon: Settings,
-    details: 'This targeted regulation maintains genomic integrity while mitigating potential side effects associated with overly active p53 signaling.',
-    stats: 'Enhances DNA repair pathways while maintaining cellular health.' 
+    details: 'Employs microRNAs to fine-tune key regulatory proteins involved in DNA damage response, aiming to improve cellular resilience.',
+    stats: 'Supports robust DNA repair while maintaining cellular balance.' 
   },
   {
     title: 'Partial Epigenetic Reprogramming',
-    description: 'Resetting the Cellular Clock: Incorporates mRNA encoding three specific Yamanaka factors (Oct4, Sox2, and Klf4 - OSK) to reverse age-related epigenetic changes and restore youthful gene expression patterns without full dedifferentiation.', 
+    description: 'Rejuvenating cellular identity by addressing age-related epigenetic changes.', 
     icon: CheckCircle, 
-    details: 'Studies in mice demonstrate lifespan extension (up to 15%), improved health, and enhanced tissue regeneration through this partial reprogramming approach using these three factors.', 
-    stats: 'Preclinical studies show lifespan extension and tissue regeneration.' 
+    details: 'Uses a targeted mRNA approach with specific factors to promote a more youthful epigenetic profile, supporting tissue health and function.', 
+    stats: 'Preclinical insights suggest potential for broad rejuvenation effects.' 
   }
 ];
 
@@ -63,8 +64,17 @@ const technicalMechanisms = [
 
 export default function SolutionPage() {
   return (
-    // Removed top-level AnimatePresence and motion.div
-    <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <motion.div 
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={{
+            initial: { opacity: 0 },
+            animate: { opacity: 1, transition: { duration: 0.5, ease: "easeInOut" } },
+            exit: { opacity: 0, transition: { duration: 0.3, ease: "easeInOut" } },
+        }}
+        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24"
+    >
       {/* Initial Section */}
       <motion.div
           variants={staggerContainer}
@@ -115,7 +125,9 @@ export default function SolutionPage() {
                 </CardContent>
                  
                  <div className="p-4 pt-0 text-right">
-                      <Button variant="link" size="sm" className="text-xs">Learn More</Button>
+                      <Button variant="link" size="sm" asChild className="text-xs">
+                        <Link href="/prototype#research-basis">Learn More</Link>
+                      </Button>
                  </div>
               </Card>
             </motion.div>
@@ -275,6 +287,6 @@ export default function SolutionPage() {
        className="mt-20 text-sm text-center text-muted-foreground italic">
           Disclaimer: This information is based on current scientific research and hypothetical therapeutic approaches. The described treatment (Phoenix) is not currently available and requires extensive additional research and regulatory approval before potential clinical application.
       </motion.p>
-    </div> 
+    </motion.div> 
   );
 }
